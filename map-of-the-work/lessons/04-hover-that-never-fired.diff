@@ -1,0 +1,107 @@
+--- a/src/09-city.js	2026-10-28 15:04:10
++++ b/src/09-city.js	2026-10-28 15:26:38
+@@ -22,7 +22,9 @@
+   const dx = b[0] - a[0], dy = b[1] - a[1], L = Math.hypot(dx, dy), S = Math.hypot(run, rise)
+   if (L < .5 || S < .5) return
+   FACES.push({ a, dx: dx / L, dy: dy / L, z0, run, rise, L, S, topL: topL == null ? L : Math.max(0, topL), m, realm: BX.realm, room: BX.room, ctr: BX.ctr, kind: BX.kind ?? (run === 0 ? 0 : 1), gid: groupId ?? GID++ })
+-  if (BX.room) { const top = z0 + rise; ROOM_TOP[BX.room] = Math.max(ROOM_TOP[BX.room] || 0, top); (ROOM_PTS[BX.room] ||= []).push([a[0], a[1], z0], [b[0], b[1], z0], [a[0], a[1], top], [b[0], b[1], top]) }
++  // A room's height and outline are kept under its name, which is how labels, notes and picking ask for them.
++  const rid = ROOM_IDS[BX.room]
++  if (rid) { const top = z0 + rise; ROOM_TOP[rid] = Math.max(ROOM_TOP[rid] || 0, top); (ROOM_PTS[rid] ||= []).push([a[0], a[1], z0], [b[0], b[1], z0], [a[0], a[1], top], [b[0], b[1], top]) }
+ }
+ const rectPts = (x, y, w, d) => [[x, y], [x + w, y], [x + w, y + d], [x, y + d]]
+ const wallsF = (pts, z0, h, m) => pts.forEach((a, i) => face(a, pts[(i + 1) % pts.length], z0, 0, h, null, m))
+@@ -975,19 +977,36 @@
+   for (const p of pts.slice().reverse()) { while (up.length > 1 && cr(up.at(-2), up.at(-1), p) <= 0) up.pop(); up.push(p) }
+   return lo.slice(0, -1).concat(up.slice(0, -1))
+ }
+-function cityPick(X, Y) {
++// How far a point lies outside a screen outline, in pixels: 0 inside.
++function outside(poly, X, Y) {
++  if (inside(poly, X, Y)) return 0
++  let d = Infinity
++  poly.forEach((a, i) => {
++    const b = poly[(i + 1) % poly.length], dx = b[0] - a[0], dy = b[1] - a[1], k = clamp(((X - a[0]) * dx + (Y - a[1]) * dy) / (dx * dx + dy * dy || 1), 0, 1)
++    d = Math.min(d, Math.hypot(X - a[0] - k * dx, Y - a[1] - k * dy))
++  })
++  return d
++}
++// A near miss still counts, so a small building is as easy to find as a big one. Inside an
++// outline beats near one (the front-most wins); the building already under the pointer
++// holds on until the pointer has clearly left it.
++const PICK_PAD = 22
++function cityPick(X, Y, held) {
+   if (!city.active || !GLS || city.rise < .25) return null
+   const v = view(), t = now()
+-  let best = null, bestD = -Infinity
++  let best = null, bestD = Infinity, bestZ = Infinity, heldD = Infinity
+   for (const [id, pts] of Object.entries(ROOM_PTS)) {
+     const part = ROOMS[id].part, ri = REALM_IDX[part.realm]
+     if (GLS.starts[ri] > 1e5 || t - GLS.starts[ri] < .6) continue
+-    const sp = pts.map(([x, y, z]) => project(x, y, z * v.t, v))
+-    if (!inside(hull(sp), X, Y)) continue
+-    const near = -project(part.c[0], part.c[1], 0, v)[2]
+-    if (near > bestD) { bestD = near; best = id }
++    const sp = pts.map(([x, y, z]) => project(x, y, z * v.t, v)), h = hull(sp)
++    const xs = sp.map(p => p[0]), ys = sp.map(p => p[1]), size = Math.min(Math.max(...xs) - Math.min(...xs), Math.max(...ys) - Math.min(...ys))
++    const d = outside(h, X, Y), pad = PICK_PAD + Math.max(0, 48 - size) / 2
++    if (id === held) heldD = d <= pad * 1.8 ? d : Infinity
++    if (d > pad) continue
++    const z = project(part.c[0], part.c[1], 0, v)[2]
++    if (d < bestD - .5 || (Math.abs(d - bestD) <= .5 && z < bestZ)) { best = id; bestD = d; bestZ = z }
+   }
+-  return best
++  return heldD < Infinity && bestD > 0 ? held : best
+ }
+ let hoverRaf = 0, liftRaf = 0
+ function cityHover(X, Y, target) {
+@@ -995,7 +1014,7 @@
+   if (flyId || hoverRaf) return
+   hoverRaf = requestAnimationFrame(() => {
+     hoverRaf = 0
+-    const id = cityPick(X, Y)
++    const id = cityPick(X, Y, peeked)
+     vp.style.cursor = id ? 'pointer' : ''
+     if (id !== peeked && (id || !peeked || !levelOf[peeked]?.el.matches(':hover'))) levelPeek(id)
+   })
+--- a/src/13-input.js	2026-10-28 15:04:10
++++ b/src/13-input.js	2026-10-28 15:16:27
+@@ -25,7 +25,10 @@
+   cancelMotion()
+   drag = { id: e.pointerId, y: e.clientY, sy: e.clientY, t: performance.now(), moved: false, target: e.target }
+ })
++// Where the mouse rests, so the building under it is found again once the map stops moving.
++let pointerAt = null
+ addEventListener('pointermove', e => {
++  if (e.pointerType === 'mouse') pointerAt = vp.contains(e.target) ? [e.clientX, e.clientY] : null
+   if (!drag || e.pointerId !== drag.id) { if (!drag && e.pointerType === 'mouse' && vp.contains(e.target)) cityHover(e.clientX, e.clientY, e.target); return }
+   if (!drag.moved && Math.abs(e.clientY - drag.sy) > 6) { drag.moved = true; document.body.classList.add('dragging'); levelPeek(null) }
+   if (!drag.moved) return
+@@ -51,7 +54,7 @@
+ }
+ // A click on the sheet: a building, a room on the plan, or nothing (which closes the note).
+ function activate(target, X, Y) {
+-  const built = cityPick(X, Y); if (built) return clickPlace(built)
++  const built = cityPick(X, Y, peeked); if (built) return clickPlace(built)
+   if (target.closest?.('.creature')) { const c = target.closest('.creature'); c.classList.add('dive'); return setTimeout(() => c.classList.remove('dive'), 2600) }
+   const link = target.closest?.('[data-go]'); if (link) return go(link.dataset.go)
+   const g = target.closest?.('.room'); if (g) return clickPlace(g.dataset.id)
+--- a/src/19-boot.js	2026-10-28 15:04:10
++++ b/src/19-boot.js	2026-10-28 15:25:02
+@@ -2,7 +2,7 @@
+ // Boot.
+ // =====================================================================================
+ function onRender(v) { placeLabels(v); cityFrame(v); placeCard(v); placeRail(v); placeSky(v); placeGym(v); playMoments() }
+-function onSettle() { cityFrame(view()); cardOnSettle(); lifeCull() }
++function onSettle() { cityFrame(view()); cardOnSettle(); lifeCull(); if (pointerAt && city.active && !caseId) cityHover(...pointerAt) }
+ function boot() {
+   ground.style.width = W + 'px'; ground.style.height = H + 'px'
+   // The paper and its grain run on past the drawing on every side.
+@@ -49,6 +49,6 @@
+   }
+   let resizeT = 0
+   addEventListener('resize', () => { VW = innerWidth; VH = innerHeight; setAnchor(); clampCam(); cityResize(); ground.style.setProperty('--lw', lineWeight(cam.s)); if (cardFor) measureCard(); render(); clearTimeout(resizeT); resizeT = setTimeout(render, 120) })
+-  window.__map = { cam, go, flyTo, fitAll, render, view, project, city, LEVELS, scrollBy, gls: () => GLS && ({ p: !!GLS.pieceP.u, s: !!GLS.shadowP.u, c: !!GLS.compP.u, rv: RV && !!RV.P.u }) }
++  window.__map = { cam, go, flyTo, fitAll, render, view, project, city, LEVELS, scrollBy, pick: (x, y) => cityPick(x, y), gls: () => GLS && ({ p: !!GLS.pieceP.u, s: !!GLS.shadowP.u, c: !!GLS.compP.u, rv: RV && !!RV.P.u }) }
+ }
+ boot()

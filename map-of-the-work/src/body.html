@@ -1,0 +1,39 @@
+<div class="loader" id="loader" role="status" aria-label="Loading the map"><div class="lveil"></div><div class="ldrop" aria-hidden="true"></div></div>
+<h1 class="sr">Kunal Satpal, a map of the work</h1>
+<main id="viewport" aria-label="A hand-drawn map of Kunal Satpal's work. Scroll or drag to travel the road; the arrow keys step from one piece of work to the next.">
+  <div id="ground"></div>
+  <div id="mist" aria-hidden="true"></div>
+</main>
+<canvas id="gl" aria-hidden="true"></canvas>
+<div id="sky" aria-hidden="true"></div>
+<div id="labels"></div>
+<div id="dusk" aria-hidden="true"></div>
+<header class="ui brand" id="brand" role="button" tabindex="0" aria-label="Kunal Satpal: back to the start">
+  <svg viewBox="0 0 33 31" aria-hidden="true"><rect y="1.09" width="7.68" height="28.36" rx="1.4" fill="currentColor"/><path fill="currentColor" d="M31.24.92c.77 0 1.4.63 1.4 1.4v25.52c0 .77-.63 1.4-1.4 1.4h-6.1c-.27 0-.52-.11-.7-.31L12.18 15.08 24.44 1.22c.18-.19.43-.3.7-.3z"/></svg>
+  <b>Kunal Satpal</b>
+</header>
+<nav class="ui top" aria-label="Links">
+  <button class="btn ink" data-go="home-hello">Say hello</button>
+  <button class="btn round" id="menuBtn" aria-controls="menu" aria-expanded="false" aria-label="Menu"><svg viewBox="0 0 18 18" aria-hidden="true"><path d="M3 5h12M3 9h12M3 13h12"/></svg></button>
+</nav>
+<div class="ui menu slip" id="menu" hidden>
+  <a href="https://kunalsatpal.com/kunalsatpal_resume.pdf" target="_blank" rel="noopener">Résumé <span aria-hidden="true">↗</span></a>
+  <button data-m="read">Read it as a plain page</button>
+  <button data-m="start">Back to the start</button>
+</div>
+<nav class="ui rail" id="rail" aria-label="Where you are on the road"></nav>
+<svg id="leader" aria-hidden="true"><path/><circle r="5"/></svg>
+<aside id="panel" class="slip" role="dialog" aria-label="Details">
+  <button class="close" id="close" aria-label="Close"><svg viewBox="0 0 18 18"><path d="M4 4l10 10M14 4L4 14"/></svg></button>
+  <div class="note" id="note" aria-live="polite"></div>
+</aside>
+<section id="letter" hidden role="dialog" aria-modal="true" aria-label="Case study">
+  <div class="lscroll"><article class="page" tabindex="-1"></article></div>
+  <button class="lclose" data-close>← Back to the map</button>
+</section>
+<div id="lightbox" hidden role="dialog" aria-modal="true" aria-label="Picture"><div class="lbin"></div><button class="lbclose" aria-label="Close">✕</button></div>
+<section id="reader" hidden role="dialog" aria-modal="true" aria-label="The work, as a list">
+  <button class="rclose btn slip" aria-label="Back to the map">← Back to the map</button>
+  <div class="rd"></div>
+</section>
+<noscript><p style="padding:24px;color:#eee">This map needs JavaScript.</p></noscript>

@@ -1,0 +1,42 @@
+diff -ru a/src/06-camera.js b/src/06-camera.js
+--- a/src/06-camera.js	2026-10-28 09:17:53
++++ b/src/06-camera.js	2026-10-28 09:33:39
+@@ -190,7 +190,8 @@
+   // and keeps doing so for the rest of that gesture.
+   const t = performance.now()
+   if (forward < 0 && ((targetY ?? cam.cy) >= START_Y - 1 || t < flipUntil)) { forward = -forward; flipUntil = t + 600; wrongWay() }
+-  targetY = clamp((targetY ?? cam.cy) - forward, END_Y, START_Y)
++  // The scroll may run only a little ahead of the eye, so letting go stops the journey promptly.
++  targetY = clamp(clamp((targetY ?? cam.cy) - forward, cam.cy - 760, cam.cy + 760), END_Y, START_Y)
+   if (!easeRaf) { easeT = performance.now(); easeRaf = requestAnimationFrame(easeStep) }
+ }
+ // The eye follows the scroll on a critically damped spring: it gathers speed smoothly, never
+@@ -200,8 +201,13 @@
+   const dt = Math.min(34, now - easeT) / 1000; easeT = now
+   if (reduce) { cam.cy = targetY; targetY = null; camVel = 0 }
+   else {
+-    const d = clamp(cam.cy - targetY, -LEAD, LEAD), base = cam.cy - d, e = Math.exp(-SPRING * dt), B = camVel + SPRING * d
++    const d = clamp(cam.cy - targetY, -LEAD, LEAD), base = cam.cy - d
++    // The eye only ever moves the way you are scrolling: never away from where you are heading,
++    // never past it.
++    if (camVel * d > 0) camVel = 0
++    const e = Math.exp(-SPRING * dt), B = camVel + SPRING * d
+     cam.cy = base + (d + B * dt) * e; camVel = (camVel - SPRING * B * dt) * e
++    if ((cam.cy - targetY) * d < 0) { cam.cy = targetY; camVel = 0 }
+     if (Math.abs(cam.cy - targetY) < .3 && Math.abs(camVel) < 6) { cam.cy = targetY; targetY = null; camVel = 0 }
+   }
+   clampCam(); moved(); render()
+diff -ru a/src/13-input.js b/src/13-input.js
+--- a/src/13-input.js	2026-10-28 09:17:53
++++ b/src/13-input.js	2026-10-28 09:33:39
+@@ -12,7 +12,9 @@
+   const unit = e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? VH : 1
+   // Travelling on puts a hovered note away; the next one opens where the pointer lands.
+   if (cardFor && !pinned) { levelPeek(null); closePanel() }
+-  scrollBy(-(Math.abs(e.deltaY) >= Math.abs(e.deltaX) ? e.deltaY : e.deltaX) * unit * perPx())
++  // Only the up-and-down of a scroll moves you: a swipe's sideways drift never steers the journey.
++  if (!e.deltaY) return
++  scrollBy(-e.deltaY * unit * perPx())
+ }, { passive: false })
+ 
+ let drag = null, vel = 0, dragged = false

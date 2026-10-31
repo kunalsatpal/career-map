@@ -1,0 +1,150 @@
+{
+ "key": "Pibit",
+ "title": "Kunal Satpal | Starting my career with Pibit",
+ "blocks": [
+  {
+   "t": "img",
+   "src": "./site/cases/m/4bba2a7ebd.png",
+   "size": "bleed"
+  },
+  {
+   "t": "h3",
+   "text": "My first job was as the only designer at a startup still finding its shape. Much of how I lead design today started there."
+  },
+  {
+   "t": "p",
+   "html": "It began with a call from a senior of mine who was building a product. Pibit was young, and saying yes meant joining before anything was settled. Early in a career, that is the best kind of classroom: with no process to inherit, you learn why each one exists."
+  },
+  {
+   "t": "h",
+   "text": "The problem"
+  },
+  {
+   "t": "p",
+   "html": "Local shops have hours when nobody walks in. Pibit put offline merchants online and connected them to nearby customers in real time: an offer goes out in a quiet hour, people close by see it, and the merchant learns who their customers are, so the next offer can be personal."
+  },
+  {
+   "t": "p",
+   "html": "I joined a few months after the website launched. As the only designer, I owned the product and everything around it, from marketing posters and campaigns to the business plan we used to raise funding."
+  },
+  {
+   "t": "img",
+   "src": "./site/cases/m/57c40c4785.png",
+   "size": "large"
+  },
+  {
+   "t": "h",
+   "text": "Listen to both sides"
+  },
+  {
+   "t": "p",
+   "html": "Before changing anything, we ran a survey and interviews with customers and merchants. The headline was good: students at IIT liked the product, and merchants were selling more. Four problems were holding it back."
+  },
+  {
+   "t": "list",
+   "ordered": true,
+   "items": [
+    "<b>Subscribing took four steps.</b> Real-time offers were the heart of the product, and a four-step subscription to a single restaurant lost a large share of people on the way.",
+    "<b>Not everyone was at home on the web.</b> Many of our users were not comfortable with new technology, and very few used the laptops that web push notifications needed.",
+    "<b>Merchants could not post offers themselves.</b> The form confused them, so they kept contacting us for help.",
+    "<b>Connections were slow.</b> Most people came through the mobile website, and on the mobile data of the time, every second of loading cost us."
+   ]
+  },
+  {
+   "t": "h",
+   "text": "Go where people already are"
+  },
+  {
+   "t": "p",
+   "html": "We decided the next step was an Android app. The research gave us three reasons:"
+  },
+  {
+   "t": "list",
+   "ordered": true,
+   "items": [
+    "People were far more active on their phones, and ignored web notifications more often than mobile ones.",
+    "They needed to save offers and use them offline.",
+    "An app gave us room to grow beyond food, starting with salons and spas."
+   ]
+  },
+  {
+   "t": "p",
+   "html": "Plenty of apps already offered deals. None connected customers and merchants in real time, or let people pre-order. That gap was our case for building."
+  },
+  {
+   "t": "img",
+   "src": "./site/cases/m/5ad0270a44.jpg",
+   "size": "large"
+  },
+  {
+   "t": "h",
+   "text": "Decide together, test early"
+  },
+  {
+   "t": "p",
+   "html": "With a team that small, how we worked mattered as much as what we made. We worked in an agile way, and for us that meant more than moving fast: discussion, testing and iteration at every step, with everyone in the room."
+  },
+  {
+   "t": "img",
+   "src": "./site/cases/m/65b830bf53.png",
+   "size": "large"
+  },
+  {
+   "t": "p",
+   "html": "Features were argued over in regular meetings with the whole team, weighed against what the market allowed, and cut down to an MVP. Then came flows and wireframes."
+  },
+  {
+   "t": "img",
+   "src": "./site/cases/m/eae6ef7636.jpg",
+   "size": "text"
+  },
+  {
+   "t": "p",
+   "html": "Usability testing kept us honest. We gave people tasks and watched closely for hesitation or confusion, and focus groups added their own suggestions. Each round of findings shaped the next iteration."
+  },
+  {
+   "t": "img",
+   "src": "./site/cases/m/91227966e8.jpg",
+   "size": "large"
+  },
+  {
+   "t": "img",
+   "src": "./site/cases/m/b4a4e7903d.jpg",
+   "size": "large"
+  },
+  {
+   "t": "h",
+   "text": "Design the move, not just the new home"
+  },
+  {
+   "t": "p",
+   "html": "I designed both the app and the website. Until then the website had been the whole product: subscribing to restaurants, getting notifications, using offers. Its design was built around making that subscription feel good."
+  },
+  {
+   "t": "img",
+   "src": "./site/cases/m/55f28f9259.png",
+   "size": "text"
+  },
+  {
+   "t": "p",
+   "html": "Once everything moved into the app, the website's job changed. It became where we promoted the app to the people who already used Pibit, and a move like that can lose people. So I designed the new landing page around one goal: keeping as many of them as possible through the switch."
+  },
+  {
+   "t": "img",
+   "src": "./site/cases/m/9fddbf48ba.jpg",
+   "size": "text"
+  },
+  {
+   "t": "h",
+   "text": "What I took with me"
+  },
+  {
+   "t": "p",
+   "html": "Being the only designer meant owning the whole problem, not just the screens: research, product, graphics, marketing and the pitch for funding. I learned to work toward a shared vision with the people building it, and how much can go wrong between a good idea and a good product."
+  },
+  {
+   "t": "p",
+   "html": "Those lessons still shape how I lead: hear from both sides of a marketplace before deciding, meet people where they already are, and design the transition as carefully as the destination."
+  }
+ ]
+}

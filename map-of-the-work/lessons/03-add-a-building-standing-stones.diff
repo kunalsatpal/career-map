@@ -1,0 +1,156 @@
+diff -ru a/src/02-content.js b/src/02-content.js
+--- a/src/02-content.js	2026-10-28 09:33:39
++++ b/src/02-content.js	2026-10-28 09:33:39
+@@ -50,9 +50,22 @@
+   'blog-whatsapp': { realm: 'writing', blog: true, title: 'A 4-hour sprint: WhatsApp Polls', hall: 'the clock house' },
+   'blog-pibit': { realm: 'writing', blog: true, title: 'Starting my career with Pibit', hall: 'the tent' },
+   'home-about': { realm: 'home', title: 'The study', hall: 'about me', key: 'About me', stat: "I lead design teams. I'm also a product designer.",
+-    list: ['<b>Product designer.</b> CareHub, GoFood promos, Fitclub: product design end to end.', '<b>Mentor.</b> I am grateful to have mentored some great designers and helped them grow.',
+-      '<b>Team builder.</b> Led 12+ designers at IIT Roorkee; today I run design quality reviews with engineering.', '<b>Strategist.</b> Set the strategy for multi-condition care at Hinge and promos at GoFood.',
+-      "<b>Systems builder.</b> Created 10+ AI skills to improve designers' work process at Hinge Health.", '<b>Prototyper who codes.</b> I designed and built this map, pairing with AI.'] },
++    list: ['<b>Product designer.</b> CareHub, GoFood promos, Fitclub: product design end to end.', '<b>How I lead</b> is carved on the five standing stones along the path; the tools I built for teams are in the workshop.'] },
++  // How I lead: five standing stones beside the path, one principle each, with its proof.
++  'lead-bar': { realm: 'home', stone: true, title: 'Raise the bar', hall: 'how I lead', stat: 'Raise the bar with the people who build it.',
++    list: ['I run design quality reviews with engineering at Hinge Health.'] },
++  'lead-grow': { realm: 'home', stone: true, title: 'Grow designers', hall: 'how I lead', stat: 'Grow designers, not just designs.',
++    list: ['Led a team of 12+ designers at IIT Roorkee · IMG, and set up design reviews and a shared process.', 'Mentored designers who went on to product roles.'] },
++  'lead-reframe': { realm: 'home', stone: true, title: 'Reframe first', hall: 'how I lead', stat: 'Reframe the problem before designing the answer.',
++    list: ["Recast Hinge Health's AI care assistant as a clinical recommendation tool, and aligned clinical, data and engineering on its safety gates. Clinician time per member fell 6–12%.", 'Set the strategy for multi-condition care at Hinge and for promotions at GoFood.'] },
++  'lead-evidence': { realm: 'home', stone: true, title: 'Decide with evidence', hall: 'how I lead', stat: 'Let the evidence make the call.',
++    list: ['Ran 20+ experiments in a year on GoFood promotions.', 'Promo discovery went through six months of usability tests and A/B experiments: +4% session conversions, 5× ad revenue.'] },
++  'lead-hands': { realm: 'home', stone: true, title: 'Stay hands-on', hall: 'how I lead', stat: 'Lead, and keep making things.',
++    list: ['I still design: product, systems, and the code behind this map, which I built pairing with AI.'] },
++  // The workshop: tools I built so teams move faster.
++  'home-workshop': { realm: 'home', title: 'The workshop', hall: 'tools for teams', key: 'Tools I built for teams', stat: 'Tools I built so teams move faster.',
++    list: ["<b>A design system.</b> Co-built Cult.fit's first app and web design system with a team of four: shared components across app and web, and a category icon system across fitness, food and care. <button class=\"golink\" data-go=\"cult-ds\">See it at Cult.fit →</button>",
++      "<b>AI skills.</b> Created 10+ AI skills that improve designers' work process at Hinge Health."] },
+   'home-hello': { realm: 'home', title: 'Say hello', hall: 'the lighthouse', key: 'Say hello', stat: 'Available for conversations about design, AI products and remote work.',
+     links: [['kunalsatpal1@gmail.com', 'mailto:kunalsatpal1@gmail.com'], ['Résumé (PDF)', 'https://kunalsatpal.com/kunalsatpal_resume.pdf'], ['LinkedIn', 'https://www.linkedin.com/in/kunalsatpal1/'], ['Dribbble', 'https://dribbble.com/kunalsatpal1'], ['Medium', 'https://medium.com/@kunalsatpal1']] },
+   'life-lift': { realm: 'home', title: 'I lift every day', hall: 'off duty', key: 'Physically fit, and sane while shipping', stat: 'Physically fit, and sane while shipping products.' },
+diff -ru a/src/03-cases.js b/src/03-cases.js
+--- a/src/03-cases.js	2026-10-28 09:33:39
++++ b/src/03-cases.js	2026-10-28 09:33:39
+@@ -45,6 +45,6 @@
+   'gojek-visits': 'growth promotions conversion redesign', 'gojek-experiments': 'experiments a/b test growth data',
+   'hinge-carehub': 'healthcare enterprise clinical tools platform b2b workflow ai', 'hinge-ai': 'ai ml machine learning strategy clinical healthcare roadmap trust safety recommendations',
+   'hinge-workflows': 'workflow efficiency enterprise clinical tools', 'hinge-video': 'video healthcare telehealth',
+-  'home-about': 'about me leadership mentoring ai skills prototyping code', 'life-lift': 'about me fitness life', 'life-books': 'about me reading books life', 'life-games': 'about me games life', 'life-anime': 'about me anime life', 'life-people': 'about me people family friends life', 'home-hello': 'contact email linkedin hire hello',
++  'home-about': 'about me leadership mentoring ai skills prototyping code', 'home-workshop': 'design systems ai skills tools teams', 'lead-bar': 'leadership quality reviews', 'lead-grow': 'leadership mentoring team', 'lead-reframe': 'leadership strategy', 'lead-evidence': 'leadership experiments research', 'lead-hands': 'leadership craft code', 'life-lift': 'about me fitness life', 'life-books': 'about me reading books life', 'life-games': 'about me games life', 'life-anime': 'about me anime life', 'life-people': 'about me people family friends life', 'home-hello': 'contact email linkedin hire hello',
+ }
+ for (const S of STOPS) TAGS[S.id] = 'freelance contract early internship'
+diff -ru a/src/03-plans.js b/src/03-plans.js
+--- a/src/03-plans.js	2026-10-28 09:33:39
++++ b/src/03-plans.js	2026-10-28 09:33:39
+@@ -69,6 +69,12 @@
+     towers: [],
+     parts: [
+       { t: 'cottage', room: 'home-about', x: 10, y: 1140, w: 250, h: 160 },
++      { t: 'workshop', room: 'home-workshop', x: 20, y: 840, w: 190, h: 140 },
++      { t: 'menhir', room: 'lead-bar', cx: 515, cy: 1330, r: 12 },
++      { t: 'menhir', room: 'lead-grow', cx: 622, cy: 1215, r: 12 },
++      { t: 'menhir', room: 'lead-reframe', cx: 628, cy: 1100, r: 12 },
++      { t: 'menhir', room: 'lead-evidence', cx: 632, cy: 985, r: 12 },
++      { t: 'menhir', room: 'lead-hands', cx: 636, cy: 870, r: 12 },
+       { t: 'garden', x: 0, y: 180, w: 420, h: 520 },
+       { t: 'lift', room: 'life-lift', x: 30, y: 296, w: 80, h: 82 },
+       { t: 'reading', room: 'life-books', x: 204, y: 290, w: 110, h: 60 },
+@@ -107,7 +113,7 @@
+   'cult-cart': 5400, 'cult-fitclub': 5250, 'cult-ds': 5100, 'cult-onboarding': 4950,
+   'iit-placement': 4150, 'iit-team': 4145, 'pibit-offers': 3755,
+   'blog-portfolio': 2870, 'blog-curefit': 2730, 'blog-whatsapp': 2590, 'blog-pibit': 2450,
+-  'home-about': 1935, 'life-people': 1304, 'life-games': 1190, 'life-anime': 1170, 'life-lift': 1038, 'life-books': 1022, 'home-hello': 780,
++  'lead-bar': 2040, 'home-about': 1935, 'lead-grow': 1925, 'lead-reframe': 1810, 'lead-evidence': 1695, 'home-workshop': 1620, 'lead-hands': 1580, 'life-people': 1304, 'life-games': 1190, 'life-anime': 1170, 'life-lift': 1038, 'life-books': 1022, 'home-hello': 780,
+ }
+ const LEVELS = []
+ for (const [id, B] of Object.entries(ROOMS)) {
+diff -ru a/src/04-ground.js b/src/04-ground.js
+--- a/src/04-ground.js	2026-10-28 09:33:39
++++ b/src/04-ground.js	2026-10-28 09:33:39
+@@ -235,6 +235,9 @@
+   gymhall(P, q) { P.boxWall(q.x, q.y, q.w, q.h, 6, { side: 's', at: .5, w: 22 }) },
+   clockhouse(P, q) { P.boxWall(q.x, q.y, q.w, q.h, 6, { side: 's', at: .3, w: 20 }); P.circ(q.x + q.w - 29, q.y + 33, 12, 'hair') },
+   tent(P, q) { P.a('pfill', circleD(q.cx, q.cy, q.r)).circ(q.cx, q.cy, q.r); for (let k = 0; k < 10; k++) { const a = k / 10 * Math.PI * 2; P.line([[q.cx, q.cy], [q.cx + Math.cos(a) * q.r, q.cy + Math.sin(a) * q.r]], 'hair') } },
++  // A standing stone, and the workshop, in plan.
++  menhir(P, q) { P.a('pfill', circleD(q.cx, q.cy, q.r)).circ(q.cx, q.cy, q.r, 'fine').circ(q.cx, q.cy, q.r * 1.7, 'hair') },
++  workshop(P, q) { const { x, y, w, h } = q; P.boxWall(x + 10, y + 10, w - 20, h - 50, 6, null); P.rect(x + 24, y + h - 30, 90, 16, 'fine') },
+   // The garden's pleasures, in ink: what stands up in 3D, and all there is on a flat map.
+   lift(P, q) { const [x, y] = q.c; P.line([[x - 30, y], [x + 30, y]], 'main'); for (const d of [-26, -21, 21, 26]) P.line([[x + d, y - 10], [x + d, y + 10]], 'bold'); P.rect(x - 8, y + 14, 16, 26, 'fine') },
+   reading(P, q) { const [x, y] = q.c; P.rect(x - 34, y - 4, 40, 9, 'fine'); for (let i = 0; i < 4; i++) { const w = 26 - i * 3; P.a('pfill', rectD(x + 22 - w / 2 + (i % 2) * 2, y - 12 + i * 7, w, 7)).rect(x + 22 - w / 2 + (i % 2) * 2, y - 12 + i * 7, w, 7) } },
+diff -ru a/src/09-city.js b/src/09-city.js
+--- a/src/09-city.js	2026-10-28 09:33:39
++++ b/src/09-city.js	2026-10-28 09:34:41
+@@ -297,6 +297,31 @@
+     for (const [dx, dy, s] of [[52, -6, 13], [64, 6, 11], [56, 18, 12], [70, -16, 10]]) crateF(q.cx + dx, q.cy + dy, s)
+     handcartF(q.cx - 92, q.cy - 6)
+   },
++  // How I lead: a standing stone, weathered, a little lichen at its foot.
++  menhir(q) {
++    const r = rng(q.cx * 5 + q.cy), lean = (r() - .5) * .5, s = mat(col3(78, .012, 70), 'stone')
++    latheF(q.cx, q.cy, [[q.r, 0], [q.r * .94, 24], [q.r * .8, 44], [q.r * .54, 58], [0, 63]], 6, s, lean)
++    for (let k = 0; k < 3; k++) { const a = r() * 6.3; ballF(q.cx + Math.cos(a) * q.r * 1.15, q.cy + Math.sin(a) * q.r * 1.15, 3 + r() * 1.5, col3(68, .07, 132)) }
++  },
++  // The workshop: a timber shop, its front open under an awning, a bench of tools before it.
++  workshop(q) {
++    const { x, y, w, h } = q, wood = mat(WOOD, 'timber'), wall = mat(HOME.cream, 'timber', OVL.lit), tile = mat(HOME.terracotta, 'tile')
++    const X = x + 10, Y = y + 10, BW = w - 20, BD = h - 50
++    boxF(X, Y, BW, BD, 0, 42, wall); gableF(X, Y, BW, BD, 42, BD * .42, tile, wall, 'x')
++    boxF(X + BW - 34, Y + 14, 13, 13, 42 + BD * .2, 46, mat(col3(58, .06, 38), 'brick'), DARK)
++    face([X + BW - 4, Y + BD + 2], [X + 4, Y + BD + 2], 32, -22, -9, null, mat(col3(58, .14, 40), 'stripe'))
++    // The bench: a hammer, a mallet, jars of paint, a stack of planks.
++    const bx = x + 24, by = y + h - 30
++    boxF(bx, by, 90, 16, 0, 16, wood, mat(col3(64, .06, 55), 'timber'))
++    boxF(bx + 10, by + 6, 24, 3, 16, 3, DARK); boxF(bx + 30, by + 2, 6, 11, 16, 6, DARK)
++    boxF(bx + 44, by + 5, 14, 6, 16, 5, mat(WOOD), mat(col3(60, .06, 55)))
++    for (const [dx, c] of [[66, [60, .12, 27]], [75, [62, .1, 150]], [84, [70, .12, 85]]]) latheF(bx + dx, by + 8, [[3, 16], [3, 25], [0, 25]], 8, mat(col3(...c)))
++    for (let k = 0; k < 4; k++) boxF(x + w - 70, y + h - 30 + k * .6, 52, 10, k * 3, 3, wood, wood)
++    // A sawhorse, and a signboard on a post.
++    for (const dx of [0, 30]) boxF(x + 130 + dx, y + h - 12, 4, 10, 0, 14, wood)
++    boxF(x + 126, y + h - 10, 40, 6, 14, 3, wood, wood)
++    latheF(x + w - 8, y + h - 8, [[1.6, 0], [1.6, 40]], 6, DARK); boxF(x + w - 28, y + h - 9, 20, 2, 26, 12, mat(HOME.cream, 'timber'), wood)
++  },
+   house(q, st) { blockF(q.x + 3, q.y + 3, q.w - 6, q.h - 6, st, 26 + (q.w * q.h % 13)) },
+   well(q, st) { latheF(q.cx, q.cy, [[q.r, 0], [q.r, 10], [q.r * .6, 10]], 10, wallM(st)); latheF(q.cx, q.cy, [[q.r + 3, 26], [0, 36]], 8, roofM(st)) },
+   hut(q, st) { boxF(q.x, q.y, q.w, q.h, 0, 22, mat(st.wall, 'timber', OVL.door)); gableF(q.x, q.y, q.w, q.h, 22, 16, roofM(st), mat(st.wall, 'timber')) },
+@@ -469,8 +494,8 @@
+   home(ox, oy) {
+     // The path lit all the way to the light; an orchard and flowers between the houses.
+     for (let y = 160; y < 1300; y += 170) lampF(ox + 470, oy + y, 30)
+-    for (const [x, y] of [[300, 900], [350, 940], [300, 990], [370, 1010], [330, 1060], [290, 1210], [350, 1250], [400, 1180], [60, 850], [130, 880], [200, 860], [90, 950], [170, 970], [60, 1030], [140, 1050]]) treeF(ox + x, oy + y, 11)
+-    for (const [x, y] of [[240, 1100], [60, 1110], [230, 1030], [210, 930]]) flowersF(ox + x, oy + y)
++    for (const [x, y] of [[300, 900], [350, 940], [300, 990], [370, 1010], [330, 1060], [290, 1210], [350, 1250], [400, 1180], [60, 1030], [140, 1050]]) treeF(ox + x, oy + y, 11)
++    for (const [x, y] of [[240, 1100], [60, 1110], [230, 1030], [690, 1150], [680, 940]]) flowersF(ox + x, oy + y)
+     benchF(ox + 226, oy + 1060, 30)
+   },
+ }
+diff -ru a/src/12-panel.js b/src/12-panel.js
+--- a/src/12-panel.js	2026-10-28 09:33:39
++++ b/src/12-panel.js	2026-10-28 09:34:41
+@@ -13,7 +13,8 @@
+   const B = ROOMS[id], realm = B.realm ? realmBy[B.realm] : null
+   const L = levelOf[id]
+   note.style.setProperty('--c', realm ? ok(48, .11, realm.hue) : ok(50, .08, 70))
+-  note.innerHTML = kicker(realm) + `<p class="lvln">Level ${L.n} of ${LEVELS.length}</p><h2>${B.title}</h2>${B.stat ? `<p class="stat">${B.stat}</p>` : ''}`
++  const stones = B.stone ? Object.keys(ROOMS).filter(k => ROOMS[k].stone) : null
++  note.innerHTML = (stones ? `<p class="kicker">${crest(realm.hue, 'mark')}<span>How I lead · ${stones.indexOf(id) + 1} of ${stones.length}</span></p>` : kicker(realm)) + `<p class="lvln">Level ${L.n} of ${LEVELS.length}</p><h2>${B.title}</h2>${B.stat ? `<p class="stat">${B.stat}</p>` : ''}`
+     + figHTML(B.img)
+     + (B.body ? `<p class="body">${B.body}</p>` : '')
+     + (B.list ? `<ul>${B.list.map(li => `<li><span>${li}</span></li>`).join('')}</ul>` : '')
+@@ -105,6 +106,7 @@
+ panelEl.addEventListener('click', e => {
+   const en = e.target.closest('[data-enter]'); if (en) return openCase(en.dataset.enter)
+   const lt = e.target.closest('[data-letter]'); if (lt) return openCase(lt.dataset.letter, cardFor)
++  const g = e.target.closest('[data-go]'); if (g) return go(g.dataset.go)
+ })
+ 
+ // The screen box of whatever the note is about: a level and its building together.
+diff -ru a/src/style.css b/src/style.css
+--- a/src/style.css	2026-10-28 09:33:39
++++ b/src/style.css	2026-10-28 09:33:39
+@@ -281,6 +281,7 @@
+ .note figure video { display: block; width: 100%; height: auto; border-radius: 2px; }
+ .note .sign { margin: 4px 0 0; font: 400 1.25rem/1.3 var(--font-note); color: var(--note-ink); }
+ .note .sign span { display: block; margin-top: 6px; text-align: right; font-size: 1.375rem; }
++.note .golink { display: inline; padding: 0; border: 0; background: none; cursor: pointer; font: italic 400 1rem/1.4 var(--font-body); color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+ .note .nda { padding: 10px 12px; border-radius: 3px; background: var(--paper-2); font: italic 400 1rem/1.4 var(--font-body); color: var(--ink-2); }
+ 
+ /* ---------- The title at the head of the road ---------- */
