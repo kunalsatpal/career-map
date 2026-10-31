@@ -5682,7 +5682,7 @@ function prepareSpread(loader) {
     const drop = () => { g.getExtension('WEBGL_lose_context')?.loseContext(); cvs.remove() }
     // The sheet was laid for this window; if it changes before the ink spreads, the veil takes over.
     const onResize = () => { gone = true; loader.classList.remove('sheet'); drop() }
-    addEventListener('resize', onResize, { once: true })
+    // addEventListener('resize', onResize, { once: true })
     return {
       // The ink spreads; the promise settles when it has reached the corners. Null if the sheet never
       // got laid (the veil then simply fades).
