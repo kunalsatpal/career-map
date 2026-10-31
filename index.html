@@ -2366,7 +2366,7 @@ function buildLabels() {
   }
   // The start of the road.
   const st = document.createElement('div'); st.className = 'lvl start'
-  st.innerHTML = `<button class="lv-hint" data-flow="next" aria-label="Start the walk at level 1">${BATCH.mobile2 && coarse ? 'Swipe down to begin' : 'Scroll up to begin'}<i aria-hidden="true"></i></button>`
+  st.innerHTML = `<button class="lv-hint" data-flow="next" aria-label="Start the walk at level 1">${BATCH.mobile2 && coarse ? 'Swipe down to begin' : 'Scroll to begin'}<i aria-hidden="true"></i></button>`
   labelLayer.appendChild(st); START.el = st
   // The lighthouse's light, lit when you reach the end of the road.
   BEACON.el = document.createElement('div'); BEACON.el.className = 'beacon'; BEACON.el.setAttribute('aria-hidden', 'true'); BEACON.el.innerHTML = '<i></i>'; labelLayer.appendChild(BEACON.el)
