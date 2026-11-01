@@ -54,7 +54,7 @@ function buildLabels() {
   }
   // The start of the road.
   const st = document.createElement('div'); st.className = 'lvl start'
-  st.innerHTML = `<button class="lv-hint" data-flow="next" aria-label="Start the walk at level 1">${BATCH.mobile2 && coarse ? 'Swipe down to begin' : 'Scroll up to begin'}<i aria-hidden="true"></i></button>`
+  st.innerHTML = `<button class="lv-hint" data-flow="next" aria-label="Start the walk at level 1">${BATCH.mobile2 && coarse ? 'Swipe down to begin' : 'Scroll to begin'}<i aria-hidden="true"></i></button>`
   labelLayer.appendChild(st); START.el = st
   // The lighthouse's light, lit when you reach the end of the road.
   BEACON.el = document.createElement('div'); BEACON.el.className = 'beacon'; BEACON.el.setAttribute('aria-hidden', 'true'); BEACON.el.innerHTML = '<i></i>'; labelLayer.appendChild(BEACON.el)
@@ -192,11 +192,20 @@ function placeLevelsNarrow(v) {
   }
 }
 // A first-time tip by the first level: what hovering and clicking do.
-const tip = { el: null, done: false }
+const tip = { el: null, done: false, wait: 0 }
 try { tip.done = sessionStorage.getItem('map-tip') === '1' } catch {}
 function placeTip(v) {
   if (tip.done) return
   const L = LEVELS[0], p = ROOMS[L.id].part, [X, Y] = project(p.c[0], p.c[1], roofOf(L.id, v), v), inView = Y > VH * .25 && Y < VH * .8
+  // Wait for the same assembly window used by cityFrame, even if scrolling stops.
+  if (!tip.el && inView && TILT && !city.failed) {
+    const start = GLS?.starts[REALM_IDX[partRealm(p)]] ?? 1e6
+    const remaining = start < 1e5 ? 4.2 - (now() - start) : .15
+    if (!city.active || remaining > 0) {
+      if (!tip.wait) tip.wait = setTimeout(() => { tip.wait = 0; requestRender() }, Math.max(.15, remaining) * 1000)
+      return
+    }
+  }
   if (!tip.el && inView) {
     tip.el = document.createElement('div'); tip.el.className = 'tip left'
     tip.el.innerHTML = `<svg class="cur" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3l14 7-6 2-2 6z"/></svg><span>${coarse ? 'Tap a building to read about it' : 'Hover a building to read about it · click a sealed one to open it'}</span>`
@@ -207,6 +216,7 @@ function placeTip(v) {
 }
 function hideTip() {
   if (tip.done) return
+  clearTimeout(tip.wait); tip.wait = 0
   tip.done = true; try { sessionStorage.setItem('map-tip', '1') } catch {}
   if (tip.el) { tip.el.classList.add('gone'); setTimeout(() => tip.el?.remove(), 500) }
 }
