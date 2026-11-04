@@ -24,7 +24,7 @@ html = f'''<!doctype html>
 <title>Kunal Satpal — A map of the work</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400,0..1,0&icon_names=app_registration,area_chart,arrow_right,cancel,chat,done,home,list,mode_heat,queue,rocket,settings_accessibility,tab,task,video_camera_front,videocam,warning&display=block" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400,0..1,0&icon_names=app_registration,area_chart,arrow_right,auto_awesome,cancel,chat,check_circle,done,home,list,mode_heat,queue,rocket,sentiment_dissatisfied,sentiment_satisfied,sentiment_very_dissatisfied,sentiment_very_satisfied,settings_accessibility,tab,task,thumb_down,thumb_up,video_camera_front,videocam,warning&display=block" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=IM+Fell+Great+Primer:ital@0;1&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Playfair+Display:wght@700&family=Noto+Sans:wght@400;500;600;700&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,500;0,7..72,600;1,7..72,400&family=Fraunces:opsz,wght@9..144,500..700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 {css}</style>

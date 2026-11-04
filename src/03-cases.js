@@ -43,9 +43,9 @@ const CASES = {
 // title, a summary and its numbers, and the final design standing beside them.
 const PAGES = {
   carehub_2: { kicker: 'Hinge Health · Case study preview', title: 'CareHub 2.0', summary: 'I was the lead IC on the visual refresh of CareHub, the workspace Hinge Health’s physical therapists and coaches use every day.', contactLock: true,
-    hero: './site/cases/media/carehub/after-hd.jpg', desktopHero: true, heroCaption: 'CareHub 2.0 · The refreshed member workspace', heroAlt: 'CareHub 2.0 with labelled navigation, member context, engagement, trends, a body map and conversation.' },
-  next_best_action: { kicker: 'Hinge Health · CareHub', title: 'Holistic Care', summary: 'A member-first redesign that brought concurrent care workflows into view.', contactLock: true,
-    hero: './site/cases/media/nba/pptx/milestone-1-final-still.png', desktopHero: true, heroCaption: 'CareHub · Related tasks, grouped in the member view', heroAlt: 'CareHub member view with related tasks grouped above the summary.' },
+    hero: './site/cases/media/carehub/hero-system.png', desktopHero: true, heroCutout: true, heroAlt: 'The CareHub 2.0 visual system: icons, a body map, buttons, colour tokens, the member record, Noto Sans type, streak cards and visit status chips.' },
+  next_best_action: { kicker: 'Hinge Health · CareHub', title: 'Holistic Care', summary: 'A member-first redesign of CareHub: the member’s whole situation in one view, then AI that helps clinicians understand it.', contactLock: true,
+    hero: './site/cases/media/carehub/after-hd.jpg', desktopHero: true, heroCaption: 'The member-first CareHub member record', heroAlt: 'The refreshed CareHub member record: a labelled navigation rail, an AI summary with suggested actions, engagement, trends, the current focus with a body map, and the conversation.' },
   promo: { kicker: 'Gojek · GoFood growth', title: 'Solving for promo discovery', summary: 'Streamlining the promo journey: 4% incremental conversions and 5× ad revenue.',
     chips: [['4%', 'session conversions'], ['5×', 'ad revenue'], ['6', 'months of testing']], hero: './site/cases/media/phone_promo.png' },
   Fitclub: { kicker: 'Cult.fit', title: 'Designing for engagement: Fitclub V2', summary: 'Fitclub V2, a loyalty program built to lift retention and cross-sell products.',

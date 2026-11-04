@@ -14,7 +14,7 @@ Source: user-provided `Case Study _ NBA.pdf` (56 pages). Page numbers are one-ba
 
 ## Claim mapping
 
-- Problem: average 2.8 open workflows (page 10), 88% Interactions-tab click rate (page 11), and 90–110 members daily (page 12). The click-rate denominator is not stated, so the page labels it as a deck baseline and does not infer a share of members.
+- Problem (each stat now says what it means): average 2.8 open workflows (page 10), 88% Interactions-tab click rate (page 11), and 90–110 members daily (page 12). The click-rate denominator is not stated, so the page labels it as a deck baseline and does not infer a share of members.
 - Interview excerpts: Kate and Natallie on page 13 are exact source excerpts retained in the source deck, but omitted from this concise page.
 - AI-summary quote: exact excerpt on page 27; speaker is not named in the slide. It follows the original summary and source-transparency screen sequence.
 - Vision, workshops and milestone sequence: pages 16–20.
@@ -32,16 +32,20 @@ The separate visual-refresh work on pages 51–55 is not used as evidence of NBA
 
 Useful inputs for a later editorial revision: evaluation dates/sample sizes, exact division of ownership across partners, and whether the recommendation milestone has shipped since this deck. These are not invented in this draft.
 
-## Requested animation assets
+## Animation assets (GIFs)
 
-- Exploration: Figma Slides file PXKPGLco8i3bJa6d9sJ5gG, node 1-87007.
-- Milestone 1 final solution: same file, node 1-87039.
-- The exploration was subsequently supplied directly by the user (see below). The final-solution animation is still outstanding; the PPTX final still is used meanwhile.
+Pulled 2026-11-04 from the Figma Slides file PXKPGLco8i3bJa6d9sJ5gG with `tools/figma_gifs.py`'s method: the REST
+API's `GET /v1/files/:key/images` (Slides files reject the node endpoints, so GIFs are matched to slides by eye).
+The deck holds 15 GIFs; the exports (PDF/PPTX) carry only their first frames.
 
-## Supplied exploration animation (retained, not displayed)
-
-The exploration GIF copies are retained but are not displayed in the portfolio; the exploration story uses the original slide still instead. The final-solution GIF is still outstanding.
-
-## PPTX visuals used on the page
-
-The page uses `pptx/milestone-1-exploration-still.png` (slide 29) and `pptx/milestone-1-final-still.png` (slide 31), displayed through the corresponding detail crops. These are restored from the original deck without redaction; the displayed member names and clinical details are example data.
+- `gifs/milestone-1-exploration-1280.gif` (Figma ref 0bbb29c5c3, original 2744×1580, 18 MB): PDF page 22, "Exploration".
+- `gifs/milestone-1-final-1280.gif` (ref 88f17c7dde, original 2560×1646, 14 MB): PDF page 24, "Final".
+- Both are scaled to 1280 px wide with every frame and frame delay kept (ImageIO), about 3.6 MB each. The final GIF is the
+  page's opening After and the slider's After; the exploration plays in the redesign section as a step on the way, not as
+  the Before (the deck's p23 notes why it was dropped: a smaller chat, and no room for small windows or 3+ workflows).
+- `before-legacy.jpg` (Figma ref b94f577bde, 2560×1440, a still: the deck has no GIF of it): PDF page 6, the 2024 CareHub
+  member view with one workflow in a side panel. The page's Before, at the top and in the slider. The full-size originals are not bundled.
+- Not used: Allison Richards member view (5b0f44bb52, 6bf4fe05d9; pages 7 and 18), alert list (c735f28e49; page 8),
+  later summary iterations (c3b086d06e, f08525b8a1; pages 33–44), recommended actions (6dfc6262d8, ef85e1f3cb; page 48),
+  a dark home dashboard (455d7210b3), five emoji (pages 45–46) and the highway photo (a99df30817; page 51).
+- The earlier user-supplied `exploration-1.gif` is the same exploration, re-encoded larger; it is no longer referenced.

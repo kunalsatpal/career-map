@@ -469,7 +469,7 @@ body.reading-case #signs, body.reading-case #labels { display: none; }
 .pnav.two .pnext img.icon.logo-fill { padding: 0; }
 .pnext small { display: block; margin: 0 0 10px; font: 400 .8125rem/1 var(--font-caps); letter-spacing: .18em; opacity: .7; font-variant-caps: small-caps; }
 .pnext b { font: 400 clamp(1.75rem, 3vw, 2.5rem)/1.05 var(--font-hand); }
-.pnext img { height: 132px; width: auto; margin: -8px 0 -60px; rotate: 4deg; border-radius: 6px; }
+.pnext img { height: 132px; width: auto; margin: -8px 0 -60px; rotate: 4deg; border-radius: 6px; backface-visibility: hidden; image-rendering: auto; }
 .pnext i { font-style: normal; font-size: 1.75rem; }
 .pback { padding: 8px 14px; border: 0; background: none; cursor: pointer; font: italic 400 1.0625rem/1 var(--font-body); color: var(--ink-2); text-decoration: underline; text-underline-offset: 4px; }
 body.reading-case #viewport, body.reading-case #dusk, body.reading-case #gl, body.reading-case .ui, body.reading-case #panel, body.reading-case #leader { visibility: hidden; }
@@ -567,6 +567,7 @@ body.reading-case #viewport, body.reading-case #dusk, body.reading-case #gl, bod
 .note .win.desktop { display: grid; place-items: center; height: auto; min-height: 144px; padding: 10px; }
 .note .win.desktop::after { display: none; }
 .note .win.desktop img { position: static; width: 100%; height: auto; padding: 2px; transform: rotate(-.6deg); animation: win-desk .9s var(--ease-out) both; }
+.note .win.desktop.cutout img { padding: 0; background: none; border-radius: 0; box-shadow: none; filter: drop-shadow(0 6px 8px oklch(20% 0.03 50 / .18)); }
 /* The full screen stays in view, so it settles in like a print laid on the card rather than sliding up from below. */
 @keyframes win-desk { from { transform: rotate(-3deg) translateY(12px) scale(.96); opacity: 0; } }
 @keyframes win-print { from { transform: translateX(-50%) rotate(-4deg) translateY(10px); opacity: 0; } }
@@ -716,6 +717,9 @@ body.reading-case #viewport, body.reading-case #dusk, body.reading-case #gl, bod
 .desktop-product .pland { width: min(560px, 100%); }
 .desktop-product .pland::before, .desktop-product .pland::after { display: none; }
 .desktop-product .pland img { width: 100%; rotate: 0deg; border-radius: 4px; filter: none; }
+/* A hero cut out of its background (CareHub's system tiles): no frame or tilt, and a shadow that follows each tile. */
+.product-hero.cutout { rotate: 0deg; border-radius: 0; box-shadow: none; }
+.desktop-product .product-hero.cutout img { border-radius: 0; filter: drop-shadow(0 1px 1.5px oklch(20% 0.03 50 / .1)) drop-shadow(0 12px 16px oklch(20% 0.03 50 / .12)); }
 .product-hero { display: block; width: 100%; padding: 0; border: 0; background: transparent; border-radius: 10px; cursor: zoom-in; rotate: -1deg; box-shadow: 0 2px 3px oklch(20% 0.03 50 / .12), 0 24px 45px -16px oklch(20% 0.03 50 / .35); }
 .screen-frame { position: relative; overflow: hidden; border: 5px solid white; border-radius: 5px; background: #fff; box-shadow: 0 0 0 1px oklch(27% .04 42 / .16), 0 18px 34px -20px oklch(20% .03 50 / .36); }
 .screen-frame > img { display: block; width: 100%; height: auto; }
@@ -989,7 +993,7 @@ body.reading-case #viewport, body.reading-case #dusk, body.reading-case #gl, bod
 .wipe-handle { position: absolute; top: 0; bottom: 0; left: var(--pos); width: 2px; translate: -1px 0; background: var(--rc); box-shadow: 0 0 0 1px oklch(99% .01 84 / .8); pointer-events: none; }
 .wipe-handle i { position: absolute; top: 50%; left: 50%; translate: -50% -50%; display: grid; place-items: center; width: 46px; height: 46px; border-radius: 50%;
   color: oklch(98% .01 84); background: var(--rc); font: 600 1rem/1 var(--font-read); font-style: normal; letter-spacing: -.05em; box-shadow: 0 0 0 3px oklch(99% .01 84 / .9), 0 10px 20px -8px oklch(20% .03 50 / .6); }
-.wipe-tag { position: absolute; top: 12px; padding: 3px 8px; border-radius: 4px; font: 600 .875rem/1.2 var(--font-read); font-variant-caps: small-caps; letter-spacing: .04em; pointer-events: none;
+.wipe-tag { position: absolute; bottom: 12px; padding: 3px 8px; border-radius: 4px; font: 600 .875rem/1.2 var(--font-read); font-variant-caps: small-caps; letter-spacing: .04em; pointer-events: none;
   color: oklch(98% .01 84); background: oklch(27% .04 42 / .82); }
 .wipe-tag.before { left: 12px; }
 .wipe-tag.after { right: 12px; background: var(--rc); }
@@ -1189,6 +1193,20 @@ body.reading-case #viewport, body.reading-case #dusk, body.reading-case #gl, bod
 /* The system film: framed like a screen, on the paper. */
 .case-reel video { display: block; width: 100%; height: auto; aspect-ratio: 7 / 5; border-radius: 12px; background: #07100e; box-shadow: 0 0 0 1px oklch(27% .04 42 / .16), 0 26px 50px -30px oklch(20% .03 50 / .5); }
 #letter[data-open-case="hinge-carehub"] .case-reel { --wide: min(900px, calc(100vw - 48px)); }
+/* The points that matter most: four figures in a 2×2 grid, divided by hairlines, no cards. */
+.case-highlights { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); margin: 34px 0 44px; border-block: 1px solid oklch(27% .04 42 / .16); }
+.case-highlights > div { display: grid; align-content: start; gap: 10px; padding: 26px 28px 26px 0; }
+.case-highlights > div:nth-child(even) { padding: 26px 0 26px 28px; border-left: 1px solid oklch(27% .04 42 / .16); }
+.case-highlights > div:nth-child(n + 3) { border-top: 1px solid oklch(27% .04 42 / .16); }
+#letter .pbody .case-highlights dt { margin: 0; font: 600 clamp(2.25rem, 4.4vw, 3rem)/1.05 var(--font-read); color: var(--rc); font-variant-numeric: lining-nums; letter-spacing: -.02em; }
+#letter .pbody .case-highlights dd { display: grid; gap: 4px; margin: 0; }
+#letter .pbody .case-highlights dd b { font: 600 1.125rem/1.3 var(--font-read); color: var(--ink); }
+#letter .pbody .case-highlights dd span { font: 400 1rem/1.5 var(--font-read); color: var(--ink-2); }
+@media (max-width: 560px) {
+  .case-highlights { grid-template-columns: 1fr; }
+  .case-highlights > div, .case-highlights > div:nth-child(even) { padding: 22px 0; border-left: 0; }
+  .case-highlights > div + div { border-top: 1px solid oklch(27% .04 42 / .16); }
+}
 /* How each milestone did: three columns, each with its verdict, its screen, and why. */
 .case-outcomes { --ow: min(880px, calc(100vw - 48px)); width: var(--ow); max-width: none; margin: 34px 0 48px calc((100% - var(--ow)) / 2); }
 .oc-title { margin: 0 0 22px; text-align: center; color: var(--ink-2); font: 400 1.25rem/1.4 var(--font-read); }
@@ -1352,3 +1370,105 @@ body.reading-case #viewport, body.reading-case #dusk, body.reading-case #gl, bod
   { font-family: var(--font-num); font-weight: 600; font-optical-sizing: auto; letter-spacing: -.015em; }
 #letter .phero h1 { font-weight: 650; letter-spacing: -.025em; }
 #letter :is(.case-detail summary, .case-evidence > figcaption, .case-route b) { font-family: var(--font-read); font-weight: 600; }
+
+/* Holistic Care opens on its before and after, both playing, side by side across the page: the deck's own GIFs. */
+.phero.case.desktop-product:has(.hero-gifs) { grid-template-columns: 1fr; gap: 44px; max-width: 1180px; min-height: 0; padding-bottom: 56px; }
+.desktop-product .pland:has(.hero-gifs) { width: 100%; }
+.hero-gifs { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; align-items: start; }
+.hero-gif { display: grid; gap: 12px; padding: 0; border: 0; background: none; text-align: left; cursor: zoom-in; }
+.desktop-product .pland .hero-gif img { display: block; width: 100%; padding: 5px; border-radius: 4px; background: oklch(99% .005 84);
+  box-shadow: 0 2px 3px oklch(20% 0.03 50 / .12), 0 24px 45px -18px oklch(20% 0.03 50 / .35); transition: translate .3s var(--ease-out); }
+.hero-gif:hover img, .hero-gif:focus-visible img { translate: 0 -3px; }
+.hg-tag { display: flex; align-items: baseline; gap: 10px; color: var(--ink-2); font: 600 .75rem/1 'Noto Sans', var(--font-read); letter-spacing: .2em; text-transform: uppercase; }
+.hg-tag b { padding: 5px 10px; border-radius: 999px; color: #fff; background: var(--ink, #2b2118); letter-spacing: .16em; font-weight: 600; }
+.hero-gif.g1 .hg-tag b { background: oklch(45% .09 160); }
+@media (max-width: 760px) { .hero-gifs { grid-template-columns: 1fr; gap: 26px; } }
+
+/* After a locked preview's invitation, the way on to the other case studies. */
+.pnav.after-lock { margin-top: 56px; }
+
+/* The staged path, vision to milestones: three cards in a row, the last one still ahead. */
+.case-milestones { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin: 30px 0 44px; padding: 0; list-style: none; counter-reset: none; }
+#letter .pbody .case-milestones li { position: relative; display: grid; align-content: start; gap: 8px; margin: 0; padding: 22px 22px 20px; border-radius: 12px; box-shadow: inset 0 0 0 1px oklch(27% .04 42 / .18); }
+#letter .pbody .case-milestones li.next { box-shadow: inset 0 0 0 1px oklch(27% .04 42 / .18); border: 1px dashed transparent; background: repeating-linear-gradient(135deg, transparent 0 9px, oklch(27% .04 42 / .035) 9px 10px); }
+#letter .pbody .ms-k { margin: 0; color: var(--ink-3); font: 600 .75rem/1.3 var(--font-read); letter-spacing: .16em; text-transform: uppercase; }
+#letter .pbody .ms-t { margin: 0; color: var(--ink); font: 500 1.0625rem/1.35 var(--font-read); text-wrap: balance; }
+#letter .pbody .ms-s { margin: 6px 0 0; color: var(--rc); font: 600 .875rem/1.3 var(--font-read); }
+#letter .pbody .case-milestones li.next .ms-s { color: var(--ink-3); font-style: italic; font-weight: 500; }
+@media (max-width: 760px) { .case-milestones { grid-template-columns: 1fr; } }
+
+/* A short loop, smaller than a full screen, with the reasons it taught set above it as flags. */
+.case-motion { width: var(--wide); max-width: none; margin: 2.2em 0 2.2em calc((100% - var(--wide)) / 2); }
+.mo-flags { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px 10px; margin: 14px 0 0; }
+.mo-k { color: var(--ink-3); font: 600 .75rem/1.3 var(--font-read); letter-spacing: .16em; text-transform: uppercase; margin-right: 4px; }
+.mo-flag { display: inline-flex; align-items: center; gap: 7px; padding: 6px 13px; border-radius: 999px; color: var(--ink); background: oklch(92% .06 85 / .7); box-shadow: inset 0 0 0 1px oklch(55% .1 75 / .35); font: 500 .9375rem/1.25 var(--font-read); }
+.mo-flag i { color: oklch(60% .14 70); font-style: normal; }
+.case-motion video { display: block; width: 100%; height: auto; border-radius: 10px; box-shadow: 0 0 0 1px oklch(27% .04 42 / .16), 0 22px 40px -28px oklch(20% .03 50 / .5); background: #fff; }
+.case-motion figcaption { margin-top: 12px; text-align: center; }
+
+/* A UI card with its problems called out, as on the deck's Blindspot slide: highlighted lines, labels with leader
+   lines on the left, a bracket on the right. Flat on the paper; the card itself is the product's own white. */
+.case-notes { --cn-bad: oklch(58% .19 27); --cn-meh: oklch(52% .16 262); --cw: min(1040px, calc(100vw - 48px)); width: var(--cw); max-width: none; margin: 36px 0 44px calc((100% - var(--cw)) / 2); }
+#letter .pbody .cn-kick { display: flex; justify-content: center; gap: 18px; margin: 0 0 26px; color: var(--ink-2); font: 400 1.25rem/1.3 'Noto Sans', system-ui, sans-serif; }
+.cn-stage { position: relative; display: grid; grid-template-columns: 1fr minmax(0, 520px) 1fr; }
+.cn-card { grid-column: 2; padding: 22px 26px 18px; border-radius: 12px; background: #fff; box-shadow: 0 0 0 1px oklch(27% .04 42 / .14), 0 18px 34px -26px oklch(20% .03 50 / .45); font-family: 'Noto Sans', system-ui, sans-serif; color: #1c2927; }
+#letter .pbody .cn-meta { display: flex; justify-content: space-between; align-items: center; margin: 0 0 18px; color: #067d38; font-size: .875rem; }
+#letter .pbody .cn-meta > span:first-child { text-decoration: underline; text-underline-offset: 3px; }
+.cn-thumbs { display: flex; gap: 10px; color: #1c2927; } .cn-thumbs .ms { font-size: 1.35rem; }
+#letter .pbody .cn-name { margin: 0 0 10px; font: 700 1.25rem/1.3 'Noto Sans', system-ui, sans-serif; color: #1c2927; }
+#letter .pbody .cn-text { margin: 0; font: 400 1.0625rem/1.7 'Noto Sans', system-ui, sans-serif; color: #1c2927; }
+.cn-text mark { color: inherit; padding: 1px 0; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+.cn-text mark.cn-bad { background: color-mix(in oklch, var(--cn-bad) 14%, white); }
+.cn-text mark.cn-meh { background: color-mix(in oklch, var(--cn-meh) 11%, white); }
+#letter .pbody .cn-more { margin: 12px 0 0; color: #067d38; font: 600 .9375rem/1.3 'Noto Sans', system-ui, sans-serif; }
+.cn-note { position: absolute; left: 0; width: calc((100% - 520px) / 2 - 12px); display: flex; align-items: center; justify-content: flex-end; translate: 0 -50%; font: 500 .875rem/1.3 'Noto Sans', system-ui, sans-serif; text-align: right; }
+.cn-note span { max-width: 15ch; }
+.cn-note i { flex: none; position: relative; width: 44px; height: 1.5px; margin-left: 10px; background: currentColor; }
+.cn-note i::before { content: ''; position: absolute; left: -1px; top: 50%; width: 0; height: 0; translate: 0 -50%; border: 4px solid transparent; border-right: 6px solid currentColor; border-left: 0; }
+.cn-note i::after { content: ''; position: absolute; right: -3px; top: 50%; width: 7px; height: 7px; translate: 0 -50%; border-radius: 50%; background: currentColor; }
+.cn-note.cn-bad { color: var(--cn-bad); } .cn-note.cn-meh { color: var(--cn-meh); }
+.cn-side { position: absolute; display: flex; align-items: center; gap: 18px; color: var(--cn-bad); font: 500 .875rem/1.35 'Noto Sans', system-ui, sans-serif; }
+.cn-side i { align-self: stretch; width: 1.5px; background: currentColor; position: relative; }
+.cn-side i::before, .cn-side i::after { content: ''; position: absolute; left: 50%; translate: -50% 0; border: 4px solid transparent; }
+.cn-side i::before { top: -1px; border-top: 6px solid currentColor; border-bottom: 0; } .cn-side i::after { bottom: -1px; border-bottom: 6px solid currentColor; border-top: 0; }
+.cn-side span { max-width: 16ch; }
+.case-notes figcaption { margin-top: 16px; text-align: center; }
+/* On a phone the labels leave the margins and become a key under the card. */
+@media (max-width: 860px) {
+  .case-notes { --cn-key: 1; width: 100%; margin-left: 0; }
+  #letter .pbody .cn-kick { flex-wrap: wrap; gap: 4px 12px; font-size: 1rem; }
+  .cn-stage { grid-template-columns: 1fr; gap: 10px; } .cn-card { grid-column: 1; }
+  .cn-note, .cn-side { position: static; width: auto; translate: none; justify-content: flex-start; text-align: left; }
+  .cn-note i { order: -1; width: 10px; height: 10px; margin: 0 10px 0 0; border-radius: 3px; background: color-mix(in oklch, currentColor 22%, white); box-shadow: inset 0 0 0 1px currentColor; }
+  .cn-note i::before, .cn-note i::after { display: none; }
+  .cn-side i { display: none; } .cn-side span, .cn-note span { max-width: none; }
+}
+/* The tag above an annotated card, and the new insight card itself. */
+#letter .pbody .cn-tag { width: fit-content; margin: 0 auto 14px; padding: 5px 14px; border-radius: 999px; color: oklch(98% .01 84); background: var(--ink); font: 600 .8125rem/1.3 var(--font-read); letter-spacing: .14em; text-transform: uppercase; }
+#letter .pbody .cn-tag.new { background: var(--rc); }
+.case-notes { --cn-good: #067d38; } .cn-note.cn-good { color: var(--cn-good); }
+.cn-insight { padding: 20px 20px 18px; }
+#letter .pbody .ci-head { display: flex; align-items: center; gap: 8px; margin: 0 0 14px; font: 700 1.0625rem/1.3 'Noto Sans', system-ui, sans-serif; color: #1c2927; }
+.ci-head .ms { color: #1aa37a; font-size: 1.25rem; } .ci-when { margin-left: auto; color: #6d7470; font-weight: 400; font-size: .875rem; white-space: nowrap; }
+.ci-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+#letter .pbody .ci-ins { margin: 0; padding: 12px 14px; border-radius: 10px; background: #f6f5f2; color: #535e5b; font: 400 .9375rem/1.5 'Noto Sans', system-ui, sans-serif; }
+.ci-src { display: inline-grid; place-items: center; min-width: 20px; height: 20px; padding: 0 5px; border-radius: 999px; background: #ebe7df; color: #535e5b; font-size: .75rem; font-weight: 600; }
+#letter .pbody .ci-owner { display: flex; align-items: center; gap: 8px; margin: 16px 0 10px; font: 500 .9375rem/1.3 'Noto Sans', system-ui, sans-serif; color: #1c2927; }
+.ci-av { display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: #f7e08a; font-size: .6875rem; font-weight: 700; }
+.ci-all { margin-left: auto; color: #067d38; font-weight: 600; }
+.ci-tasks { display: flex; flex-wrap: wrap; gap: 8px; }
+.ci-task { display: inline-flex; align-items: center; gap: 10px; padding: 7px 8px 7px 14px; border-radius: 12px; box-shadow: inset 0 0 0 1px #ececea; font: 400 .9375rem/1.2 'Noto Sans', system-ui, sans-serif; color: #1c2927; }
+.ci-task b { font-weight: 600; } .ci-task em { font-style: normal; color: #6d7470; } .ci-task .ms { font-size: 1.25rem; color: #3b4643; }
+@media (max-width: 560px) { .ci-row { grid-template-columns: 1fr; } }
+/* The feedback form on a summary, set as UI. */
+.cn-fb { padding: 22px 24px 20px; text-align: center; }
+#letter .pbody .fb-q { margin: 0 0 14px; font: 600 1rem/1.3 'Noto Sans', system-ui, sans-serif; color: #1c2927; }
+.fb-faces { display: flex; justify-content: center; gap: 26px; margin: 0 auto 18px; width: fit-content; }
+.fb-faces .ms { font-size: 2.25rem; color: #c9cbc7; } .fb-faces .ms.on { color: #f5a623; font-variation-settings: 'FILL' 1; }
+.fb-tags { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; padding-top: 16px; border-top: 1px solid #ececea; }
+.fb-tag { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; border-radius: 8px; box-shadow: inset 0 0 0 1px #e3e2de; font: 400 .875rem/1.2 'Noto Sans', system-ui, sans-serif; color: #3b4643; }
+.fb-tag i { width: 13px; height: 13px; border-radius: 3px; box-shadow: inset 0 0 0 1.5px #8c918d; }
+#letter .pbody .fb-box { margin: 16px 0 12px; padding: 12px 14px 30px; border-radius: 8px; box-shadow: inset 0 0 0 1px #e3e2de; color: #a4a6a2; text-align: left; font: 400 .875rem/1.3 'Noto Sans', system-ui, sans-serif; }
+#letter .pbody .fb-btn { margin: 0; padding: 10px; border-radius: 8px; background: #067d38; color: #fff; font: 600 .9375rem/1.2 'Noto Sans', system-ui, sans-serif; }
+/* Steps inside a section: a small heading that sits close to its one sentence. */
+#letter .pbody section > h3 + p { margin-top: 0; }

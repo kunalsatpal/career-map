@@ -11,12 +11,29 @@
    "html": "CareHub is where Hinge Health’s physical therapists and coaches work with members every day. I was the lead IC on its visual refresh, from the member record to the visual system behind it."
   },
   {
-   "t": "list",
+   "t": "highlights",
+   "label": "My role at a glance",
    "items": [
-    "<b>Lead IC.</b> I led the design of the refresh, end to end.",
-    "<b>A team of two.</b> I worked with one more designer, over six months.",
-    "<b>+6% PT efficiency.</b> After the visual refresh.",
-    "<b>Recognised.</b> The work won a Mover’s Award in 2025."
+    [
+     "Lead IC",
+     "Design lead",
+     "I led the design of the refresh, end to end."
+    ],
+    [
+     "2",
+     "Designers",
+     "Me and one more designer, over six months."
+    ],
+    [
+     "+6%",
+     "PT efficiency",
+     "After the visual refresh."
+    ],
+    [
+     "2025",
+     "Mover’s Award",
+     "The work was recognised with a Mover’s Award."
+    ]
    ]
   },
   {

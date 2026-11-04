@@ -214,6 +214,37 @@ function caseInteraction(b, uid) {
   }
   // A short film of the system: muted and looping, still for anyone who prefers less motion.
   if (b.t === 'reel') return `<figure class="ph large rise case-reel"><video src="${abs(b.src)}" poster="${abs(b.poster)}" muted loop playsinline preload="metadata" controls${matchMedia('(prefers-reduced-motion: reduce)').matches ? '' : ' autoplay'} aria-label="${caseAttr(b.alt)}" width="${Number(b.width)}" height="${Number(b.height)}"></video>${b.cap ? `<figcaption>${keep(b.cap)}</figcaption>` : ''}</figure>`
+  // A few points that matter most, each with a large figure: a 2×2 grid on the paper, hairlines between.
+  if (b.t === 'highlights') return `<dl class="case-highlights rise" aria-label="${caseAttr(b.label)}">${b.items.map(([n, what, line], i) => `<div style="--i:${i}"><dt>${keep(n)}</dt><dd><b>${keep(what)}</b><span>${keep(line)}</span></dd></div>`).join('')}</dl>`
+  // A short loop, smaller than a full screen, with what it taught set above it as flags. Still for anyone who prefers less motion.
+  if (b.t === 'motion') return `<figure class="case-motion rise">`
+    + `<video src="${abs(b.src)}" poster="${abs(b.poster)}" muted loop playsinline preload="metadata"${matchMedia('(prefers-reduced-motion: reduce)').matches ? ' controls' : ' autoplay'} aria-label="${caseAttr(b.alt)}" width="${Number(b.width)}" height="${Number(b.height)}"></video>`
+    + `${b.cap ? `<figcaption>${keep(b.cap)}</figcaption>` : ''}`
+    + `${b.pills ? `<div class="mo-flags" aria-label="${caseAttr(b.label || 'Notes')}">${b.label ? `<span class="mo-k">${keep(b.label)}</span>` : ''}${b.pills.map(x => `<span class="mo-flag"><i aria-hidden="true">⚑</i>${keep(x)}</span>`).join('')}</div>` : ''}</figure>`
+  // A UI card with its problems called out: highlighted lines, labels with leader lines on the left, and a bracket on
+  // the right. placeNotes() draws the lines to wherever the text wraps; on a phone the labels become a key.
+  if (b.t === 'notes') { const C = b.card
+    return `<figure class="case-notes rise" data-notes>${b.tag ? `<p class="cn-tag${b.tagTone ? ' ' + b.tagTone : ''}">${keep(b.tag)}</p>` : ''}${b.kicker ? `<p class="cn-kick">${b.kicker.map(keep).join('<span aria-hidden="true">|</span>')}</p>` : ''}<div class="cn-stage">`
+      // Three kinds of card: the old paragraph summary (parts of its text highlighted), the new insight card, and the
+      // feedback form that sits on it.
+      + (C.kind === 'feedback'
+        ? `<div class="cn-card cn-fb"><p class="fb-q">${keep(C.question)}</p><div class="fb-faces" data-note="0">${C.faces.map((f, i) => `<span class="ms${i === C.chosen ? ' on' : ''}" aria-hidden="true">${f}</span>`).join('')}</div>`
+          + `<div class="fb-tags" data-note="1">${C.tags.map(t => `<span class="fb-tag"><i aria-hidden="true"></i>${keep(t)}</span>`).join('')}</div>`
+          + `<p class="fb-box" data-note="2">${keep(C.placeholder)}</p><p class="fb-btn">${keep(C.button)}</p></div>`
+        : C.kind === 'insight'
+        ? `<div class="cn-card cn-insight"><p class="ci-head"><span class="ms" aria-hidden="true">auto_awesome</span><b>${keep(C.title)}</b><span class="ci-when">${keep(C.when)}</span></p>`
+          + `<div class="ci-row" data-note="0">${C.insights.map(([t, src]) => `<p class="ci-ins">${keep(t)} ${src.map((n, k) => `<span class="ci-src"${k === 0 && C.insights[0][1] === src ? ' data-note="1"' : ''}>${n}</span>`).join(' ')}</p>`).join('')}</div>`
+          + `<p class="ci-owner"><span class="ci-av">${keep(C.initials)}</span>${keep(C.owner)}<span class="ci-all">View all ▾</span></p>`
+          + `<div class="ci-tasks" data-note="2">${C.tasks.map(([t, w]) => `<span class="ci-task"><b>${keep(t)}</b><em>${keep(w)}</em><span class="ms" aria-hidden="true">check_circle</span></span>`).join('')}</div></div>`
+        : `<div class="cn-card"><p class="cn-meta"><span>${keep(C.meta)}</span><span class="cn-thumbs" aria-hidden="true"><span class="ms">thumb_down</span><span class="ms">thumb_up</span></span></p><p class="cn-name">${keep(C.name)}</p>`
+          + `<p class="cn-text">${C.parts.map(([text, tone], i) => tone ? `<mark class="cn-${tone}" data-note="${i}">${keep(text)}</mark>` : keep(text)).join(' ')}</p><p class="cn-more">⌄ ${keep(C.more)}</p></div>`)
+      + (C.notes ? C.notes.map(([tone, note], i) => `<span class="cn-note cn-${tone}" data-for="${i}"><span>${keep(note)}</span><i aria-hidden="true"></i></span>`).join('')
+        : C.parts.map(([, tone, note], i) => tone ? `<span class="cn-note cn-${tone}" data-for="${i}"><span>${keep(note)}</span><i aria-hidden="true"></i></span>` : '').join(''))
+      + `${b.side ? `<span class="cn-side"><i aria-hidden="true"></i><span>${keep(b.side)}</span></span>` : ''}</div>`
+      + `${b.cap ? `<figcaption>${keep(b.cap)}</figcaption>` : ''}</figure>` }
+  // The staged path: one card per milestone, with where each one stands.
+  if (b.t === 'milestones') return `<ol class="case-milestones rise" aria-label="${caseAttr(b.label)}">${b.items.map(([k, title, status], i) => `<li class="${i === b.items.length - 1 ? 'next' : 'done'}" style="--i:${i}">`
+    + `<p class="ms-k">${keep(k)}</p><p class="ms-t">${keep(title)}</p><p class="ms-s">${keep(status)}</p></li>`).join('')}</ol>`
   // How each milestone did, side by side: what rose, what held, what fell, and why.
   if (b.t === 'outcomes') return `<figure class="case-outcomes rise" style="--n:${b.items.length};--oimg:${Number(b.imgMax) || 217}px"><figcaption class="oc-title">${keep(b.title)}</figcaption><ul>${b.items.map((o, i) => `<li class="oc-${o.tone}" style="--i:${i}">`
     + `<p class="oc-tag">${keep(o.tag)}</p><button data-zoom="${abs(b.full || o.src)}" aria-label="${caseAttr('Enlarge: ' + o.alt)}"><img src="${abs(o.src)}" alt="${caseAttr(o.alt)}" loading="lazy" decoding="async"></button>${o.note ? `<p class="oc-note">${keep(o.note)}</p>` : ''}</li>`).join('')}</ul></figure>`
@@ -242,12 +273,13 @@ function caseInteraction(b, uid) {
   // The screens are shown no wider than their pixels allow, so they stay sharp.
   if (b.t === 'slides') { const [before, after] = b.states
     return `<figure class="case-wipe rise" data-wipe style="--pos:50%"><div class="wipe-stage" style="aspect-ratio:${b.ratio || '1.56'}">`
-      // Each tag sits with its own screen, so the divider covers and uncovers it along with the picture.
+      // Each tag sits with its own screen, so the divider covers and uncovers it along with the picture. The slider
+      // compares stills, which line up; a state's caption opens its deck GIF (gif), where the deck has one.
       + `<img class="wipe-img" src="${abs(after.src)}" alt="${caseAttr(after.alt)}" loading="lazy" decoding="async"><span class="wipe-tag after" aria-hidden="true">${keep(after.tag || 'After')}</span>`
       + `<div class="wipe-before"><img class="wipe-img" src="${abs(before.src)}" alt="${caseAttr(before.alt)}" loading="lazy" decoding="async"><span class="wipe-tag before" aria-hidden="true">${keep(before.tag || 'Before')}</span></div>`
       + `<span class="wipe-handle" aria-hidden="true"><i>‹ ›</i></span>`
       + `<input class="wipe-range" type="range" min="0" max="100" value="50" aria-label="${caseAttr(b.label || 'Before and after')}: drag left to reveal ${caseAttr(after.tag || 'after')}, right to reveal ${caseAttr(before.tag || 'before')}"></div>`
-      + `<div class="wipe-caps">${[before, after].map(s => `<button data-zoom="${abs(s.src)}"><b>${keep(s.tag)}</b> ${keep(s.label)} <span aria-hidden="true">· full size ↗</span></button>`).join('')}</div>`
+      + `<div class="wipe-caps">${[before, after].map(s => `<button data-zoom="${abs(s.gif || s.src)}"><b>${keep(s.tag)}</b> ${keep(s.label)} <span aria-hidden="true">· ${s.gif ? 'watch it move' : 'full size'} ↗</span></button>`).join('')}</div>`
       + `${b.note ? `<figcaption>${keep(b.note)}</figcaption>` : ''}</figure>` }
   // A design system taken apart: each piece of the board flies in to its place. Pointing at one (or tapping it)
   // takes it apart beside the board: its elements, rebuilt as live UI from the layers of the deck's vector slide.
@@ -316,12 +348,13 @@ function pageHTML(id) {
       + `<h1>${P.title || L.title}</h1>${P.stand ? `<p class="pstand">${P.stand}</p>` : ''}</header>`
     : `<header class="phero case${P.desktopHero ? ' desktop-product' : ''}"><div class="ptext"><p class="pkick">${crest(from.hue, from.sig)}<span>${from.name}</span></p><h1>${P.title || L.title}</h1>`
       + `${P.summary ? `<p class="psum">${P.summary}</p>` : ''}${P.chips ? `<dl class="pchips">${P.chips.map(([b, t]) => `<div><dt>${b}</dt><dd>${t}</dd></div>`).join('')}</dl>` : ''}<p class="pmeta">${from.role} · ${mins} min read</p></div>`
-      + `${P.hero ? `<div class="pland">${P.desktopHero ? `<button class="product-hero" data-zoom="${abs(P.hero)}" aria-label="Enlarge the final design"><img src="${abs(P.hero)}" alt="${caseAttr(P.heroAlt || 'The final design')}"></button>` : `<img src="${abs(P.hero)}" alt="${caseAttr(P.heroAlt || 'The final design')}">`}${P.heroCaption ? `<p class="hero-caption">${keep(P.heroCaption)}</p>` : ''}</div>` : ''}</header>`
+      + `${P.hero ? `<div class="pland">${P.heroGifs ? `<div class="hero-gifs">${P.heroGifs.map((g, i) => `<button class="hero-gif g${i}" data-zoom="${abs(g.src)}" aria-label="${caseAttr('Enlarge: ' + g.label)}"><span class="hg-tag"><b>${keep(g.tag)}</b>${keep(g.label)}</span><img src="${abs(g.src)}" alt="${caseAttr(g.alt)}" decoding="async"></button>`).join('')}</div>` : P.desktopHero ? `<button class="product-hero${P.heroCutout ? ' cutout' : ''}" data-zoom="${abs(P.hero)}" aria-label="Enlarge the final design"><img src="${abs(P.hero)}" alt="${caseAttr(P.heroAlt || 'The final design')}"></button>` : `<img src="${abs(P.hero)}" alt="${caseAttr(P.heroAlt || 'The final design')}">`}${P.heroCaption ? `<p class="hero-caption">${keep(P.heroCaption)}</p>` : ''}</div>` : ''}</header>`
   // The end offers two ways on: the one before and the one after, each with its picture.
   const card = (step, label) => {
     const to = order[(at + step + order.length) % order.length], N = to !== id && letterOf(to)
     if (!N) return ''
-    const NP = PAGES[N.doc] || {}, pic = NP.hero || NP.icon, arrow = `<i aria-hidden="true">${step < 0 ? '←' : '→'}</i>`
+    // The card shows a small copy of the hero made at twice its size (media/thumbs), so it stays sharp when tilted.
+    const NP = PAGES[N.doc] || {}, pic = NP.hero ? './site/cases/media/thumbs/' + NP.hero.split('/').pop().replace(/\.\w+$/, '.png') : NP.icon, arrow = `<i aria-hidden="true">${step < 0 ? '←' : '→'}</i>`
     return `<button class="pnext${step < 0 ? ' prev' : ''}" data-case="${to}">${step < 0 ? arrow : ''}<span><small>${label} ${kind}</small><b>${plain(NP.title || N.title)}</b></span>`
       + `${pic ? `<img${NP.hero ? '' : NP.iconBg ? ` class="icon" style="background:${NP.iconBg}"` : ' class="icon logo-fill"'} src="${abs(pic)}" alt="">` : ''}${step > 0 ? arrow : ''}</button>`
   }
@@ -331,8 +364,9 @@ function pageHTML(id) {
   const say = P.contactLock
     ? `<section class="contact-callout ink-lock" aria-labelledby="case-contact-title"><div class="ink-lock-mark" aria-hidden="true"><img src="${abs('./assets/case-lock.svg')}" alt="" width="420" height="300" loading="lazy" decoding="async"></div><h2 id="case-contact-title">The complete case study</h2><p>The research, explorations and decisions behind this work, walked through on a call.</p><a class="contact-action" href="mailto:kunalsatpal1@gmail.com?subject=${encodeURIComponent(title + ' — complete case study')}"><span>Write to me <span aria-hidden="true">↗</span></span><span class="contact-mail">kunalsatpal1@gmail.com</span></a></section>`
     : BATCH.pageFixes || EXTRA_PAGES[id] ? `<p class="psay">Want to talk about ${L.blog ? 'this' : 'this work'}? <a href="mailto:kunalsatpal1@gmail.com?subject=${encodeURIComponent(title)}">Write to me at kunalsatpal1@gmail.com</a><span aria-hidden="true"> · </span><a href="${abs(cv[1])}" target="_blank" rel="noopener">Résumé</a></p>` : ''
-  const foot = `<footer class="pfoot">${!P.contactLock && (prev || next) ? `<nav class="pnav${prev && next ? ' two' : ''}" aria-label="More to read">${prev}${next}</nav>` : ''}`
-    + say + `<button class="pback" data-close>Back to the map</button></footer>`
+  // Every page offers the way on to the other case studies; on a locked preview it comes after the invitation.
+  const nav = prev || next ? `<nav class="pnav${prev && next ? ' two' : ''}${P.contactLock ? ' after-lock' : ''}" aria-label="More to read">${prev}${next}</nav>` : ''
+  const foot = `<footer class="pfoot">${P.contactLock ? say + nav : nav + say}<button class="pback" data-close>Back to the map</button></footer>`
   return head + `<div class="pbody${L.blog ? ' blog' : ''}">${body}</div>` + foot
 }
 
@@ -343,6 +377,7 @@ let caseId = null, letterFrom = null, seq = 0, reveal = null, riseIO = null, sys
 const SETTLE = 'cubic-bezier(.22, 1, .36, 1)'
 // Pictures rise into place as they scroll into view.
 function watchRise() {
+  placeNotes()
   riseIO?.disconnect()
   const all = pageEl.querySelectorAll('.rise')
   if (reduce || !('IntersectionObserver' in window)) { pageEl.querySelectorAll('[data-system]').forEach(el => el.classList.add('play')); return all.forEach(el => el.classList.add('in')) }
@@ -352,6 +387,28 @@ function watchRise() {
   sysIO?.disconnect()
   sysIO = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.closest('[data-system]').classList.add('play'); sysIO.unobserve(e.target) } }), { root: lscroll, threshold: .5 })
   pageEl.querySelectorAll('[data-system] .sys-board').forEach(el => sysIO.observe(el))
+}
+// Annotated cards: each label sits level with the first line of the text it describes, its leader line reaching the
+// text's left edge; the bracket spans the paragraph. Placed again whenever the card changes size (fonts, resizing).
+let notesRO = null
+function placeNotes() {
+  notesRO?.disconnect()
+  const figs = pageEl.querySelectorAll('[data-notes]')
+  if (!figs.length) return
+  const place = fig => {
+    const stage = fig.querySelector('.cn-stage'), text = fig.querySelector('.cn-text') || fig.querySelector('.cn-card'), S = stage.getBoundingClientRect(), T = text.getBoundingClientRect()
+    if (getComputedStyle(fig).getPropertyValue('--cn-key').trim() === '1') return
+    // Each label sits by the middle line of its highlight, and never on top of the one above it.
+    let floor = -Infinity
+    fig.querySelectorAll('.cn-note').forEach(n => {
+      const rs = fig.querySelector(`.cn-card [data-note="${n.dataset.for}"]`).getClientRects(), r = rs[Math.floor((rs.length - 1) / 2)] || rs[0]; if (!r) return
+      const y = Math.max(r.top + r.height / 2 - S.top, floor + n.offsetHeight / 2 + 8)
+      n.style.top = y + 'px'; floor = y + n.offsetHeight / 2
+    })
+    const side = fig.querySelector('.cn-side'); if (side) { side.style.top = (T.top - S.top) + 'px'; side.style.height = T.height + 'px'; side.style.left = (T.right - S.left + 22) + 'px' }
+  }
+  notesRO = new ResizeObserver(es => es.forEach(e => place(e.target.closest('[data-notes]'))))
+  figs.forEach(f => { place(f); notesRO.observe(f.querySelector('.cn-stage')) })
 }
 // Open a page: a building's (by its id), or a field note's.
 function openCase(id) {
@@ -389,6 +446,31 @@ function closeCase(then) {
   reveal.finished.then(done, () => {})
 }
 function goCase(id) { if (caseId) return closeCase(() => goCase(id)); go(id, { enter: true }) }
+// From one page to the next (its Previous / Next cards): the page turns in place, a quick fade, with no trip back
+// through the map. The map behind moves to the new building at once, unseen, so "Back to the map" lands there.
+function swapCase(n) {
+  const id = letterFor(n), L = id && letterOf(id)
+  if (!caseId || !L) return goCase(n)
+  const my = ++seq, R = ROOMS[n] && levelOf[n] ? n : ROOMS[L.from] && levelOf[L.from] ? L.from : null
+  lightboxClose()
+  if (R) {
+    clearTimeout(hideT); current = R; cardFor = R; pinned = true; panelEl.classList.add('pinned')
+    showRoom(R); markSelected(R); markVisited(R); panelEl.classList.remove('open'); leader.classList.remove('on')
+    flyTo(0, levelOf[R].y + (mobile() ? 220 : 0), 0, 0)
+  }
+  const put = () => {
+    if (my !== seq) return
+    caseId = id; letterEl.dataset.openCase = id; markVisited(L.from)
+    pageEl.innerHTML = pageHTML(id); letterEl.style.setProperty('--rc', ok(46, .12, fromOf(L).hue))
+    lscroll.scrollTop = 0; watchRise(); history.replaceState(null, '', `#${id}/read`)
+    if (ROOMS[L.from]) citySelect(L.from)
+    pageEl.focus({ preventScroll: true })
+    if (!reduce) pageEl.animate([{ opacity: 0, transform: 'translateY(10px)' }, { opacity: 1, transform: 'none' }], { duration: 320, easing: SETTLE })
+  }
+  if (reduce) return put()
+  const out = pageEl.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 150, easing: 'ease-in', fill: 'forwards' })
+  out.finished.then(() => { put(); out.cancel() }, () => {})
+}
 
 // ---------- Looking closer ----------
 function lightboxOpen(src, alt = '') {
@@ -500,7 +582,7 @@ letterEl.addEventListener('click', e => {
   const t = e.target.closest('[data-zoom], [data-close], [data-case]')
   if (t?.dataset.zoom) lightboxOpen(t.dataset.zoom, t.querySelector('img')?.alt)
   else if (t?.hasAttribute('data-close')) closeCase()
-  else if (t?.dataset.case) { const n = t.dataset.case; closeCase(() => goCase(n)) }
+  else if (t?.dataset.case) swapCase(t.dataset.case)
 })
 addEventListener('keydown', e => {
   if (!caseId || e.key !== 'Escape') return

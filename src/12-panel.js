@@ -18,7 +18,7 @@ const opens = id => hasCase(id) || !!ROOMS[id]?.see
 function winHTML(id) {
   // A building may keep its own picture for the hover (hoverSrc), whatever its page opens on, framed as a plain shot.
   const B = ROOMS[id], P = PAGES[FULL_OF[letterFor(id) || B.see]] || {}, src = B.hoverSrc || P.hero || B.img || P.icon
-  return src ? `<figure class="win${B.hoverSrc ? '' : P.desktopHero ? ' desktop' : P.hero ? ' phone' : ''}"><img src="${abs(src)}" alt="" decoding="async" onerror="this.parentElement.remove()"></figure>` : ''
+  return src ? `<figure class="win${B.hoverCutout ? ' desktop cutout' : B.hoverSrc ? '' : P.desktopHero ? ' desktop' : P.hero ? ' phone' : ''}"><img src="${abs(src)}" alt="" decoding="async" onerror="this.parentElement.remove()"></figure>` : ''
 }
 // A field note's popover is a page from a notebook: its cover small beside the title, what it is
 // about and how long it takes, a few lines of it, and the way in.
