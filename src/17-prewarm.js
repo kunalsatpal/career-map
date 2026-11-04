@@ -26,7 +26,7 @@ function prewarmPage() {
   // One card of each kind: a picture window, a photo, a grid of covers, a pillar, a stop, an NDA note,
   // a field note, the lighthouse's sign-off (pinned), and the ink writing itself on.
   const saved = [panelEl.className, note.innerHTML, panelEl.style.cssText]
-  for (const id of ['cult-cart', 'life-lift', 'life-books', 'work-data', 'stop-west', 'hinge-ai', 'blog-pibit', 'home-hello']) {
+  for (const id of ['cult-cart', 'life-lift', 'life-books', 'work-data', 'stop-west', 'hinge-ai', 'hinge-carehub', 'blog-pibit', 'home-hello']) {
     if (!ROOMS[id]) continue
     showRoom(id); const c = add(box, panelEl, 'open'); c.style.cssText = ''
     if (id === 'home-hello') c.classList.add('pinned')
@@ -46,8 +46,8 @@ function prewarmPage() {
     r.querySelectorAll('button').forEach((b, i) => { b.setAttribute('aria-current', String(i === 3)); b.classList.toggle('past', i < 3) })
     r.querySelectorAll('span').forEach(s => { s.style.opacity = '1'; s.style.transform = 'none' })
   }
-  // Things made only when they're needed: the first-time tip by the first building, and a speech bubble.
-  for (const [cls, html] of [['tip left', '<svg class="cur" viewBox="0 0 24 24"><path d="M5 3l14 7-6 2-2 6z"/></svg><span>Hover a building to read about it</span>'], ['hello', '<span>Rep 1</span>']]) {
+  // Things made only when they're needed: a speech bubble.
+  for (const [cls, html] of [['hello', '<span>Rep 1</span>']]) {
     const el = document.createElement('div'); el.className = cls + ' pw'; el.innerHTML = html; box.appendChild(el)
   }
   // The whole ink map, small: every section of the road, with every kind of line, fill and engraving.

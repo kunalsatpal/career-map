@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 300" fill="none">
+  <defs>
+    <pattern id="etch" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(35)"><path d="M0 0V7" stroke="#745838" stroke-width=".65" opacity=".24"/></pattern>
+  </defs>
+  <g stroke="#59422d" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Faint spell trails and the engraved ground line. -->
+    <path d="M109 230C37 201 57 112 117 88M296 67c68 16 82 92 34 131" stroke-width="1" stroke-dasharray="2 7" opacity=".45"/>
+    <path d="M83 276c32-3 55-3 72-2m110 0c22-2 47-2 72 2M108 282h34m136 0h34" stroke-width=".8" opacity=".38"/>
+    <!-- A substantial, old brass shackle, engraved with a second line. -->
+    <path d="M153 143V88c0-36 25-62 57-62s57 26 57 62v55h-18V88c0-25-16-43-39-43s-39 18-39 43v55Z" fill="#dbc59e" stroke-width="2.7"/>
+    <path d="M159 130V88c0-32 21-55 51-55s51 23 51 55v42M165 89v36m90-36v36" stroke-width="1"/>
+    <path d="m181 51 5 6m-13 7 6 4m54-17-5 6m13 7-6 4M205 33v10m10-10v10" stroke-width=".9"/>
+    <!-- Shield-shaped lock face with an uneven, double engraved edge. -->
+    <path d="M146 126h128c8 14 13 26 13 43v56c0 16-7 26-23 33l-54 23-54-23c-16-7-23-17-23-33v-56c0-17 5-29 13-43Z" fill="#e4d1ac" stroke-width="3"/>
+    <path d="M146 126h128c8 14 13 26 13 43v56c0 16-7 26-23 33l-54 23-54-23c-16-7-23-17-23-33v-56c0-17 5-29 13-43Z" fill="url(#etch)"/>
+    <path d="M153 135h114c7 13 11 23 11 36v52c0 12-6 21-19 27l-49 21-49-21c-13-6-19-15-19-27v-52c0-13 4-23 11-36Z" stroke-width="1.2"/>
+    <path d="M159 142h102M150 173v47c0 9 4 15 12 20m108-67v47c0 9-4 15-12 20" stroke-width=".7"/>
+    <!-- Curled ironwork surrounds the unmistakable keyhole. -->
+    <circle cx="210" cy="201" r="34" fill="#f1e3c8" stroke-width="1.6"/>
+    <circle cx="210" cy="201" r="29" stroke="#aa7c37" stroke-width=".8"/>
+    <path d="M210 181a10 10 0 0 0-5 19l-5 20h20l-5-20a10 10 0 0 0-5-19Z" fill="#3e2b20" stroke-width="1.2"/>
+    <path d="M177 191c-23-18-23-38-9-38 10 0 11 13 3 14-5 1-7-4-4-7m76 31c23-18 23-38 9-38-10 0-11 13-3 14 5 1 7-4 4-7M179 216c-19 5-22 23-9 26 8 2 13-7 7-11m64-15c19 5 22 23 9 26-8 2-13-7-7-11" stroke-width="1.4"/>
+    <path d="m210 147 4 7-4 7-4-7Zm0 97 4 6-4 6-4-6Z" fill="#aa7c37" stroke-width=".7"/>
+    <g fill="#59422d"><circle cx="151" cy="153" r="2"/><circle cx="269" cy="153" r="2"/><circle cx="156" cy="237" r="2"/><circle cx="264" cy="237" r="2"/></g>
+    <!-- A winged key, drawn as a small marginal illustration. -->
+    <g transform="translate(332 132) rotate(28)">
+      <path d="M-2-9c-5-22-23-31-28-29 1 14 10 25 25 29m8 0c5-22 23-31 28-29-1 14-10 25-25 29" fill="#efe3cc" stroke-width="1.1"/>
+      <path d="m-6-14-17-17m15 18-18-9m32 8 17-17M8-13l18-9" stroke-width=".65"/>
+      <circle cy="-5" r="9" fill="#e4d1ac" stroke-width="1.8"/><circle cy="-5" r="4" stroke-width="1"/>
+      <path d="M0 4v42h12v-7H6v-6h9v-7H0" stroke="#87642f" stroke-width="2.4"/>
+    </g>
+    <!-- Four-point sparks, kept sparse so the lock carries the scene. -->
+    <g fill="#be9148" stroke="#9b7237" stroke-width=".7">
+      <path d="m91 111 3 10 10 3-10 3-3 10-3-10-10-3 10-3ZM299 38l2 7 7 2-7 2-2 7-2-7-7-2 7-2ZM326 227l2 7 7 2-7 2-2 7-2-7-7-2 7-2Z"/>
+      <circle cx="114" cy="62" r="1.8"/><circle cx="77" cy="183" r="1.4"/><circle cx="352" cy="207" r="1.6"/>
+    </g>
+  </g>
+</svg>

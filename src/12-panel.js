@@ -16,8 +16,9 @@ const opens = id => hasCase(id) || !!ROOMS[id]?.see
 // Their note opens a little window of the map, as the universe site opens one of sky: the final
 // design standing on a wash of its company's colour, or the story's cover pinned to it.
 function winHTML(id) {
-  const B = ROOMS[id], P = PAGES[FULL_OF[letterFor(id) || B.see]] || {}, src = P.hero || B.img || P.icon
-  return src ? `<figure class="win${P.hero ? ' phone' : ''}"><img src="${abs(src)}" alt="" decoding="async" onerror="this.parentElement.remove()"></figure>` : ''
+  // A building may keep its own picture for the hover (hoverSrc), whatever its page opens on, framed as a plain shot.
+  const B = ROOMS[id], P = PAGES[FULL_OF[letterFor(id) || B.see]] || {}, src = B.hoverSrc || P.hero || B.img || P.icon
+  return src ? `<figure class="win${B.hoverSrc ? '' : P.desktopHero ? ' desktop' : P.hero ? ' phone' : ''}"><img src="${abs(src)}" alt="" decoding="async" onerror="this.parentElement.remove()"></figure>` : ''
 }
 // A field note's popover is a page from a notebook: its cover small beside the title, what it is
 // about and how long it takes, a few lines of it, and the way in.
@@ -49,12 +50,12 @@ function showRoom(id) {
     + (B.part?.t === 'pillar' ? `<div class="ehead">${crownSVG(B.part.kind)}<p class="headline">${head}</p></div>` : `<p class="headline">${head}</p>`) + (line ? `<p class="body">${line}</p>` : '')
     + (!B.tip && B.list ? `<ul>${B.list.map(li => `<li><span>${li}</span></li>`).join('')}</ul>` : '')
     + (B.links && !(BATCH.finale && id === 'home-hello') ? `<ul class="links">${B.links.map(([t, h]) => `<li><a href="${abs(h)}" target="_blank" rel="noopener">${t}</a></li>`).join('')}</ul>` : '')
-    + (B.nda ? `<p class="status">Under NDA · <a class="ext" href="mailto:kunalsatpal1@gmail.com?subject=${encodeURIComponent(B.title)}">ask me about it</a></p>`
+    + (B.underConstruction ? '<p class="status">Full case study under construction · Preview available</p>' : B.nda ? `<p class="status">Under NDA · <a class="ext" href="mailto:kunalsatpal1@gmail.com?subject=${encodeURIComponent(B.title)}">ask me about it · kunalsatpal1@gmail.com</a></p>`
       : B.soon ? '<p class="status">Case study coming soon</p>' : '')
-    + (hasCase(id) ? `<button class="go" data-enter="${id}">Read the case study <span>· ${readMins(caseBody(letterFor(id)))} min →</span></button>`
+    + (hasCase(id) ? `<button class="go" data-enter="${id}">${B.caseLabel || 'Read the case study'} <span>· ${readMins(caseBody(letterFor(id)))} min →</span></button>`
       : B.see ? `<button class="go" data-letter="${B.see}">${B.seeLabel || 'Read the story'} <span>· ${readMins(caseBody(B.see))} min →</span></button>`
       : B.href ? `<a class="cta" href="${abs(B.href)}" target="_blank" rel="noopener">${B.cta || 'Read the case study'} <span aria-hidden="true">↗</span></a>` : '')
-    + (id === 'home-hello' ? `<a class="cta" href="mailto:kunalsatpal1@gmail.com?subject=${encodeURIComponent('Found you on the map')}">Write to me <span aria-hidden="true">✉</span></a>` : '')
+    + (id === 'home-hello' ? `<a class="cta" href="mailto:kunalsatpal1@gmail.com?subject=${encodeURIComponent('Found you on the map')}"><span>Write to me <span aria-hidden="true">✉</span></span><span class="mail">kunalsatpal1@gmail.com</span></a>` : '')
     // The sign-off (BATCH.finale): one way to write, then everything else in a single line.
     + (BATCH.finale && id === 'home-hello' ? `<p class="also">${B.links.filter(([, h]) => !h.startsWith('mailto:')).map(([t, h]) => `<a href="${abs(h)}" target="_blank" rel="noopener">${t.replace(' (PDF)', '')}</a>`).join('<span aria-hidden="true"> · </span>')}</p>` : '')
 }
@@ -84,10 +85,10 @@ function go(id, opts = {}) {
   if (!B && !R0 && id !== 'earlier') return
   if (caseId) return closeCase(() => go(id, opts))
   // A company, or the isles: just travel there. Its banner on the map already says who it was.
-  if (!B) { closePanel(); hideTip(); closeMenu(); const b = R0 ? (R0.key === 'home' ? GEO.aboutBox : R0.box) : ISLES; return flyTo(0, R0?.key === 'home' ? b.y1 - 260 : (b.y0 + b.y1) / 2, 0, 1100) }
+  if (!B) { closePanel(); closeMenu(); const b = R0 ? (R0.key === 'home' ? GEO.aboutBox : R0.box) : ISLES; return flyTo(0, R0?.key === 'home' ? b.y1 - 260 : (b.y0 + b.y1) / 2, 0, 1100) }
   clearTimeout(hideT); current = id; cardFor = id; pinned = true; panelEl.classList.add('pinned')
   showRoom(id)
-  markSelected(id); hideTip(); closeMenu()
+  markSelected(id); closeMenu()
   panelEl.classList.remove('open'); leader.classList.remove('on')
   history.replaceState(null, '', '#' + id)
   const done = () => { if (cardFor !== id) return; if (opts.enter) openCase(id); else openCard() }
@@ -110,7 +111,7 @@ function showCard(id, pin) {
   if (cardFor === id) { if (pin) { pinned = true; panelEl.classList.add('pinned') } return }
   panelEl.classList.remove('open'); leader.classList.remove('on')
   current = id; cardFor = id; pinned = !!pin; panelEl.classList.toggle('pinned', pinned)
-  showRoom(id); markSelected(id); hideTip()
+  showRoom(id); markSelected(id)
   openCard(true)
 }
 function hoverCard(id) {

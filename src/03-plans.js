@@ -2,8 +2,8 @@
 // Plans: every realm is a list of structures in its own coordinates. The ink drawing and
 // the standing city are both built from these, so a building always rises out of its plan.
 // =====================================================================================
-// An experiment: Hinge's case studies are still being written, so their buildings stand half built,
-// one wizard in the middle of the campus raising the rest. False puts the finished buildings back.
+// Hinge buildings with previews stand complete; the remaining case studies use the construction
+// treatment by default. Each room can override it with underConstruction.
 const WIP_SITE = true
 // Each half-built building's layout, shared by its stones (09-city) and the spells cast on it
 // (16-moments): where its stones go.
@@ -43,7 +43,7 @@ const WIP_PLANS = { hallwip: hallWipPlan, rotundawip: rotundaWipPlan, towerwip: 
 // the front row, working on all four from one pile of stone. tip is where his spells start (WIZ_ORB is
 // in 09-city).
 const WIP_CASTERS = () => [
-  { kind: 'wizard', at: onCampus(444, 252), dir: 1, k: 2, rooms: ['hinge-carehub', 'hinge-ai', 'hinge-workflows', 'hinge-video'], pile: [...onCampus(470, 266), 8] },
+  { kind: 'wizard', at: onCampus(444, 252), dir: 1, k: 2, rooms: ['hinge-carehub', 'hinge-ai', 'hinge-workflows', 'hinge-video'].filter(id => ROOMS[id].underConstruction ?? WIP_SITE), pile: [...onCampus(470, 266), 8] },
 ]
 const casterTip = C => [C.at[0] + C.dir * WIZ_ORB[0] * C.k, C.at[1], WIZ_ORB[1] * C.k]
 const PLANS = {
@@ -51,8 +51,9 @@ const PLANS = {
     walls: [[[0, 278], [0, 540], [740, 540], [740, 278]], [[740, 202], [740, 0], [398, 0]], [[322, 0], [0, 0], [0, 202]]], th: 10,
     towers: [[0, 540, 30], [740, 540, 30], [740, 0, 30], [0, 0, 30], [0, 282, 17], [0, 198, 17], [318, 0, 17], [402, 0, 17], [740, 282, 17], [740, 198, 17]],
     parts: [
-      { t: WIP_SITE ? 'hallwip' : 'hall', room: 'hinge-carehub', x: 54, y: 326, w: 300, h: 160, banners: true },
-      { t: WIP_SITE ? 'rotundawip' : 'rotunda', room: 'hinge-ai', cx: 590, cy: 382, r: 92 },
+      // Use the existing finished BUILD/DRAW pairs for previews, preserving their footprints.
+      { t: (ROOMS['hinge-carehub'].underConstruction ?? WIP_SITE) ? 'hallwip' : 'hall', room: 'hinge-carehub', x: 54, y: 326, w: 300, h: 160, banners: true },
+      { t: (ROOMS['hinge-ai'].underConstruction ?? WIP_SITE) ? 'rotundawip' : 'rotunda', room: 'hinge-ai', cx: 590, cy: 382, r: 92 },
       { t: WIP_SITE ? 'cloisterwip' : 'cloister', room: 'hinge-workflows', x: 60, y: 48, w: 280, h: 200 },
       { t: WIP_SITE ? 'towerwip' : 'roundtower', room: 'hinge-video', cx: 598, cy: 136, r: 70 },
       { t: 'rehab', x: 388, y: 356, w: 86, h: 128 },

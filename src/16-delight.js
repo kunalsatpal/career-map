@@ -14,7 +14,6 @@ const DEC_U = new Float32Array(24), DEC_A = new Float32Array(24)
 // How long each kind of movement lasts, in seconds.
 const DEC_T = { 1: 6.2, 2: 3.3, 3: 2.2, 4: 7, 5: 4.1, 6: 3.6, 7: 1.5, 8: 1.5, 9: 4 }
 const WAND = `url("data:image/svg+xml,${encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 26 26"><path d="M7 7L23 23" stroke="#fbf3e2" stroke-width="4.6" stroke-linecap="round"/><path d="M7 7L23 23" stroke="#3b2618" stroke-width="2.6" stroke-linecap="round"/><path d="M5 .8l1.1 2.6 2.7 1.1-2.7 1.1L5 8.2 3.9 5.6 1.2 4.5l2.7-1.1z" fill="#f1c84b" stroke="#3b2618" stroke-width=".7" stroke-linejoin="round"/></svg>')}") 5 5, pointer`
-const NUDGE = ['Psst! Click me', 'Psst, over here!', 'Want to see a spell?']
 const HELLO = ['Hello!', 'Oh, hi there!', 'Hello, traveller!'], SPELLS = ['Wingardium leviosa!', 'Nearly there!', 'Mind the crane!', 'Shh, it’s under NDA', 'Coming soon, promise']
 let decorRaf = 0, decorUntil = 0, decorHot = 0, spell = 0, decorIdle = false, decorTick = 0
 const pick = list => list[Math.floor(Math.random() * list.length)]
@@ -140,7 +139,7 @@ function wizardNudge(room) {
   if (!decorLive()) return
   const id = DECOR.findIndex(D => D?.kind === 'wizard' && (D.rooms || [D.room]).includes(room)), D = DECOR[id], t = performance.now()
   if (id < 1 || t - (D.nudged || 0) < 5000 || decorBusy(id)) return
-  D.nudged = t; decorPlay(id, 3, [0, 0, 1], 4 * D.k); flecks(wandTip(D), 'wspark', 6, 10); if (!BATCH.propsShareHover) say(D, pick(NUDGE))
+  D.nudged = t; decorPlay(id, 3, [0, 0, 1], 4 * D.k); flecks(wandTip(D), 'wspark', 6, 10)
 }
 // Now and then one piece of decor in view stirs on its own: one at a time, never while the map is
 // moving, a city is building or a page is open, and drawn at a third of the frame rate.

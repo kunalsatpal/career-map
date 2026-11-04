@@ -18,8 +18,6 @@ const K_MARK = '<svg viewBox="0 0 33 31" aria-hidden="true"><rect y="1.09" width
 
 // A company's own mark, from the portfolio, where there is one.
 const logoHTML = name => `<span class="logo"><img src="assets/logos/${name}.png" alt="" decoding="async"></span>`
-// A small wax seal, the mark of a building with a full case study inside: its letter.
-const WAX = '<svg class="wax" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 .8l2.1 1.4 2.5-.3 1.1 2.3 2.3 1.1-.3 2.5 1.4 2.1-1.4 2.1.3 2.5-2.3 1.1-1.1 2.3-2.5-.3L10 19.2l-2.1-1.4-2.5.3-1.1-2.3-2.3-1.1.3-2.5L.8 10l1.4-2.1-.3-2.5 2.3-1.1 1.1-2.3 2.5.3z"/><g transform="translate(5.3 5.6) scale(.28)"><rect y="1.09" width="7.68" height="28.36" rx="1.4"/><path d="M31.24.92c.77 0 1.4.63 1.4 1.4v25.52c0 .77-.63 1.4-1.4 1.4h-6.1c-.27 0-.52-.11-.7-.31L12.18 15.08 24.44 1.22c.18-.19.43-.3.7-.3z"/></g></svg>'
 const labelLayer = $('labels'), LABELS = [], BRANDS = []
 let visited = new Set()
 try { visited = new Set(JSON.parse(sessionStorage.getItem('map-visited') || '[]')) } catch {}
@@ -62,10 +60,10 @@ function buildLabels() {
   for (const L of LEVELS) {
     const B = ROOMS[L.id], realm = B.realm ? realmBy[B.realm] : null, about = B.realm === 'home', c = realm ? ok(50, .12, realm.hue) : ok(52, .08, 70)
     const el = document.createElement('div'); el.className = 'lvl' + (about ? ' about' : '') + (B.logo ? ' has-logo' : '') + (opens(L.id) ? ' case' : '') + (B.group === 'work' && BATCH.pillarNames ? ' plaque' : B.group || B.quiet || /^life-/.test(L.id) ? ' quiet' : '') + (visited.has(L.id) ? ' done' : ''); el.dataset.id = L.id; el.style.setProperty('--c', c)
-    const cta = hasCase(L.id) ? (letterOf(letterFor(L.id)).blog ? 'Read the blog' : 'Read the case study') : B.see ? B.seeLabel || 'Read the story' : '', k = (B.tip || [])[0] || B.stat || B.key || B.body
-    el.innerHTML = `<button class="lv-t" data-go="${L.id}" aria-label="${B.title}. ${k || ''}">${B.logo ? (opens(L.id) ? WAX : '') + logoHTML(B.logo) : ''}<b>${!B.logo && opens(L.id) ? WAX : ''}${B.short || B.title}</b>${k ? `<span class="lv-k">${k}</span>` : ''}${cta ? `<span class="lv-cta">${cta} →</span>` : ''}</button>`
+    const cta = hasCase(L.id) ? (letterOf(letterFor(L.id)).blog ? 'Read the blog' : B.caseLabel || 'Read the case study') : B.see ? B.seeLabel || 'Read the story' : '', k = (B.tip || [])[0] || B.stat || B.key || B.body
+    el.innerHTML = `<button class="lv-t" data-go="${L.id}" aria-label="${B.title}. ${k || ''}">${B.logo ? logoHTML(B.logo) : ''}<b>${B.short || B.title}</b>${k ? `<span class="lv-k">${k}</span>` : ''}${cta ? `<span class="lv-cta">${cta} →</span>` : ''}</button>`
     labelLayer.appendChild(el); L.el = el
-    const peekOn = () => { levelPeek(L.id); hideTip() }
+    const peekOn = () => levelPeek(L.id)
     el.addEventListener('pointerenter', peekOn); el.addEventListener('focusin', peekOn)
     el.addEventListener('pointerleave', () => levelPeek(null)); el.addEventListener('focusout', () => levelPeek(null))
   }
@@ -166,7 +164,6 @@ function placeLabels(v) {
     // Another note still open on arrival: look again once it has gone, even if nothing else redraws.
     else if (!BEACON.wait) BEACON.wait = setTimeout(() => { BEACON.wait = 0; requestRender() }, 800)
   }
-  placeTip(v)
   START.el.classList.toggle('gone', cam.cy < START_Y - 260)
 }
 
@@ -190,33 +187,4 @@ function placeLevelsNarrow(v) {
     tuck(L, out); if (!out) placedRects.push(r)
     L.el.style.transform = `translate3d(${X.toFixed(1)}px,${Y.toFixed(1)}px,0) scale(${s.toFixed(3)})`; fade(L.el, z, v)
   }
-}
-// A first-time tip by the first level: what hovering and clicking do.
-const tip = { el: null, done: false, wait: 0 }
-try { tip.done = sessionStorage.getItem('map-tip') === '1' } catch {}
-function placeTip(v) {
-  if (tip.done) return
-  const L = LEVELS[0], p = ROOMS[L.id].part, [X, Y] = project(p.c[0], p.c[1], roofOf(L.id, v), v), inView = Y > VH * .25 && Y < VH * .8
-  // Wait for the same assembly window used by cityFrame, even if scrolling stops.
-  if (!tip.el && inView && TILT && !city.failed) {
-    const start = GLS?.starts[REALM_IDX[partRealm(p)]] ?? 1e6
-    const remaining = start < 1e5 ? 4.2 - (now() - start) : .15
-    if (!city.active || remaining > 0) {
-      if (!tip.wait) tip.wait = setTimeout(() => { tip.wait = 0; requestRender() }, Math.max(.15, remaining) * 1000)
-      return
-    }
-  }
-  if (!tip.el && inView) {
-    tip.el = document.createElement('div'); tip.el.className = 'tip left'
-    tip.el.innerHTML = `<svg class="cur" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3l14 7-6 2-2 6z"/></svg><span>${coarse ? 'Tap a building to read about it' : 'Hover a building to read about it · click a sealed one to open it'}</span>`
-    labelLayer.appendChild(tip.el)
-    setTimeout(hideTip, 9000)
-  }
-  if (tip.el) tip.el.style.transform = `translate3d(${X.toFixed(1)}px,${Y.toFixed(1)}px,0)`
-}
-function hideTip() {
-  if (tip.done) return
-  clearTimeout(tip.wait); tip.wait = 0
-  tip.done = true; try { sessionStorage.setItem('map-tip', '1') } catch {}
-  if (tip.el) { tip.el.classList.add('gone'); setTimeout(() => tip.el?.remove(), 500) }
 }

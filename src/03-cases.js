@@ -28,18 +28,24 @@ const CASES = {
   ],
   'hinge-carehub': [
     { k: 'What it is', body: 'CareHub is the platform Hinge Health\'s physical therapists and coaches work in every day, to care for millions of members with joint and muscle pain.' },
-    { k: 'My part', body: "I owned the design of CareHub 2.0's core: the member record, the queue and AI actions.", img: './site/img/proof_carehub.png' },
-    { k: 'The outcome', body: 'Now used by every physical therapist and coach.' },
+    { k: 'The visual refresh', body: 'I led the visual refresh with one additional designer over six months. The member record brings navigation, care context and conversation into a shared visual system.', img: './site/cases/media/carehub/after.png' },
+    { k: 'The outcome', body: 'A 6% gain in PT efficiency after the visual refresh.' },
   ],
   'hinge-ai': [
-    { k: 'The brief', body: 'Set the strategy and roadmap for AI next-best-action: recommendations that tell a care team what to do next for each member.' },
-    { k: 'The reframe', body: 'I reframed the AI care assistant as a clinical recommendation tool, and aligned clinical, data and engineering on the safety gates it would need before anyone could trust it.' },
-    { k: 'The outcome', body: 'Clinician time per member down 6–12%.' },
+    { k: 'The evidence', body: 'Members had 2.8 open workflows on average, while the interface showed one at a time. The baseline analysis recorded an 88% click rate on Interactions and a daily workload of 90–110 members. PTs and coaches described discovering related work late and repeatedly checking other tabs.' },
+    { k: 'The direction', body: 'I set a member-first strategy and staged roadmap toward next-best-action recommendations, working across clinical, data and engineering.' },
+    { k: 'Milestone 1: see the whole situation', body: 'Related workflows were hidden behind a single task. Bringing them into the member view, while preserving space for the conversation, reduced member-profile time by about 6%: 5 min 40 sec to 5 min 20 sec.' },
+    { k: 'Milestone 2: understand what matters', body: 'We replaced long, difficult-to-verify summaries with concise context and visible sources, informed by prompt iteration, expert review and end-user evaluation. Results: about 1% less time per member and 4% less message-crafting time.' },
+    { k: 'What remained', body: 'AI correctness was only about 74% in evaluation. Reviews found missing information, too much emphasis on pain and conclusions beyond the evidence. Action recommendations remained design work in progress at this stage.' },
   ],
 }
 // How each page opens, from the case-study and blog pages on kunalsatpal.com: a kicker, the
 // title, a summary and its numbers, and the final design standing beside them.
 const PAGES = {
+  carehub_2: { kicker: 'Hinge Health · Case study preview', title: 'CareHub 2.0', summary: 'I was the lead IC on the visual refresh of CareHub, the workspace Hinge Health’s physical therapists and coaches use every day.', contactLock: true,
+    hero: './site/cases/media/carehub/after-hd.jpg', desktopHero: true, heroCaption: 'CareHub 2.0 · The refreshed member workspace', heroAlt: 'CareHub 2.0 with labelled navigation, member context, engagement, trends, a body map and conversation.' },
+  next_best_action: { kicker: 'Hinge Health · CareHub', title: 'Holistic Care', summary: 'A member-first redesign that brought concurrent care workflows into view.', contactLock: true,
+    hero: './site/cases/media/nba/pptx/milestone-1-final-still.png', desktopHero: true, heroCaption: 'CareHub · Related tasks, grouped in the member view', heroAlt: 'CareHub member view with related tasks grouped above the summary.' },
   promo: { kicker: 'Gojek · GoFood growth', title: 'Solving for promo discovery', summary: 'Streamlining the promo journey: 4% incremental conversions and 5× ad revenue.',
     chips: [['4%', 'session conversions'], ['5×', 'ad revenue'], ['6', 'months of testing']], hero: './site/cases/media/phone_promo.png' },
   Fitclub: { kicker: 'Cult.fit', title: 'Designing for engagement: Fitclub V2', summary: 'Fitclub V2, a loyalty program built to lift retention and cross-sell products.',

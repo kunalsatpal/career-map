@@ -1,0 +1,191 @@
+{
+ "key": "carehub_2",
+ "title": "CareHub 2.0",
+ "blocks": [
+  {
+   "t": "h",
+   "text": "My role"
+  },
+  {
+   "t": "p",
+   "html": "CareHub is where Hinge Health’s physical therapists and coaches work with members every day. I was the lead IC on its visual refresh, from the member record to the visual system behind it."
+  },
+  {
+   "t": "list",
+   "items": [
+    "<b>Lead IC.</b> I led the design of the refresh, end to end.",
+    "<b>A team of two.</b> I worked with one more designer, over six months.",
+    "<b>+6% PT efficiency.</b> After the visual refresh.",
+    "<b>Recognised.</b> The work won a Mover’s Award in 2025."
+   ]
+  },
+  {
+   "t": "h",
+   "text": "Before and after"
+  },
+  {
+   "t": "img",
+   "src": "./site/cases/media/carehub/before-hd.jpg",
+   "size": "large",
+   "cap": "<b>Before.</b> The earlier member record.",
+   "alt": "The earlier CareHub member record: tabs, a summary card, engagement and pain data, and the conversation on the right."
+  },
+  {
+   "t": "img",
+   "src": "./site/cases/media/carehub/after-hd.jpg",
+   "size": "large",
+   "cap": "<b>After.</b> The refreshed member record.",
+   "alt": "The refreshed CareHub member record: a labelled navigation rail, an AI summary at the top, engagement, trends, the current focus with a body map, and the conversation."
+  },
+  {
+   "t": "h3",
+   "text": "What changed"
+  },
+  {
+   "t": "list",
+   "items": [
+    "<b>What needs attention comes first.</b> A summary at the top states the member’s need, with the notes behind it.",
+    "<b>Progress at a glance.</b> Engagement by week sits beside pain and PSFS trends.",
+    "<b>The plan in view.</b> The current focus, with the treated regions marked on a body map.",
+    "<b>Clear navigation.</b> A labelled rail for Home, Search, Queue and Next."
+   ]
+  },
+  {
+   "t": "h",
+   "text": "The system behind the screen"
+  },
+  {
+   "t": "p",
+   "html": "The refresh brought typography, colour, icons and reusable components into one visual language."
+  },
+  {
+   "t": "reel",
+   "src": "./site/cases/media/carehub/system-reel.mp4",
+   "poster": "./site/cases/media/carehub/system-reel-poster.jpg",
+   "width": 1400,
+   "height": 1000,
+   "alt": "A 10-second tease of CareHub 2.0: the earlier member record sweeping into the refreshed one, then its icons, its body-map illustration and its colour families.",
+   "cap": "CareHub 2.0 in 10 seconds. Below, the system board: select any piece to see it full size."
+  },
+  {
+   "t": "system",
+   "frame": [
+    436.2,
+    190.7,
+    1050.3,
+    783.5
+   ],
+   "cap": "The CareHub 2.0 system board.",
+   "pieces": [
+    {
+     "key": "typography",
+     "src": "./site/cases/media/carehub/system/typography.png",
+     "label": "Noto Sans typography",
+     "note": "One typeface across the workspace, from names and notes to clinical numbers.",
+     "box": [
+      436.2,
+      763.2,
+      512.2,
+      211.0
+     ]
+    },
+    {
+     "key": "colour",
+     "src": "./site/cases/media/carehub/system/colour.png",
+     "label": "Colour tokens",
+     "note": "Named fills in families (neutral, neutral dark and brand), each in primary, secondary and tertiary steps.",
+     "box": [
+      1247.5,
+      190.7,
+      239.0,
+      411.2
+     ]
+    },
+    {
+     "key": "icon-set",
+     "src": "./site/cases/media/carehub/system/icon-set.png",
+     "label": "Filled icons",
+     "note": "Navigation icons on soft green tiles, drawn from Material Symbols.",
+     "box": [
+      436.2,
+      190.7,
+      240.2,
+      362.0
+     ]
+    },
+    {
+     "key": "line-icons",
+     "src": "./site/cases/media/carehub/system/line-icons.png",
+     "label": "Line icons",
+     "note": "A lighter line set for actions in toolbars and menus.",
+     "box": [
+      436.2,
+      569.2,
+      240.2,
+      177.5
+     ]
+    },
+    {
+     "key": "buttons",
+     "src": "./site/cases/media/carehub/system/buttons.png",
+     "label": "Buttons",
+     "note": "Primary, secondary, neutral and destructive buttons, sharing one shape.",
+     "box": [
+      965.0,
+      190.7,
+      267.5,
+      213.8
+     ]
+    },
+    {
+     "key": "statuses",
+     "src": "./site/cases/media/carehub/system/statuses.png",
+     "label": "Appointment statuses",
+     "note": "Visit chips that say where an appointment stands at a glance.",
+     "box": [
+      1247.5,
+      616.5,
+      239.0,
+      357.7
+     ]
+    },
+    {
+     "key": "body-map",
+     "src": "./site/cases/media/carehub/system/body-map.png",
+     "label": "Anatomical body map",
+     "note": "The region being treated, highlighted on the body, here the shoulder.",
+     "box": [
+      692.0,
+      191.0,
+      256.8,
+      213.8
+     ]
+    },
+    {
+     "key": "engagement",
+     "src": "./site/cases/media/carehub/system/engagement.png",
+     "label": "Streak cards",
+     "note": "Weekly goal and activity streaks, each with its count and a badge.",
+     "box": [
+      965.0,
+      763.5,
+      267.5,
+      210.7
+     ]
+    },
+    {
+     "key": "clinical-cards",
+     "src": "./site/cases/media/carehub/system/clinical-cards.png",
+     "label": "Clinical data cards",
+     "note": "Care-plan actions, and pain and PSFS scores with their change.",
+     "box": [
+      691.5,
+      422.5,
+      541.0,
+      324.2
+     ]
+    }
+   ]
+  }
+ ]
+}

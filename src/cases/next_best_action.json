@@ -1,0 +1,92 @@
+{
+  "key": "next_best_action",
+  "title": "Holistic Care",
+  "blocks": [
+    {
+      "t": "h",
+      "text": "The problem"
+    },
+    {
+      "t": "p",
+      "html": "CareHub showed one workflow at a time, even when a member had several in progress. Clinicians had to search across tabs to understand the full picture."
+    },
+    {
+      "t": "evidence-stats",
+      "label": "The care-team context",
+      "stats": [
+        [
+          "2.8",
+          "open workflows per member",
+          "Average"
+        ],
+        [
+          "88%",
+          "Interactions tab click rate",
+          "Baseline"
+        ],
+        [
+          "90–110",
+          "members each day",
+          "Daily clinician workload"
+        ]
+      ]
+    },
+    {
+      "t": "h",
+      "text": "The redesign"
+    },
+    {
+      "t": "p",
+      "html": "Before: related care-plan work lived in a separate tab. I led a member-first redesign that brought open tasks into the member view, above the summary, so clinicians could scan the situation alongside the conversation."
+    },
+    {
+      "t": "slides",
+      "states": [
+        {
+          "label": "A separate care-plan view",
+          "src": "./site/cases/media/nba/pptx/milestone-1-exploration-still.png",
+          "cap": "Earlier care-plan layout",
+          "alt": "Early CareHub exploration with care plan, treatment, and action plan sections.",
+          "tag": "Before"
+        },
+        {
+          "label": "Related tasks in the member view",
+          "src": "./site/cases/media/nba/pptx/milestone-1-final-still.png",
+          "cap": "Related tasks above the summary",
+          "alt": "Final CareHub member view with related tasks grouped above the summary.",
+          "tag": "After"
+        }
+      ],
+      "label": "Before and after: the member view",
+      "ratio": "1252 / 804"
+    },
+    {
+      "t": "h",
+      "text": "Impact"
+    },
+    {
+      "t": "metrics",
+      "items": [
+        [
+          "~6%",
+          "less member-profile time",
+          "Milestone 1 · 5 min 40 sec → 5 min 20 sec"
+        ],
+        [
+          "~1%",
+          "less time per member",
+          "Milestone 2"
+        ],
+        [
+          "~4%",
+          "less message-crafting time",
+          "Milestone 2"
+        ]
+      ]
+    },
+    {
+      "t": "p",
+      "html": "AI summaries were ~73.5% correct in evaluation, so recommendations are still in progress."
+    }
+  ]
+}

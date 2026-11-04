@@ -9,7 +9,7 @@ function buildReader() {
       + (B.list ? `<ul>${B.list.map(li => `<li>${li}</li>`).join('')}</ul>` : '')
       + (B.links ? `<ul>${B.links.map(([t, h]) => `<li><a href="${abs(h)}" target="_blank" rel="noopener">${t}</a></li>`).join('')}</ul>` : '')
       + (chs ? chs.map(c => `<h4>${c.k}</h4>${c.body ? `<p>${c.body}</p>` : ''}${c.list ? `<ul>${c.list.map(li => `<li>${li}</li>`).join('')}</ul>` : ''}${c.draft ? `<p class="draft">${c.draft}</p>` : ''}`).join('') : '')
-      + `<p class="onmap"><button data-map="${id}">See it on the map</button>${B.href ? ` · <a href="${abs(B.href)}" target="_blank" rel="noopener">Full case study ↗</a>` : ''}</p></article>`
+      + `<p class="onmap"><button data-map="${id}">See it on the map</button>${B.href?.startsWith('#') ? ` · <button data-reader-case="${id}">${B.caseLabel || 'Full case study'} →</button>` : B.href ? ` · <a href="${abs(B.href)}" target="_blank" rel="noopener">Full case study ↗</a>` : ''}</p></article>`
   }
   const realms = REALMS.filter(r => r.key !== 'home')
   readerEl.querySelector('.rd').innerHTML = `<header><p class="kick">A map of the work of</p><h1>Kunal Satpal</h1><p class="lede">Staff Product Designer at Hinge Health. ${realmBy.home.blurb}</p>`
@@ -29,6 +29,7 @@ function openReader() {
 function closeReader() { if (readerEl.hidden) return; readerEl.hidden = true; document.body.classList.remove('reading'); readerFrom?.focus?.({ preventScroll: true }) }
 readerEl.addEventListener('click', e => {
   if (e.target.closest('.rclose')) return closeReader()
+  const full = e.target.closest('[data-reader-case]'); if (full) { closeReader(); goCase(full.dataset.readerCase); return }
   const m = e.target.closest('[data-map]'); if (m) { closeReader(); go(m.dataset.map) }
 })
 readerEl.addEventListener('keydown', e => { if (e.key === 'Escape') { e.stopPropagation(); closeReader() } })
