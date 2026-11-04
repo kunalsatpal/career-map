@@ -158,7 +158,10 @@ function placeLabels(v) {
   })
   trackLevel()
   // The beam turns over the sea from the lamp room, brighter the nearer the end.
-  const lh = ROOMS['home-hello'].part, o = v.t ? 1 - smoothstep(END_Y + 250, END_Y + 750, cam.cy) : 0
+  // Only once the lighthouse stands whole: with the 3D city, it fades in as the isle's building finishes.
+  const hs = city.active && GLS ? GLS.starts[REALM_IDX.home] : -1e9, built = city.active ? (hs > 1e5 ? 0 : smoothstep(3.6, 4.6, now() - hs)) : 1
+  if (built < 1 && hs < 1e5 && !BEACON.rise) BEACON.rise = setTimeout(() => { BEACON.rise = 0; requestRender() }, 100)
+  const lh = ROOMS['home-hello'].part, o = (v.t ? 1 - smoothstep(END_Y + 250, END_Y + 750, cam.cy) : 0) * built
   if (o > .01) { const [X, Y, z] = project(lh.cx, lh.cy, 216 * LIGHTHOUSE_K * v.t, v), k = depthScale(z, v) * 1.5 * LIGHTHOUSE_K; BEACON.el.style.transform = `translate3d(${X.toFixed(1)}px,${Y.toFixed(1)}px,0) scale(${k.toFixed(3)},${(k * v.sp).toFixed(3)})` }
   if (Math.abs(o - BEACON.o) > .01) { BEACON.o = o; BEACON.el.style.opacity = o.toFixed(2) }
   // Arriving at the end of the road, the lighthouse's note opens by itself, once a visit (BATCH.finale).

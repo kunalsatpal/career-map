@@ -911,11 +911,6 @@ body.reading-case #viewport, body.reading-case #dusk, body.reading-case #gl, bod
 #panel.hcard.cartouche .note .go { border-radius: 1px; }
 #panel.hcard.cartouche .note .cta { justify-self: center; border-radius: 1px; }
 #panel.hcard.cartouche .close { top: 12px; right: 12px; }
-/* The lighthouse's note, the finale (BATCH.finaleCard). */
-#panel.finale .note .fkick { margin: 0 0 -2px; font: italic 400 .875rem/1.2 var(--font-body); color: var(--ink-3); letter-spacing: .02em; }
-#panel.finale .note .headline { max-width: 15em; padding-inline: 10px; font-size: 1.1875rem; }
-#panel.finale .note .also { margin-top: 4px; }
-#panel.finale .note .fsign { margin: 2px 0 0; font: 400 1.625rem/1 var(--font-name); color: var(--ink); rotate: -3deg; }
 
 /* ---------- Phones, second pass (00-batches.js: mobile2) ---------- */
 /* Everything here is for phones only: touch screens, or a screen as narrow as a phone's. */
@@ -1645,3 +1640,6 @@ body.reading-case #viewport, body.reading-case #dusk, body.reading-case #gl, bod
   .chap-rail .cr-label { position: static; translate: none; padding: 0; opacity: 1; background: none; box-shadow: none; white-space: normal; }
 }
 @media (prefers-reduced-motion: reduce) { .chap-rail, .chap-rail ol, .cr-dot, .chap-rail ol::after { transition: none; } }
+
+/* The locked case study's kicker: the reason it's locked, said plainly. */
+.ink-lock .lock-kicker { margin: 0 0 6px; font: 400 .8125rem/1.2 var(--font-body); font-variant-caps: all-small-caps; letter-spacing: .14em; color: var(--seal); }

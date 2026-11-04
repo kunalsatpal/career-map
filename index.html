@@ -923,11 +923,6 @@ body.reading-case #viewport, body.reading-case #dusk, body.reading-case #gl, bod
 #panel.hcard.cartouche .note .go { border-radius: 1px; }
 #panel.hcard.cartouche .note .cta { justify-self: center; border-radius: 1px; }
 #panel.hcard.cartouche .close { top: 12px; right: 12px; }
-/* The lighthouse's note, the finale (BATCH.finaleCard). */
-#panel.finale .note .fkick { margin: 0 0 -2px; font: italic 400 .875rem/1.2 var(--font-body); color: var(--ink-3); letter-spacing: .02em; }
-#panel.finale .note .headline { max-width: 15em; padding-inline: 10px; font-size: 1.1875rem; }
-#panel.finale .note .also { margin-top: 4px; }
-#panel.finale .note .fsign { margin: 2px 0 0; font: 400 1.625rem/1 var(--font-name); color: var(--ink); rotate: -3deg; }
 
 /* ---------- Phones, second pass (00-batches.js: mobile2) ---------- */
 /* Everything here is for phones only: touch screens, or a screen as narrow as a phone's. */
@@ -1657,6 +1652,9 @@ body.reading-case #viewport, body.reading-case #dusk, body.reading-case #gl, bod
   .chap-rail .cr-label { position: static; translate: none; padding: 0; opacity: 1; background: none; box-shadow: none; white-space: normal; }
 }
 @media (prefers-reduced-motion: reduce) { .chap-rail, .chap-rail ol, .cr-dot, .chap-rail ol::after { transition: none; } }
+
+/* The locked case study's kicker: the reason it's locked, said plainly. */
+.ink-lock .lock-kicker { margin: 0 0 6px; font: 400 .8125rem/1.2 var(--font-body); font-variant-caps: all-small-caps; letter-spacing: .14em; color: var(--seal); }
 </style>
 </head>
 <body>
@@ -1741,7 +1739,6 @@ const BATCH = {
   crispFog: true,        // names in the distance stay readable, then are gone: no ghost labels half-lost in the mist
   bareTitle: true,      // the halo behind the name and tagline is matched to the rendered paper, so it no longer reads as a white outline
   // Worlds, more to find
-  finaleCard: true,      // the lighthouse's note: "The end of the road" over the headline, and signed
   pillarStars: true,
   pillarCrowns: true,    // How I work's crowns, hovered: the tree rustles and drops a leaf, a pawn is moved, the brass bar ticks up, the hammer strikes, the slash turns
   cherryTree: true,      // About me: a cherry tree in blossom by the noodle stand; hovered, a few petals fall
@@ -1894,7 +1891,7 @@ const ROOMS = {
   'gojek-experiments': { tip: ['20+ experiments · +2% promo redemption', 'A year of tests on GoFood promotions, which also changed how people perceive them.'], realm: 'gojek', title: 'Promo experiments', hall: 'the kitchens', key: '20+ experiments in a year', stat: '20+ experiments in a year', body: 'Ran more than 20 experiments in a year on promotions.', list: ['Promo redemption up 2%', 'Better perception of promos'] },
   'hinge-carehub': { hoverImg: true, hoverSrc: './site/cases/media/carehub/hover-bento.png', hoverCutout: true, underConstruction: false, tip: ['A 6% gain in PT efficiency', 'Led the CareHub 2.0 visual refresh. Mover’s Award 2025.'], realm: 'hinge', title: 'CareHub 2.0', hall: 'the great hall', key: 'Before & after · Case study preview', stat: 'The platform every PT and coach works in', body: "Lead IC on the CareHub visual refresh, with one more designer over six months. Mover’s Award 2025.",
     list: ['Used by every physical therapist and coach', 'Visual refresh: reported 6% gain in PT efficiency'], img: './site/cases/media/carehub/after.png', href: '#hinge-carehub/read' },
-  'hinge-ai': { underConstruction: false, tip: ['Two milestones toward better care', 'A member-first roadmap: see the whole situation, then understand what matters.'], realm: 'hinge', title: 'AI next-best-action', hall: 'the observatory', key: '~6% less member-profile time', stat: 'Two milestones toward next best action', body: 'Set the strategy and roadmap for a member-first CareHub, building toward next-best-action recommendations.',
+  'hinge-ai': { underConstruction: false, tip: ['Holistic care ~ $400 monthly savings', 'Then ~4% less time crafting messages. A member-first AI roadmap: see the whole situation, then understand what matters.'], realm: 'hinge', title: 'AI next-best-action', hall: 'the observatory', key: '~6% less member-profile time', stat: 'Two milestones toward next best action', body: 'Set the strategy and roadmap for a member-first CareHub, building toward next-best-action recommendations.',
     list: ['Milestone 1: ~6% less member-profile time', 'Milestone 2: ~1% less time per member and ~4% less message-crafting time'], img: './site/cases/media/nba/final-carehub.jpg', href: '#hinge-ai/read' },
   'hinge-workflows': { tip: ['8% faster for PTs · 16% for coaches', 'Simplified the everyday workflows care teams run in CareHub.'], realm: 'hinge', title: 'Care-team workflows', hall: 'the cloister', key: '8% faster for PTs · 16% for coaches', stat: '8% faster for PTs · 16% for coaches', soon: true, body: 'Simplified care-team workflows across CareHub.', list: ['Time per member down 8% for PTs and 16% for coaches'] },
   'hinge-video': { tip: ['Recording 53% → 95%', 'Redesigned video visits between members and their care team; visit time down 4.5%.'], realm: 'hinge', title: 'Video visits', hall: 'the mirror tower', key: 'Recording 53% → 95%', stat: 'Recording 53% → 95%', soon: true, body: 'Redesigned video visits between members and their care team.', list: ['Recording rates up from 53% to 95%', 'Visit time down 4.5%'] },
@@ -3353,7 +3350,10 @@ function placeLabels(v) {
   })
   trackLevel()
   // The beam turns over the sea from the lamp room, brighter the nearer the end.
-  const lh = ROOMS['home-hello'].part, o = v.t ? 1 - smoothstep(END_Y + 250, END_Y + 750, cam.cy) : 0
+  // Only once the lighthouse stands whole: with the 3D city, it fades in as the isle's building finishes.
+  const hs = city.active && GLS ? GLS.starts[REALM_IDX.home] : -1e9, built = city.active ? (hs > 1e5 ? 0 : smoothstep(3.6, 4.6, now() - hs)) : 1
+  if (built < 1 && hs < 1e5 && !BEACON.rise) BEACON.rise = setTimeout(() => { BEACON.rise = 0; requestRender() }, 100)
+  const lh = ROOMS['home-hello'].part, o = (v.t ? 1 - smoothstep(END_Y + 250, END_Y + 750, cam.cy) : 0) * built
   if (o > .01) { const [X, Y, z] = project(lh.cx, lh.cy, 216 * LIGHTHOUSE_K * v.t, v), k = depthScale(z, v) * 1.5 * LIGHTHOUSE_K; BEACON.el.style.transform = `translate3d(${X.toFixed(1)}px,${Y.toFixed(1)}px,0) scale(${k.toFixed(3)},${(k * v.sp).toFixed(3)})` }
   if (Math.abs(o - BEACON.o) > .01) { BEACON.o = o; BEACON.el.style.opacity = o.toFixed(2) }
   // Arriving at the end of the road, the lighthouse's note opens by itself, once a visit (BATCH.finale).
@@ -5284,8 +5284,6 @@ const crownSVG = kind => CROWNS[kind] ? `<span class="emblem"><svg viewBox="0 0 
 function showRoom(id) {
   const B = ROOMS[id], realm = B.realm ? realmBy[B.realm] : null, c = realm ? ok(48, .11, realm.hue) : ok(50, .08, 70)
   pillarRead(id)
-  const fin = BATCH.finaleCard && id === 'home-hello'
-  panelEl.classList.toggle('finale', fin)
   panelEl.classList.toggle('journal', !!B.blog); panelEl.classList.toggle('hcard', !B.blog); panelEl.classList.toggle('cartouche', BATCH.cardCartouche && !B.blog)
   note.style.setProperty('--c', c); panelEl.style.setProperty('--c', c)
   if (B.blog) { note.innerHTML = noteHTML(id); return }
@@ -5294,20 +5292,18 @@ function showRoom(id) {
   // In a cartouche the headline is centred and set larger, so a line of numbers breaks after its dot, not before.
   const head = (B.tip ? B.tip[0] : B.stop ? B.title : B.stat || B.title).replace(/ · /g, BATCH.cardCartouche ? '&nbsp;· ' : ' · ')
   const line = B.tip ? B.tip[1] : B.stop ? [B.stat, B.body].filter(Boolean).join(' · ') : B.body
-  note.innerHTML = (fin ? '<p class="fkick">The end of the road</p>' : '') + (opens(id) || B.hoverImg ? winHTML(id) : !B.tip ? figHTML(B.img, B.alt) : '') + picsHTML(B.pics, B.grid)
+  note.innerHTML = (opens(id) || B.hoverImg ? winHTML(id) : !B.tip ? figHTML(B.img, B.alt) : '') + picsHTML(B.pics, B.grid)
     + (B.part?.t === 'pillar' ? `<div class="ehead">${crownSVG(B.part.kind)}<p class="headline">${head}</p></div>` : `<p class="headline">${head}</p>`) + (line ? `<p class="body">${line}</p>` : '')
     + (!B.tip && B.list ? `<ul>${B.list.map(li => `<li><span>${li}</span></li>`).join('')}</ul>` : '')
     + (B.links && !(BATCH.finale && id === 'home-hello') ? `<ul class="links">${B.links.map(([t, h]) => `<li><a href="${abs(h)}" target="_blank" rel="noopener">${t}</a></li>`).join('')}</ul>` : '')
     + (B.underConstruction ? '<p class="status">Full case study under construction · Preview available</p>' : B.nda ? `<p class="status">Under NDA · <a class="ext" href="mailto:kunalsatpal1@gmail.com?subject=${encodeURIComponent(B.title)}">ask me about it · kunalsatpal1@gmail.com</a></p>`
       : B.soon ? '<p class="status">Case study coming soon</p>' : '')
-    + (hasCase(id) ? `<button class="go" data-enter="${id}">${B.caseLabel || 'Read the case study'} <span>· ${readMins(caseBody(letterFor(id)))} min →</span></button>`
+    + (hasCase(id) ? `<button class="go" data-enter="${id}">${B.caseLabel || 'Read now'} <span>· ${readMins(caseBody(letterFor(id)))} min →</span></button>`
       : B.see ? `<button class="go" data-letter="${B.see}">${B.seeLabel || 'Read the story'} <span>· ${readMins(caseBody(B.see))} min →</span></button>`
       : B.href ? `<a class="cta" href="${abs(B.href)}" target="_blank" rel="noopener">${B.cta || 'Read the case study'} <span aria-hidden="true">↗</span></a>` : '')
     + (id === 'home-hello' ? `<a class="cta" href="mailto:kunalsatpal1@gmail.com?subject=${encodeURIComponent('Found you on the map')}"><span>Write to me <span aria-hidden="true">✉</span></span><span class="mail">kunalsatpal1@gmail.com</span></a>` : '')
     // The sign-off (BATCH.finale): one way to write, then everything else in a single line.
     + (BATCH.finale && id === 'home-hello' ? `<p class="also">${B.links.filter(([, h]) => !h.startsWith('mailto:')).map(([t, h]) => `<a href="${abs(h)}" target="_blank" rel="noopener">${t.replace(' (PDF)', '')}</a>`).join('<span aria-hidden="true"> · </span>')}</p>` : '')
-    // Signed, in the hand of the name on the map's title.
-    + (fin ? '<p class="fsign">Kunal</p>' : '')
 }
 // Ink writes itself onto the note: each line sweeps in, a beat after the last.
 function writeOn() {
@@ -7093,7 +7089,7 @@ function pageHTML(id) {
   // Every page ends with a way to get in touch (BATCH.pageFixes): write, or take the résumé.
   const cv = ROOMS['home-hello'].links.find(([t]) => /sum/.test(t)), title = plain(P.title || L.title)
   const say = P.contactLock
-    ? `<section class="contact-callout ink-lock" aria-labelledby="case-contact-title"><div class="ink-lock-mark" aria-hidden="true"><img src="${abs('./assets/case-lock.svg')}" alt="" width="420" height="300" loading="lazy" decoding="async"></div><h2 id="case-contact-title">The complete case study</h2><p>The research, explorations and decisions behind this work, walked through on a call.</p><a class="contact-action" href="mailto:kunalsatpal1@gmail.com?subject=${encodeURIComponent(title + ' — complete case study')}"><span>Write to me <span aria-hidden="true">↗</span></span><span class="contact-mail">kunalsatpal1@gmail.com</span></a></section>`
+    ? `<section class="contact-callout ink-lock" aria-labelledby="case-contact-title"><div class="ink-lock-mark" aria-hidden="true"><img src="${abs('./assets/case-lock.svg')}" alt="" width="420" height="300" loading="lazy" decoding="async"></div><p class="lock-kicker">Under NDA</p><h2 id="case-contact-title">The rest is under lock and key</h2><p>This is a preview. Write to me for the complete case study: the research, explorations and decisions behind it, walked through together on a call.</p><a class="contact-action" href="mailto:kunalsatpal1@gmail.com?subject=${encodeURIComponent(title + ' — complete case study')}"><span>Write to me <span aria-hidden="true">↗</span></span><span class="contact-mail">kunalsatpal1@gmail.com</span></a></section>`
     : BATCH.pageFixes || EXTRA_PAGES[id] ? `<p class="psay">Want to talk about ${L.blog ? 'this' : 'this work'}? <a href="mailto:kunalsatpal1@gmail.com?subject=${encodeURIComponent(title)}">Write to me at kunalsatpal1@gmail.com</a><span aria-hidden="true"> · </span><a href="${abs(cv[1])}" target="_blank" rel="noopener">Résumé</a></p>` : ''
   // Every page offers the way on to the other case studies; on a locked preview it comes after the invitation.
   const nav = prev || next ? `<nav class="pnav${prev && next ? ' two' : ''}${P.contactLock ? ' after-lock' : ''}" aria-label="More to read">${prev}${next}</nav>` : ''
