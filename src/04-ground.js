@@ -463,9 +463,9 @@ function drawSheet() {
   }
 
   // ---- The title at the foot of the road, where the journey sets out.
-  S.raw('text', 8000, `<text class="hub-name" x="950" y="8160" font-size="300" text-anchor="middle">Kunal Satpal</text>`
-    + `<text class="hub-sub" x="950" y="8270" font-size="64">${BATCH.tagline ? 'Crafting with strategy &amp; technical fluency' : 'A design leader who loves craft &amp; code'}</text>`
-    + `<text class="cart-small i" x="950" y="8336" font-size="28">Staff Product Designer at Hinge Health · designing since 2017</text>`
+  S.raw('text', 8000, `<text class="hub-name${BATCH.bareTitle ? ' bare' : ''}" x="950" y="8160" font-size="300" text-anchor="middle">Kunal Satpal</text>`
+    + `<text class="hub-sub${BATCH.bareTitle ? ' bare' : ''}" x="950" y="8270" font-size="64">${BATCH.tagline ? 'Crafting with strategy &amp; technical fluency' : 'A design leader who loves craft &amp; code'}</text>`
+    + `<text class="cart-small i" x="950" y="8336" font-size="28">Staff Product Designer, Hinge Health · Designing since 2017</text>`
     + `<path class="fine" d="M720,8382H930M970,8382H1180"/><path class="solid" d="${star4(950, 8382, 10)}"/>`)
   // ---- Names of the country.
   for (const [t, cx, cy, size, sub] of GEO.regions) S.raw('text', cy, `<text class="region" x="${cx}" y="${cy}" font-size="${size}" text-anchor="middle">${t}</text>` + (sub ? `<text class="region-sub" x="${cx}" y="${cy + size * .9}" font-size="${size * .5}">${sub}</text>` : ''))

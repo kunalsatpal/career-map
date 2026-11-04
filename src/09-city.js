@@ -119,10 +119,19 @@ function fellTreeF(x, y, r) {
   BX.kind = null
 }
 // The buildings of the work, one design per kind of plan.
+// A piece that does one trick of its own when its place is hovered (16-pillars): `trick` is the GPU
+// movement (kind, axis, amount, as decorPlay takes them) and `fx` what it throws off besides.
+const trickF = (kind, x, y, z, h, r, trick, fn) => decorF(kind, x, y, z, h, r, fn, { base: z, trick })
+// With BATCH.pillarCrowns, one part of each crown moves: the tree rustles and drops a leaf, a pawn
+// is moved, the brass bar ticks up, the hammer strikes, the brass slash turns.
+const crownF = (trick, x, y, z, h, r, fn) => BATCH.pillarCrowns ? trickF('crown', x, y, z, h, r, trick, fn) : fn()
 // The crowns of the How I work pillars, one for each principle, drawn at a pillar's scale k.
 const PILLAR_TOPS = {
   // Grow the team: a young tree growing out of the stone.
-  grow(x, y, z, k) { latheF(x, y, [[2.2 * k, z], [2.2 * k, z + 14 * k]], 6, mat(TRUNK)); ballF(x, y, 13 * k, GREEN, z + 9 * k); ballF(x - 9 * k, y + 3 * k, 8 * k, GREEN2, z + 7 * k); ballF(x + 9 * k, y - 2 * k, 9 * k, GREEN, z + 8 * k) },
+  grow(x, y, z, k) {
+    latheF(x, y, [[2.2 * k, z], [2.2 * k, z + 14 * k]], 6, mat(TRUNK))
+    crownF({ kind: 7, axis: [1, 0, 0], amount: .12, fx: 'leaf' }, x, y, z + 8 * k, 28 * k, 14 * k, () => { ballF(x, y, 13 * k, GREEN, z + 9 * k); ballF(x - 9 * k, y + 3 * k, 8 * k, GREEN2, z + 7 * k); ballF(x + 9 * k, y - 2 * k, 9 * k, GREEN, z + 8 * k) })
+  },
   // Think like a strategist: a chessboard, a king behind two pawns.
   strategy(x, y, z, k) {
     const c = 4.6 * k, x0 = x - 2 * c, y0 = y - 2 * c, D = mat(col3(36, .02, 250)), L = mat(col3(92, .02, 85)), base = z + 2 * k
@@ -132,25 +141,25 @@ const PILLAR_TOPS = {
     const kx = x + c * .5, ky = y - c * .5
     latheF(kx, ky, [[3.4 * k, base], [3.4 * k, base + 2 * k], [1.8 * k, base + 4 * k], [1.5 * k, base + 13 * k], [3 * k, base + 15 * k], [2.2 * k, base + 17 * k], [0, base + 17.6 * k]], 10, D)
     boxF(kx - .8 * k, ky - .8 * k, 1.6 * k, 1.6 * k, base + 17 * k, 5 * k, D, D); boxF(kx - 2.4 * k, ky - .8 * k, 4.8 * k, 1.6 * k, base + 19 * k, 1.6 * k, D, D)
-    pawn(x - c * 1.5, y + c * .5, L); pawn(x + c * 1.5, y + c * 1.5, D)
+    crownF({ kind: 3, axis: [0, 0, 1], amount: 4 * k }, x - c * 1.5, y + c * .5, base, 8 * k, 4 * k, () => pawn(x - c * 1.5, y + c * .5, L)); pawn(x + c * 1.5, y + c * 1.5, D)
   },
   // Data-driven design: a bar chart, each bar taller than the last, the tallest in brass.
   data(x, y, z, k) {
     const w = 4.4 * k, g = 1.6 * k, x0 = x - (4 * w + 3 * g) / 2, S = mat(col3(36, .02, 250))
     boxF(x0 - g, y - 5 * k, 4 * w + 5 * g, 10 * k, z, 1.6 * k, mat(STONE), mat(STONE))
-    ;[8, 13, 19, 28].forEach((h, i) => { const m = i === 3 ? mat(BRASS) : S; boxF(x0 + i * (w + g), y - w / 2, w, w, z + 1.6 * k, h * k, m, m) })
+    ;[8, 13, 19, 28].forEach((h, i) => { const m = i === 3 ? mat(BRASS) : S, bar = () => boxF(x0 + i * (w + g), y - w / 2, w, w, z + 1.6 * k, h * k, m, m); i === 3 ? crownF({ kind: 8, axis: [0, 0, 1], amount: 6 * k }, x0 + i * (w + g) + w / 2, y, z + 1.6 * k, h * k, w, bar) : bar() })
   },
   // Build tools for the team: an anvil, a hammer resting on it.
   tools(x, y, z, k) {
     const D = mat(col3(36, .02, 250))
     boxF(x - 8 * k, y - 6 * k, 16 * k, 12 * k, z, 6 * k, D, D); boxF(x - 4 * k, y - 4 * k, 8 * k, 8 * k, z + 6 * k, 6 * k, D); boxF(x - 13 * k, y - 6 * k, 24 * k, 12 * k, z + 12 * k, 6 * k, D, mat(col3(48, .02, 250)))
-    boxF(x - 2 * k, y + k, 18 * k, 2.5 * k, z + 18 * k, 2.5 * k, mat(WOOD, 'timber')); boxF(x + 13 * k, y - 2 * k, 4 * k, 8 * k, z + 18 * k, 5 * k, D, D)
+    crownF({ kind: 4, axis: [0, 1, 0], amount: -.3, fx: 'sparks' }, x - 2 * k, y + 2.2 * k, z + 18 * k, 8 * k, 12 * k, () => { boxF(x - 2 * k, y + k, 18 * k, 2.5 * k, z + 18 * k, 2.5 * k, mat(WOOD, 'timber')); boxF(x + 13 * k, y - 2 * k, 4 * k, 8 * k, z + 18 * k, 5 * k, D, D) })
   },
   // Code and motion: a </> in blocks, standing on the capital and facing the road.
   code(x, y, z, k) {
     const s = 2.1 * k, lt = ['..X', '.X.', 'X..', '.X.', '..X'], sl = ['..X', '..X', '.X.', 'X..', 'X..'], gt = ['X..', '.X.', '..X', '.X.', 'X..'], gap = '...'
     blocksF(x, y, z, lt.map((r, i) => r + '.' + gap + '.' + gt[i]), s, mat(col3(36, .02, 250)), 2.4 * k)
-    blocksF(x, y, z, sl.map(r => '....' + r + '....'), s, mat(BRASS), 2.4 * k)
+    crownF({ kind: 6, axis: [0, 0, 1], amount: 0 }, x, y, z, 12 * k, 8 * k, () => blocksF(x, y, z, sl.map(r => '....' + r + '....'), s, mat(BRASS), 2.4 * k))
   },
 }
 const BUILD = {
@@ -461,7 +470,10 @@ const BUILD = {
     latheF(q.cx, q.cy, [[R0 * 1.24, H0], [R0 * 1.24, H0 + 6 * k], [R0 * .62, H0 + 6 * k]], 16, DARK)
     latheF(q.cx, q.cy, [[R0 * .62, H0 + 6 * k], [R0 * .62, H0 + 34 * k]], 12, mat(LAMP, 'glass'))
     latheF(q.cx, q.cy, [[R0 * .74, H0 + 34 * k], [0, H0 + 62 * k]], 12, red); ballF(q.cx, q.cy, 2.6 * k, col3(40, .03, 60), H0 + 61 * k)
-    owlF(q.cx + R0 * .3, q.cy + R0 * 1.14, H0 + 6 * k, 1.7 * k)
+    // The owl on the gallery: with BATCH.nightWatch a prop, that shuffles now and then like the others, takes
+    // the wand, and keeps the night watch when clicked (16-side).
+    const ox = q.cx + R0 * .3, oy = q.cy + R0 * 1.14, oz = H0 + 6 * k
+    BATCH.nightWatch ? decorF('owl', ox, oy, oz, 27 * 1.7 * k, 9 * k, () => owlF(ox, oy, oz, 1.7 * k), { base: oz }) : owlF(ox, oy, oz, 1.7 * k)
     const kx = q.cx - 104 * k, ky = q.cy - 26 * k
     boxF(kx, ky, 62 * k, 44 * k, 0, 30 * k, mat(HOME.cream, 'plaster', OVL.lit)); gableF(kx, ky, 62 * k, 44 * k, 30 * k, 20 * k, mat(HOME.terracotta, 'tile'), mat(HOME.cream, 'plaster'), 'x')
     boxF(kx + 44 * k, ky + 8 * k, 9 * k, 9 * k, 40 * k, 22 * k, mat(col3(58, .06, 38), 'brick'), DARK)
@@ -499,14 +511,15 @@ const BUILD = {
   // Weekends are for books: a bench, a lamp, a pile to get through.
   reading(q) {
     const [kx, ky] = [q.x + 46, q.y + 30]
-    benchF(kx - 22, ky + 4, 44); lampF(kx - 34, ky - 4, 30)
+    if (BATCH.hammock) hammockF(kx - 26, ky + 8); else benchF(kx - 22, ky + 4, 44)
+    lampF(kx - 34, ky - 4, 30)
     let bz = 0
     for (const [bw, bd, bh, a, c] of [[30, 22, 6, .2, [50, .15, 27]], [27, 20, 5, -.18, [40, .09, 258]], [28, 19, 6, .06, [52, .11, 150]], [24, 17, 5, -.1, [70, .12, 80]]]) { slabF(kx + 34, ky - 6, bw, bd, bz, bh, a, mat(col3(...c)), mat(HOME.page, 'tiers'), mat(col3(...c))); bz += bh }
   },
   // Breaks mean a controller; a noodle stand for the anime; a table for the people who matter.
   games(q) { controllerF(...q.c) },
-  noodles(q) { ramenF(...q.c) },
-  feast(q) { tableF(...q.c) },
+  noodles(q) { ramenF(...q.c); if (BATCH.cherryTree) cherryF(q.x + q.w + 20, q.y + 4) },
+  feast(q) { tableF(...q.c); if (BATCH.wavers) wavingBenchF(q.c[0], q.c[1] + 60) },
   // Designing my portfolio: an observatory, for a portfolio built as a universe.
   observatory(q, st) {
     const R0 = q.r * .82, H0 = 48, top = H0 + 4, dome = mat(col3(62, .07, 255), 'slate')
@@ -616,14 +629,18 @@ function owlF(x, y, z, k = 1) {
   for (const dx of [-3.3, 3.3]) { latheF(x + dx * k, y, [[1.7 * k, Z(22)], [0, Z(27)]], 5, brown); ballF(x + dx * .62 * k, y + 4.8 * k, 1.5 * k, col3(86, .15, 92), Z(18)) }
   latheF(x, y + 5.4 * k, [[1.1 * k, Z(17.5)], [0, Z(15.5)]], 4, mat(col3(70, .1, 70)))
 }
-// A game controller, larger than life, on a plinth.
+// A game controller, larger than life, on a plinth. A bright shell so it reads against the grass,
+// a pale d-pad, four coloured buttons and two dark sticks; it hops to a combo when hovered (16-delight).
 function controllerF(x, y) {
-  const body = mat(col3(30, .02, 260)), key = col3(74, .01, 60)
+  const shell = col3(58, .15, 255), body = mat(shell), top = mat(col3(64, .14, 255)), key = mat(col3(92, .01, 80)), stick = mat(col3(28, .02, 260))
   boxF(x - 42, y - 20, 84, 40, 0, 12, mat(STONE, 'stone'), mat(STONE))
-  boxF(x - 24, y - 10, 48, 18, 12, 12, body, body)
-  for (const dx of [-28, 28]) latheF(x + dx, y + 4, [[12, 12], [12, 25], [0, 25]], 12, body)
-  for (const [dx, dy, c] of [[22, -3, 150], [30, 2, 27], [22, 7, 258], [14, 2, 85]]) ballF(x + dx, y + dy, 2.4, col3(62, .16, c), 24)
-  boxF(x - 34, y, 14, 4, 25, 2, mat(key)); boxF(x - 29, y - 5, 4, 14, 25, 2, mat(key))
+  decorF('pad', x, y, 12, 18, 42, () => {
+    boxF(x - 24, y - 10, 48, 18, 12, 12, body, top)
+    for (const dx of [-28, 28]) latheF(x + dx, y + 4, [[12, 12], [12, 24], [0, 25]], 12, body)
+    boxF(x - 34, y + 2, 14, 4, 25, 2, key); boxF(x - 29, y - 3, 4, 14, 25, 2, key)
+    for (const [dx, dy, c] of [[28, -1, 150], [34, 4, 27], [28, 9, 85], [22, 4, 300]]) ballF(x + dx, y + dy, 2.6, col3(72, .17, c), 26)
+    for (const dx of [-11, 11]) { latheF(x + dx, y + 2, [[2, 24], [2, 27]], 8, stick); latheF(x + dx, y + 2, [[4.2, 27], [4.2, 29], [0, 29.5]], 10, stick) }
+  }, { base: 12 })
 }
 // A noodle stand: a counter, a striped awning, paper lanterns, stools.
 function ramenF(x, y) {
@@ -633,6 +650,42 @@ function ramenF(x, y) {
   gableF(x - 36, y - 16, 72, 32, 40, 13, mat(col3(58, .16, 27), 'stripe'), wood, 'x')
   for (const dx of [-30, 0, 30]) ballF(x + dx, y + 18, 3.8, col3(64, .18, 30), 30)
   for (const dx of [-18, 0, 18]) { latheF(x + dx, y + 24, [[1.2, 0], [1.2, 10]], 5, DARK); latheF(x + dx, y + 24, [[4.5, 10], [4.5, 12], [0, 12]], 8, wood) }
+}
+// Weekends are for books (BATCH.hammock): a striped hammock between two posts, an open book left in
+// it; hovered, its right-hand page turns over (16-pillars).
+function hammockF(x0, y) {
+  const W2 = 54, P = mat(WOOD, 'timber'), stripes = [mat(col3(70, .1, 38)), mat(CREAM)], n = 9, sag = 8, top = 17
+  for (const dx of [0, W2]) { latheF(x0 + dx, y, [[1.6, 0], [1.6, 24]], 6, P); ballF(x0 + dx, y, 1.8, WOOD, 23) }
+  const zAt = t => top - sag * Math.sin(Math.PI * t), sw = (W2 - 10) / n
+  for (let i = 0; i < n; i++) { const t = (i + .5) / n; boxF(x0 + 5 + i * sw, y - 6, sw + .3, 12, zAt(t), 1.2, stripes[i % 2], stripes[i % 2]) }
+  for (const [a, b] of [[0, 5], [W2 - 5, W2]]) boxF(x0 + a, y - .4, b - a, .8, top + 2, .8, DARK, DARK)
+  // The book, open at the lowest point of the cloth.
+  const bx = x0 + W2 / 2, bz = top - sag + 1.3, page = mat(HOME.page), cover = mat(col3(42, .1, 258))
+  boxF(bx - 8.6, y - 5.6, 17.2, 11.2, bz, .7, cover, cover)
+  boxF(bx - 8, y - 5, 7.8, 10, bz + .7, .9, page, page)
+  trickF('page', bx, y, bz + .7, 3, 8, { kind: 9, axis: [0, 1, 0], amount: -2.9 }, () => boxF(bx + .2, y - 5, 7.8, 10, bz + .7, .9, page, page))
+}
+// A cherry tree in blossom beside the noodle stand (BATCH.cherryTree); hovered, it rustles and lets
+// a few petals fall.
+function cherryF(x, y) {
+  latheF(x, y, [[2.6, 0], [2.2, 20]], 6, mat(TRUNK))
+  const pink = col3(86, .07, 350), pink2 = col3(80, .09, 355)
+  trickF('blossom', x, y, 18, 30, 16, { kind: 7, axis: [1, 0, 0], amount: .08, fx: 'petals' }, () => {
+    ballF(x, y, 11, pink, 17); ballF(x - 8, y + 2, 7, pink2, 16); ballF(x + 8, y - 2, 8, pink, 17); ballF(x + 2, y + 4, 6, pink2, 25)
+  })
+}
+// People matter most (BATCH.wavers): two friends on a bench by the table, who wave when you come by.
+function wavingBenchF(x, y) {
+  const K = 1.7, skin = col3(78, .06, 55)
+  benchF(x - 30, y, 60)
+  ;[[-14, col3(58, .12, 38), -1], [14, col3(50, .08, 255), 1]].forEach(([dx, shirt, side]) => {
+    const fx = x + dx, fy = y + 3.5, m = mat(shirt)
+    latheF(fx, fy, [[3.4 * K, 6], [3.2 * K, 6 + 5 * K], [2.4 * K, 6 + 8.6 * K], [1.1 * K, 6 + 9.4 * K]], 10, m)
+    ballF(fx, fy, 2.5 * K, skin, 6 + 9 * K)
+    // The arm on the outer side, raised to wave: it swings about the shoulder.
+    const ax = fx + side * 3.2 * K, az = 6 + 7.4 * K
+    trickF('waver', ax, fy, az, 7 * K, 3 * K, { kind: 4, axis: [0, 1, 0], amount: .5 * side }, () => { boxF(ax - .8 * K, fy - .8 * K, 1.6 * K, 1.6 * K, az, 5.6 * K, m, m); ballF(ax, fy, 1.1 * K, skin, az + 5.4 * K) })
+  })
 }
 // A round table with chairs for six, and lights strung between four poles.
 function tableF(x, y) {
@@ -1216,7 +1269,7 @@ function prewarmGL() {
 // whichever way. The trees swap in for the flat ink ones all at once, so that is best done out of sight.
 const cityReady = (cap = 5000) => new Promise(r => { const t0 = performance.now()
   const check = () => city.ready && city.cardsDone || city.failed || !TILT || performance.now() - t0 > cap ? r() : setTimeout(check, 50); check() })
-function failGL(err) { console.warn('3D city unavailable:', err?.message || err); city.failed = true; city.ready = false; gl = null; CARDGL = null; TILT = false; document.body.classList.remove('cards'); requestRender() }
+function failGL(err) { console.warn('3D city unavailable:', err?.message || err); city.failed = true; city.ready = false; gl = null; CARDGL = null; TILT = false; document.body.classList.remove('cards', 'city3d'); requestRender() }
 function startGL() {
   gl = cv.getContext('webgl2', { alpha: true, premultipliedAlpha: true, antialias: false, depth: false, stencil: false, powerPreference: 'high-performance' })
   if (!gl) throw new Error('no webgl2')
@@ -1320,12 +1373,12 @@ const inSight = (b, gv) => b.x1 > gv.x0 - 400 && b.x0 < gv.x1 + 400 && b.y1 > gv
 function cityFrame(v) {
   city.rise = v.t
   if (v.t <= 0.001) {
-    if (city.active) { city.active = false; cv.style.display = 'none'; document.body.classList.remove('cards'); if (GLS) GLS.starts.fill(1e6); cancelAnimationFrame(assemblyRaf); assemblyRaf = 0 }
+    if (city.active) { city.active = false; cv.style.display = 'none'; document.body.classList.remove('cards', 'city3d'); if (GLS) GLS.starts.fill(1e6); cancelAnimationFrame(assemblyRaf); assemblyRaf = 0 }
     return
   }
   if (!city.ready) { prewarmGL(); return }
   if (!city.active) { city.active = true; cv.style.display = 'block' }
-  document.body.classList.toggle('cards', !!CARDGL)
+  document.body.classList.toggle('cards', !!CARDGL); document.body.classList.add('city3d')
   const t = now()
   // A realm starting to build gets one more pass of the labels, which wait on it (the brand seals do).
   let began = false
@@ -1453,7 +1506,9 @@ function cityHover(X, Y, target) {
     // The pointer arriving over a building: its wizard looks up, or its own trick plays (16-delight).
     if (id !== pointedRoom) { pointedRoom = id; if (id) { wizardNudge(id); roomHover(id) } }
     // Only a building with a full story to open takes a pointer; the rest are read on hover.
-    vp.style.cursor = dec ? WAND : id && opens(id) ? 'pointer' : ''
+    // The wand only over a prop with a trick of its own to click; the pieces that play when their place
+    // is hovered (trickF) don't need it. A hand only where a click opens something.
+    vp.style.cursor = dec && !DECOR[dec].trick ? WAND : id && clickable(id) ? 'pointer' : ''
     if (id !== peeked && (id || !peeked || !levelOf[peeked]?.el.matches(':hover'))) levelPeek(id)
   })
 }

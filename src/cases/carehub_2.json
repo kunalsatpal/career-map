@@ -41,18 +41,22 @@
    "text": "Before and after"
   },
   {
-   "t": "img",
-   "src": "./site/cases/media/carehub/before-hd.jpg",
-   "size": "large",
-   "cap": "<b>Before.</b> The earlier member record.",
-   "alt": "The earlier CareHub member record: tabs, a summary card, engagement and pain data, and the conversation on the right."
-  },
-  {
-   "t": "img",
-   "src": "./site/cases/media/carehub/after-hd.jpg",
-   "size": "large",
-   "cap": "<b>After.</b> The refreshed member record.",
-   "alt": "The refreshed CareHub member record: a labelled navigation rail, an AI summary at the top, engagement, trends, the current focus with a body map, and the conversation."
+   "t": "evidence-pair",
+   "even": true,
+   "items": [
+    {
+     "label": "Before",
+     "src": "./site/cases/media/carehub/before-hd.jpg",
+     "cap": "The earlier member record.",
+     "alt": "The earlier CareHub member record: tabs, a summary card, engagement and pain data, and the conversation on the right."
+    },
+    {
+     "label": "After",
+     "src": "./site/cases/media/carehub/after-hd.jpg",
+     "cap": "The refreshed member record.",
+     "alt": "The refreshed CareHub member record: a labelled navigation rail, an AI summary at the top, engagement, trends, the current focus with a body map, and the conversation."
+    }
+   ]
   },
   {
    "t": "h3",
@@ -76,15 +80,6 @@
    "html": "The refresh brought typography, colour, icons and reusable components into one visual language."
   },
   {
-   "t": "reel",
-   "src": "./site/cases/media/carehub/system-reel.mp4",
-   "poster": "./site/cases/media/carehub/system-reel-poster.jpg",
-   "width": 1400,
-   "height": 1000,
-   "alt": "A 10-second tease of CareHub 2.0: the earlier member record sweeping into the refreshed one, then its icons, its body-map illustration and its colour families.",
-   "cap": "CareHub 2.0 in 10 seconds. Below, the system board: select any piece to see it full size."
-  },
-  {
    "t": "system",
    "frame": [
     436.2,
@@ -92,7 +87,7 @@
     1050.3,
     783.5
    ],
-   "cap": "The CareHub 2.0 system board.",
+   "cap": "The CareHub 2.0 system board: select any piece to see it full size.",
    "pieces": [
     {
      "key": "typography",

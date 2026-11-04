@@ -1,8 +1,8 @@
 // =====================================================================================
-// Where you are: a thin rail down the right with a dot for each world, and a small menu for
-// everything else. Each city's own banner on the map names it as you arrive.
+// Where you are: a thin rail down the right with a dot for each world. Each city's own
+// banner on the map names it as you arrive.
 // =====================================================================================
-const rail = $('rail'), menu = $('menu'), menuBtn = $('menuBtn')
+const rail = $('rail')
 const RAIL = [{ key: 'start', name: 'Start', years: '' }, ...WORLDS]
 rail.innerHTML = `<ol>${RAIL.map((w, i) => `<li><button data-world="${i}" aria-label="${w.name}${w.years ? `, ${w.years}` : ''}"><i></i><span><b>${w.name}</b>${w.years && !BATCH.railNames ? `<small>${w.years}</small>` : ''}</span></button></li>`).join('')}</ol>`
 let worldAt = -1
@@ -28,13 +28,4 @@ function goWorld(i) {
 }
 rail.addEventListener('click', e => { const b = e.target.closest('[data-world]'); if (b) goWorld(+b.dataset.world) })
 function onLevelChange() {}
-// The menu: résumé, the plain page, back to the start.
-function closeMenu() { if (menu.hidden) return; menu.hidden = true; menuBtn.setAttribute('aria-expanded', 'false') }
-menuBtn.addEventListener('click', e => { e.stopPropagation(); const open = menu.hidden; menu.hidden = !open; menuBtn.setAttribute('aria-expanded', String(open)); if (open) menu.querySelector('a, button')?.focus() })
-menu.addEventListener('click', e => {
-  const b = e.target.closest('[data-m]'); if (!b) return
-  closeMenu()
-  if (b.dataset.m === 'read') openReader(); else if (b.dataset.m === 'start') fitAll()
-})
-document.addEventListener('pointerdown', e => { if (!menu.hidden && !e.target.closest('#menu, #menuBtn')) closeMenu() })
 $('brand').addEventListener('click', () => { closePanel(); fitAll() })

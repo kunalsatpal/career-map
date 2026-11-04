@@ -3,10 +3,10 @@
 // on. Nothing zooms: the road is the whole way through.
 // =====================================================================================
 const vp = $('viewport')
-const BLOCK = '#panel, #letter, #reader, #menu, #lightbox, .ui'
+const BLOCK = '#panel, #letter, #reader, #lightbox, .ui'
 const busy = () => document.body.classList.contains('reading') || caseId
 addEventListener('wheel', e => {
-  if (e.target.closest?.('#panel, #letter, #reader, #menu, #lightbox') || busy()) return
+  if (e.target.closest?.('#panel, #letter, #reader, #lightbox') || busy()) return
   e.preventDefault()
   if (e.ctrlKey || e.metaKey) return
   const unit = e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? VH : 1
@@ -78,6 +78,8 @@ function glide() {
 }
 // A click on the sheet: a building, a room on the plan, or nothing (which closes the note).
 function activate(target, X, Y) {
+  // The lighthouse's lamp room keeps the night watch (BATCH.nightWatch, 16-side).
+  if (lampRoomAt(X, Y)) return nightWatch()
   // A prop that does its trick on hover hands the click to its building (BATCH.propsShareHover)
   // when the building has a page or links to open; otherwise the click plays the trick again, the
   // barbell's next rep. On a touch screen, where nothing hovers, the tap plays the trick as well.
@@ -92,7 +94,7 @@ function activate(target, X, Y) {
   if (target.closest?.('.needle')) return
   const link = target.closest?.('[data-go]'); if (link) return go(link.dataset.go)
   const g = target.closest?.('.room'); if (g) return clickPlace(g.dataset.id)
-  closePanel(); closeMenu(); seaClick(X, Y)
+  closePanel(); seaClick(X, Y)
 }
 document.addEventListener('click', e => {
   if (e.target.closest('#letter, #panel')) return
@@ -108,7 +110,7 @@ function stepLevel(d) {
 addEventListener('keydown', e => {
   if (e.metaKey || e.ctrlKey || e.altKey || busy() || e.target.closest?.('input, textarea')) return
   const k = e.key, unit = perPx()
-  if (k === 'Escape') { closeMenu(); closePanel() }
+  if (k === 'Escape') { closePanel() }
   else if (k === 'ArrowUp') { e.preventDefault(); scrollBy(140 * unit) }
   else if (k === 'ArrowDown') { e.preventDefault(); scrollBy(-140 * unit) }
   else if (k === 'PageUp' || (k === ' ' && !e.shiftKey && !e.target.closest?.('button, a'))) { e.preventDefault(); scrollBy(VH * .8 * unit) }

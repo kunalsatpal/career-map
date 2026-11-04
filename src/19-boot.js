@@ -1,7 +1,7 @@
 // =====================================================================================
 // Boot.
 // =====================================================================================
-function onRender(v) { placeLabels(v); cityFrame(v); placeCard(v); placeRail(v); placeSky(v); placeGym(v); placeWip(); placeLit(v); playMoments() }
+function onRender(v) { placeLabels(v); cityFrame(v); placeCard(v); placeRail(v); placeSky(v); placeGym(v); placeWip(); placeLit(v); placeStars(v); sideFrame(v); playMoments() }
 function onSettle() { cityFrame(view()); cardOnSettle(); lifeCull(); if (pointerAt && city.active && !caseId) cityHover(...pointerAt) }
 function boot() {
   ground.style.width = W + 'px'; ground.style.height = H + 'px'
@@ -28,7 +28,7 @@ function boot() {
     B.key = B.stat = `Field note · ${readMins(caseBody(id))} min read`
     if (text) B.body = (text.match(/^.{40,260}?[.!?](?=\s|$)/) || [text.slice(0, 220) + '…'])[0]
   }
-  buildLabels(); buildSky(); buildGym(); buildWip()
+  buildLabels(); buildSky(); buildGym(); buildWip(); if (BATCH.wanderCat) buildCat(); markInert()
   // No cover: the map opens straight onto the title, and the eye leans in.
   const deep = decodeURIComponent(location.hash.slice(1))
   // One calm entrance (BATCH.calmOpen): a blank sheet stands over the page while the fonts load, the
@@ -53,12 +53,16 @@ function boot() {
   render()
   if (loader?.isConnected && !deep) spread = prepareSpread(loader)
   else BARE = null
-  document.fonts.ready.then(render)
+  // The web fonts' stylesheets load without holding up the first paint (build.py), so the loader shows
+  // at once instead of a blank tab; the fonts count as ready once those sheets are in and their faces loaded.
+  const fontsIn = Promise.all([...document.querySelectorAll('link[data-font]')].map(l => l.media === 'all' ? 0 : new Promise(r => { l.addEventListener('load', r, { once: true }); l.addEventListener('error', r, { once: true }) })))
+    .then(() => new Promise(requestAnimationFrame)).then(() => document.fonts.ready)
+  fontsIn.then(render)
   performance.mark('map-ready')
   startLife(); buildCompass(); prewarmGL(); const warm = prewarmPage()
   if (deep) { warm.then(unload); const [did, mode] = deep.split('/'); setTimeout(() => ROOMS[did] || realmBy[did] || did === 'earlier' ? go(did, { enter: mode === 'read' }) : openCase(did, [VW - 200, 40]), 300) }
   // The lean-in waits for the first-visit warm-up (BATCH.prewarm) to finish, so it never stutters.
-  else Promise.race([document.fonts.ready, new Promise(r => setTimeout(r, 900))]).then(() => warm).then(() => BATCH.calmOpen && cityReady().then(linger)).then(() => {
+  else Promise.race([fontsIn, new Promise(r => setTimeout(r, 1500))]).then(() => warm).then(() => BATCH.calmOpen && cityReady().then(linger)).then(() => {
     const inking = unload()
     setTimeout(() => leanIn(2600), inking ? 1200 : BATCH.calmOpen ? 650 : 250)
   })

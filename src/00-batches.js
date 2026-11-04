@@ -33,4 +33,20 @@ const BATCH = {
   workBuild: true,       // How I work's pillars build when you reach them, on their own, before About me's isle
   lateBuild: true,       // each city starts building once its middle is a quarter of the way down the screen, not while still small by the horizon
   stopDetails: true,    // earlier-work stops say more, from the résumé and the field notes
+  // After the 4 Nov visual critique
+  inkLogos: true,        // company logos on the map are stamped in the map's ink, not their brand colours
+  noBadges: true,        // Field notes' buildings lose their round white brand badges
+  crispFog: true,        // names in the distance stay readable, then are gone: no ghost labels half-lost in the mist
+  bareTitle: true,      // the halo behind the name and tagline is matched to the rendered paper, so it no longer reads as a white outline
+  // Worlds, more to find
+  pillarStars: true,
+  pillarCrowns: true,    // How I work's crowns, hovered: the tree rustles and drops a leaf, a pawn is moved, the brass bar ticks up, the hammer strikes, the slash turns
+  cherryTree: true,      // About me: a cherry tree in blossom by the noodle stand; hovered, a few petals fall
+  hammock: true,         // About me: the reading bench becomes a hammock with an open book; hovered, a page turns
+  wavers: true,
+  // Side missions, for whoever lingers or pokes about
+  wanderCat: true,       // a cat naps beside the road; come near and it pads off to the next world, until it curls up by the lighthouse door
+  catLife: true,         // the cat blinks and flicks its tail, watches the pointer come near, says mrrp, purrs asleep, and a heart if you pat it
+  fireflies: true,       // linger in About me's yard and fireflies come out over the garden
+  nightWatch: true,      // click the lighthouse's lamp room: night falls, the beam sweeps once round, and day comes back          // About me: two friends on a bench by the table, who wave as you come by
 }

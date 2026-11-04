@@ -3,7 +3,7 @@
 // hello and cast; a tree on the last islands can be cut down, and grows back from the stump; a
 // parked scooter tips over; the hourglass flips, the orrery spins, a punching bag swings, the
 // dumbbell on the gym's roof and my barbell are lifted, the telescope looks up and a star shoots
-// past; the fountain spurts; a lamp turns on and off; the ramen steams; a ship breaks up and sinks,
+// past; the controller hops as its buttons are pressed; the fountain spurts; a lamp turns on and off; the ramen steams; a ship breaks up and sinks,
 // and comes back; open water rings where you touch it; the compass needle follows you. Over them the pointer becomes a wand, and now and then one stirs on its own, so they can be
 // told from the scenery. And two secrets, typed: "I solemnly swear", and the Konami code.
 // Nothing here runs until something is touched. The pieces themselves move on the GPU (09-city),
@@ -82,30 +82,32 @@ const unit = (x, y) => { const L = Math.hypot(x, y) || 1; return [x / L, y / L, 
 function stir(id, idle = false) {
   const D = DECOR[id], k = idle ? .7 : 1
   if (D.kind === 'lamp') return
+  if (D.trick) return playTrick(id, idle)
   if (D.kind === 'wizard') decorPlay(id, 3, [0, 0, 1], (idle ? 2.5 : 4) * D.k, idle)
   else if (D.kind === 'swing') decorPlay(id, 4, [0, 1, 0], .14 * k, idle)
   else if (D.kind === 'spin') decorPlay(id, 7, [0, 0, 1], .2 * k, idle)
   else if (D.kind === 'rep' || D.kind === 'barbell') decorPlay(id, 8, [0, 0, 1], 3, idle)
   else if (D.kind === 'scope') decorPlay(id, 9, [0, 1, 0], .12, idle)
+  else if (D.kind === 'pad') decorPlay(id, 3, [0, 0, 1], 3, idle)
   else if (D.kind === 'fountain') spurt(D, 4)
   else decorPlay(id, 7, D.kind === 'scooter' ? [1, 0, 0] : unit(Math.random() - .5, Math.random() - .5), (D.kind === 'tree' ? .07 : .06) * k, idle)
 }
 // The small props do their whole trick as soon as the pointer reaches them, with no click needed:
 // the hourglass, the bags, the orrery, the weights, the telescope, the fountain, the scooters. A tree
 // is only cut, a lamp only lit and a wizard only casts when clicked; on hover they stir or say hello.
-const ON_HOVER = new Set(['flip', 'swing', 'spin', 'rep', 'barbell', 'scope', 'fountain', 'scooter'])
+const ON_HOVER = new Set(['flip', 'swing', 'spin', 'rep', 'barbell', 'scope', 'fountain', 'scooter', 'pad'])
 function decorHover(id) {
   if (id === decorHot) return
   decorHot = id
   if (!id) return
-  if (DECOR[id].kind === 'barbell') keepLifting(id)
+  if (DECOR[id].kind === 'barbell' || DECOR[id].kind === 'pad') keepLifting(id)
   if (ON_HOVER.has(DECOR[id].kind)) return decorClick(id)
   if (decorBusy(id)) return
   stir(id)
   if (DECOR[id].kind === 'wizard') say(DECOR[id], pick(HELLO))
 }
-// The weights keep going while the pointer rests on them, a rep each time the bar comes down,
-// and stop as soon as it leaves.
+// The weights (and the controller) keep going while the pointer rests on them, a rep (or a combo)
+// each time, and stop as soon as it leaves.
 let repTimer = 0
 function keepLifting(id) {
   clearInterval(repTimer)
@@ -118,18 +120,22 @@ function keepLifting(id) {
 // A click: the thing does what it does.
 function decorClick(id) {
   const D = DECOR[id]
-  if (decorBusy(id, true) && D.kind !== 'wizard' && D.kind !== 'swing' && D.kind !== 'barbell') return
+  if (decorBusy(id, true) && D.kind !== 'wizard' && D.kind !== 'swing' && D.kind !== 'barbell' && D.kind !== 'pad') return
   const play = (kind, axis, amount = 0) => decorPlay(id, kind, axis, amount, false, true)
+  if (D.trick) return playTrick(id)
   if (D.kind === 'tree') { play(1, [0, Math.random() < .5 ? 1 : -1, 0]); flecks([D.x, D.y, D.z], 'chip', 7, 12); setTimeout(() => flecks([D.x, D.y, D.z], 'chip', 6, 10), 200) }
   else if (D.kind === 'scooter') play(2, [-1, 0, 0])
   else if (D.kind === 'flip') play(5, [1, 0, 0])
   else if (D.kind === 'spin') play(6, [0, 0, 1])
   else if (D.kind === 'swing') play(4, [0, 1, 0], .55)
   else if (D.kind === 'rep') play(8, [0, 0, 1], 14)
-  else if (D.kind === 'barbell') { play(8, [0, 0, 1], 18); D.reps = (D.reps || 0) + 1; say(D, D.reps % 5 ? `Rep ${D.reps}` : 'Light weight!') }
+  else if (D.kind === 'barbell') { play(8, [0, 0, 1], 18); D.reps = (D.reps || 0) + 1; say(D, D.reps % 3 ? `Rep ${D.reps}` : 'Light weight!') }
+  // Three silent button presses, then the fourth says something: a goal for FIFA or a shout for God of War.
+  else if (D.kind === 'pad') { play(3, [0, 0, 1], 9); D.hits = (D.hits || 0) + 1; if (D.hits % 4 === 0) say(D, D.hits % 8 ? 'GOAL!' : 'BOY!') }
   else if (D.kind === 'scope') { play(9, [0, 1, 0], .55); shootingStar(D) }
   else if (D.kind === 'fountain') { spurt(D, 14); ripples(D) }
   else if (D.kind === 'lamp') lamp(id)
+  else if (D.kind === 'owl') nightWatch()
   else if (D.kind === 'wizard') cast(id, SPELLS[spell++ % SPELLS.length])
 }
 function cast(id, words) { const D = DECOR[id]; decorPlay(id, 3, [0, 0, 1], 8 * D.k); flecks(wandTip(D), 'wspark', 12, 20); if (words) say(D, words) }
@@ -157,15 +163,23 @@ setTimeout(idleStir, 9000)
 
 // ---------- What the touched things do besides move ----------
 // What a wizard (or a lamp) says, in a little bubble over its top, for a moment.
-function say(D, text) {
+function say(D, text, cls = '') {
   D.bubble?.remove()
-  const el = document.createElement('div'); el.className = 'hello'; el.setAttribute('aria-hidden', 'true'); el.innerHTML = `<span>${text}</span>`
+  const el = document.createElement('div'); el.className = 'hello' + (cls ? ' ' + cls : ''); el.setAttribute('aria-hidden', 'true'); el.innerHTML = `<span>${text}</span>`
   labelLayer.appendChild(el); D.bubble = el
   const t0 = performance.now(), life = 2000
   const step = () => {
     const k = (performance.now() - t0) / life
     if (k >= 1 || !city.active || caseId || D.bubble !== el) { el.remove(); if (D.bubble === el) D.bubble = null; return }
-    const [X, Y] = at3(D.x, D.y, (D.base || 0) + D.h + 5)
+    let [X, Y] = at3(D.x, D.y, (D.base || 0) + D.h + 5)
+    // A prop shares its building's hover, so the building's name may be showing just where the
+    // bubble would sit: then the bubble rises to sit above the name instead of covering it.
+    const L = document.querySelector('.lvl.peek .lv-t')
+    if (L) {
+      const r = L.getBoundingClientRect(), o = labelLayer.getBoundingClientRect(), w = el.firstChild.offsetWidth / 2 + 4, h = el.firstChild.offsetHeight + 10
+      const top = r.top - o.top, left = r.left - o.left
+      if (r.width && X + w > left && X - w < left + r.width && Y > top && Y - h < top + r.height) Y = top - 2
+    }
     el.style.transform = tr(X, Y); el.style.opacity = (k < .08 ? k / .08 : k > .8 ? (1 - k) / .2 : 1).toFixed(2)
     requestAnimationFrame(step)
   }

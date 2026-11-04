@@ -24,6 +24,7 @@ try { visited = new Set(JSON.parse(sessionStorage.getItem('map-visited') || '[]'
 function markVisited(id) { if (!levelOf[id] || visited.has(id)) return; visited.add(id); try { sessionStorage.setItem('map-visited', JSON.stringify([...visited])) } catch {}; levelOf[id].el?.classList.add('done') }
 const START = { x: ROAD[0][0], y: ROAD[0][1], el: null }, BEACON = { el: null, o: -1 }
 function buildLabels() {
+  document.body.classList.toggle('ink-logos', BATCH.inkLogos)
   // A ribbon over each city.
   for (const R0 of REALMS) {
     const el = document.createElement('button'), home = R0.key === 'home'
@@ -43,7 +44,7 @@ function buildLabels() {
     labelLayer.appendChild(el); LABELS.push({ el, x: G.x, y: G.y, z: G.z, a: -1 })
   }
   // The field notes wear their brand: a round badge on the face of each building, as in their notes.
-  for (const { id } of BLOGS) {
+  for (const { id } of BATCH.noBadges ? [] : BLOGS) {
     const P = PAGES[FULL_OF[id]]
     if (!P?.icon) continue
     const el = document.createElement('div'); el.className = 'brand-badge'; el.setAttribute('aria-hidden', 'true')
@@ -104,7 +105,10 @@ function trackLevel() {
 const roofOf = (id, v) => (city.ready ? (ROOMS[id]?.group ? (ROOMS[id].tagUp ? 64 : 14) : ROOMS[id]?.stop ? 74 : 40) : 20) * v.t + 14
 // Nearer labels are larger, farther ones smaller and paler, as if printed on the land.
 const depthScale = (z, v) => v.t ? clamp(v.D / z, .58, 1.18) : 1
-const fade = (el, z, v) => { const a = (1 - fogAt(z, v) * 1.15).toFixed(2); if (el._a !== a) { el._a = a; el.style.opacity = a } }
+// With BATCH.crispFog a name stays whole until the mist is a third in, then goes within a short
+// stretch, so nothing lingers at a ghostly third of its ink.
+const inkLeft = (z, v) => BATCH.crispFog ? 1 - smoothstep(.3, .5, fogAt(z, v)) : 1 - fogAt(z, v) * 1.15
+const fade = (el, z, v) => { const a = inkLeft(z, v).toFixed(2); if (el._a !== a) { el._a = a; el.style.opacity = a } }
 // Phones (BATCH.mobile): every name is kept inside the screen and out from under the top bar, and
 // where two would overlap, the farther one waits until there is room. Sizes are measured once.
 const narrow = () => BATCH.mobile && mobile(), TOP_BAR = 62, placedRects = []
@@ -128,7 +132,7 @@ function placeLabels(v) {
       tuck(L, under); if (!under) placedRects.push(r)
     } else if (L.tucked) tuck(L, false)
     L.el.style.transform = `translate3d(${X.toFixed(1)}px,${Y.toFixed(1)}px,0) translate(-50%,-100%) scale(${s.toFixed(3)})`
-    if (a) { const o = ((1 - fogAt(z, v) * 1.15) * (1 - gone)).toFixed(2); if (L.el._a !== o) { L.el._a = o; L.el.style.opacity = o } }
+    if (a) { const o = (inkLeft(z, v) * (1 - gone)).toFixed(2); if (L.el._a !== o) { L.el._a = o; L.el.style.opacity = o } }
     if (a !== L.a) { L.a = a; L.el.style.visibility = a ? 'visible' : 'hidden' }
   }
   const place = (el, x, y, h = 0) => {

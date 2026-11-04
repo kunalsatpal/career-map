@@ -4,35 +4,48 @@
  "jump": [
   {
    "match": "Why website?",
-   "label": "Why a website"
+   "label": "Why a website",
+   "year": "2018"
   },
   {
    "match": "Launch - 26th September",
-   "label": "Launch, 2018"
+   "label": "Launch",
+   "year": "2018"
   },
   {
    "match": "December 2018",
-   "label": "First experiment"
+   "label": "First experiment",
+   "year": "2018"
   },
   {
    "match": "May 2019",
-   "label": "Hotjar insights"
+   "label": "Hotjar insights",
+   "year": "2019"
   },
   {
    "match": "March 2020",
-   "label": "Rebrand, 2020"
+   "label": "Rebrand",
+   "year": "2020"
   },
   {
    "match": "October 2026",
-   "label": "The universe"
+   "label": "The universe",
+   "year": "2026"
   },
   {
    "match": "Late October 2026",
-   "label": "First impression"
+   "label": "First impression",
+   "year": "2026"
+  },
+  {
+   "match": "November 2026",
+   "label": "The map",
+   "year": "2026"
   },
   {
    "match": "The final stage",
-   "label": "Final stage"
+   "label": "Final stage",
+   "year": "Now"
   }
  ],
  "blocks": [
@@ -803,15 +816,214 @@
   },
   {
    "t": "h",
+   "text": "November 2026: A map of the work"
+  },
+  {
+   "t": "p",
+   "html": "The universe was a lot of fun to fly through, but the longer I lived with it, the further away it felt. Space is big and empty, and a career isn’t. It’s places, the people in them and the roads between them. So I put the stars away and drew a map."
+  },
+  {
+   "t": "img",
+   "src": "./site/cases/m/map-title.jpg",
+   "size": "large",
+   "alt": "The title of the map: Kunal Satpal in hand-drawn lettering on parchment, with forests, a winding road and the Hinge Health campus above.",
+   "cap": "The title page. Scrolling flies a camera up the sheet, past one hand-drawn city for each company."
+  },
+  {
+   "t": "p",
+   "html": "It’s drawn like an old engraved map, ink and watercolour on parchment. Every company is a city with a building for each piece of work I did there, and the road between them runs in the order I got there: Hinge Health first, then Gojek and Cult.fit, my earlier stops, my writing and, at the very end of the road, about me and a lighthouse."
+  },
+  {
+   "t": "h3",
+   "text": "Why a map?"
+  },
+  {
+   "t": "p",
+   "html": "I wanted the home page to say two things before anyone reads a word: I’ve worked in a few very different places, and I like making things by hand. A map does both. It also gives every piece of work a home. At Hinge Health, CareHub 2.0 is the great hall and AI next-best-action is the observatory. At Gojek, promo discovery is the market square, and Fitclub at Cult.fit is an arena. You don’t need to know any of that to use it, but it’s there if you look."
+  },
+  {
+   "t": "gallery",
+   "size": "wide",
+   "srcs": [
+    "./site/cases/m/map-gojek.jpg",
+    "./site/cases/m/map-notes.jpg"
+   ],
+   "caps": [
+    "Gojek: promo discovery and promo experiments inside one walled market, with Cult.fit’s arena up the road.",
+    "Field notes: four posts, from my first job to this one, each in a small building of its own."
+   ]
+  },
+  {
+   "t": "h3",
+   "text": "Cities that build themselves"
+  },
+  {
+   "t": "p",
+   "html": "There are no 3D models anywhere. Every building is a short recipe in code: a hall, a rotunda, an arena, a market, a lighthouse. Each one is cut into bricks, planks and tiles, and as you arrive at a city they all fly in and settle into place. Getting the timing right took a few tries. At first a city started building while it was still small at the top of the screen, so it was done before you got close. Waiting until it was 40% of the way down felt too late. A quarter of the way down was right."
+  },
+  {
+   "t": "gallery",
+   "size": "wide",
+   "srcs": [
+    "./site/cases/m/map-build-1.jpg",
+    "./site/cases/m/map-build-2.jpg",
+    "./site/cases/m/map-build-3.jpg"
+   ],
+   "caps": [
+    "Arriving at Hinge Health: the bricks are still in the air.",
+    "Less than a second later, most of them have landed.",
+    "Built. The cranes stay, because two of these case studies are still being written."
+   ]
+  },
+  {
+   "t": "p",
+   "html": "Hover over a building and its note opens: what the work was and what it changed. If there’s a full story, the note leads to a page like this one."
+  },
+  {
+   "t": "img",
+   "src": "./site/cases/m/map-about.jpg",
+   "size": "large",
+   "alt": "The About me island with a lighthouse, a garden of small things and a note about a game controller: To slay gods or kick goals.",
+   "cap": "About me, at the end of the road. Even the game controller has a note."
+  },
+  {
+   "t": "h3",
+   "text": "How I built it"
+  },
+  {
+   "t": "p",
+   "html": "I built this one with Claude Code, an AI coding agent. I directed it in plain language and it wrote the code: no frameworks and no 3D libraries, just JavaScript, CSS and WebGL. Every change went through the same loop. Describe it, build it, check it with a screenshot (or a measurement, for anything about motion) and give feedback. Before every big change I kept a copy, so a rejected idea could be rolled back completely."
+  },
+  {
+   "t": "p",
+   "html": "The measuring mattered more than I expected. A lot of what felt “a bit off” turned out to be a real problem I could count."
+  },
+  {
+   "t": "metrics",
+   "items": [
+    [
+     "24 → 0",
+     "frames scrolling the wrong way",
+     "on a fast trackpad swipe"
+    ],
+    [
+     "0 → 95",
+     "of 121 hover points opening a building",
+     "after fixing the hit test"
+    ],
+    [
+     "15 → 2",
+     "graphics programs built mid-flight",
+     "each one a short freeze on a first visit"
+    ]
+   ],
+   "note": "Measured with small scripts that drive Chrome and count what happens, before and after each fix."
+  },
+  {
+   "t": "h3",
+   "text": "The opening"
+  },
+  {
+   "t": "p",
+   "html": "The map needs a moment to get ready, and I didn’t want a spinner for that. I tried a wax seal inside a compass ring, then the old oath written out line by line. What I kept is the simplest one: a blank sheet, and ink spreading out from the middle until the whole map is there. The loader is the entrance itself."
+  },
+  {
+   "t": "specimen",
+   "kind": "spread",
+   "src": "./site/cases/m/map-title.jpg",
+   "title": "The opening",
+   "hint": "Live: it plays as it comes into view.",
+   "cap": "The same idea as the real opening, replayed here on a picture of the title page."
+  },
+  {
+   "t": "h3",
+   "text": "The small delights"
+  },
+  {
+   "t": "p",
+   "html": "The part I enjoyed most was the small stuff. But a portfolio is read by busy people, so before adding any of it I set myself a few rules:"
+  },
+  {
+   "t": "list",
+   "ordered": true,
+   "items": [
+    "<b>Never in the way of the work.</b> Nothing jumps out and nothing needs closing. You can read every case study without finding a single one.",
+    "<b>Reward curiosity, don’t ask for it.</b> They answer when you touch them. Now and then one stirs on its own, so you can tell them from the scenery.",
+    "<b>Belong to the place.</b> Each says something true: a barbell on my island because I lift every day, a controller because I play, a telescope at the AI observatory.",
+    "<b>Cost nothing until touched.</b> Nothing runs until you reach it, and every effect cleans up after itself."
+   ]
+  },
+  {
+   "t": "p",
+   "html": "Over anything that answers, the pointer turns into a small wand. That’s the only hint. Here are a few of them, live, made from the same pieces the map uses."
+  },
+  {
+   "t": "specimen",
+   "kind": "compass",
+   "title": "The compass rose",
+   "hint": "Move your pointer around it. Click to spin it.",
+   "cap": "Every compass rose on the map has a needle that follows you, and settles back on north when you leave."
+  },
+  {
+   "t": "specimen",
+   "kind": "sea",
+   "title": "The ship",
+   "hint": "Click the ship. Then click the water, a few times.",
+   "cap": "She shudders, breaks in two and goes down, leaving planks and rings on the water. A little later she comes back up and sails on. The water rings wherever you touch it, and if you keep at it, something else comes up for air."
+  },
+  {
+   "t": "p",
+   "html": "At Hinge Health, two buildings are still under construction because those case studies aren’t written yet. Instead of a “coming soon” badge, a wizard is working on them. Hover and it looks up and says hello. Click and it casts: sometimes “Mind the crane!”, sometimes “Shh, it’s under NDA”."
+  },
+  {
+   "t": "specimen",
+   "kind": "wand",
+   "src": "./site/cases/m/map-campus.jpg",
+   "title": "The wizard",
+   "hint": "Click the wizard, or anywhere on the campus.",
+   "cap": "Sparks from the wand and a few words, wherever you click."
+  },
+  {
+   "t": "img",
+   "src": "./site/cases/m/map-lit.jpg",
+   "size": "large",
+   "alt": "The Hinge Health campus with the wizard casting Wingardium leviosa and a row of lit lamps along the wall.",
+   "cap": "On the map itself: the wizard mid-spell, and a row of lamps I clicked on. Each lamp lights a soft pool on the ground, and goes out when you click it again."
+  },
+  {
+   "t": "p",
+   "html": "The rest are yours to find, but here are a few. A tree on the last islands can be cut down and grows back from its stump. A parked scooter at Gojek tips over. The hourglass flips, the orrery spins, my barbell gets lifted, the telescope looks up as a star shoots past, and the ramen stall steams as you walk by."
+  },
+  {
+   "t": "specimen",
+   "kind": "swear",
+   "title": "The secret",
+   "hint": "Click the sheet and type “I solemnly swear”.",
+   "cap": "Typed anywhere on the map, it sets my footprints walking with my name. “Mischief managed” wipes them. There’s a second secret, for anyone who knows the Konami code."
+  },
+  {
+   "t": "h3",
+   "text": "What I left out"
+  },
+  {
+   "t": "p",
+   "html": "Plenty of ideas didn’t make it: a night mode, a kraken, a hand-drawn 2D wizard, four wizards instead of one, floating wands, a softer faded palette and a food-court layout for the Gojek market. Most were fun on their own, but each one made the map a little busier, and a busy map makes the work harder to find. Whenever a delight started competing with the case studies, the case studies won."
+  },
+  {
+   "t": "h3",
+   "text": "Making delight cheap"
+  },
+  {
+   "t": "p",
+   "html": "A delight that makes the map stutter isn’t one. The pieces that move are turned on the graphics card, so a falling tree costs almost nothing. Frames are only drawn while something is moving, a stir on its own runs at a third of the frame rate, and none of it runs while the map is moving or a page is open. Everything else is a short-lived element that removes itself when it’s done."
+  },
+  {
+   "t": "h",
    "text": "The final stage"
   },
   {
    "t": "p",
-   "html": "From my first site in 2018, to blog cards, a colour-neutral rebrand, a desk and now a universe. Every version taught me something new about storytelling, data and building things myself. This is the final stage of the story, for now, and you are already in it."
-  },
-  {
-   "t": "p",
-   "html": "<a href=\"./universe.html\">Go back to orbit and take the flight →</a>"
+   "html": "From my first site in 2018, to blog cards, a colour-neutral rebrand, a desk, a universe and now a map. Every version taught me something new about storytelling, data and building things myself. This is the final stage of the story, for now, and you’re reading it inside the map."
   }
  ]
 }

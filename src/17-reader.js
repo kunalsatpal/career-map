@@ -22,7 +22,7 @@ let readerFrom = null
 function openReader() {
   if (!readerEl.querySelector('article')) buildReader()
   readerFrom = document.activeElement
-  closePanel(); closeMenu()
+  closePanel()
   readerEl.hidden = false; document.body.classList.add('reading')
   readerEl.scrollTop = 0; readerEl.querySelector('.rclose').focus({ preventScroll: true })
 }

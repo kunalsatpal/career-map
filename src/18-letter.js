@@ -122,9 +122,8 @@ const PAGE_SWAPS = {
     '<b>Visibility of the top options:</b> for casual polls, seeing preferences helps users make a better decision.',
     '<b>Manual declare:</b> better control for the user, and faster decisions.'],
     pics: [{ src: './site/cases/media/whatsapp/poll-results.png', alt: 'A poll in the chat with votes, Vote and Declare Results; then the declared result, Monday with 9 votes.' }] },
-  // My portfolio's story: a way to the newer chapters, the numbers and the new look.
-  './site/cases/m/29ab381f3c.png': { t: 'jump', title: 'Newer chapters', body: 'I keep adding to this article.',
-    items: ['March 2020: More feedback', 'October 2026: The universe', 'Late October 2026: The first impression'] },
+  // My portfolio's story: the numbers and the new look. Its chapters have their own rail now (18-specimens).
+  './site/cases/m/29ab381f3c.png': [],
   './site/cases/m/3f5c792968.png': { t: 'metrics', items: [['+35.36%', 'pages per session', '2.49 vs 1.84'], ['+17.22%', 'average session duration', '2 min 26 s vs 2 min 5 s'], ['−26.38%', 'bounce rate', '50.74% vs 68.93%']], note: 'Across 1,000 sessions, before and after the changes.' },
   './site/cases/m/d212501616.png': { t: 'palette', title: 'A new visual language', font: 'Playfair Display', words: ['Elegant', 'Bold'], colors: ['#38100F', '#6C2929', '#D12E11', '#FFEEEE'] },
   './site/cases/m/09460bd589.png': [],
@@ -305,8 +304,9 @@ function caseInteraction(b, uid) {
   if (b.t === 'findings') return `<div class="case-findings"><h3>${keep(b.label)}</h3><p><b>Useful:</b> ${keep(b.positive)}</p><p><b>Still unreliable:</b> ${keep(b.negative)}</p>${b.examples?.length ? `<details class="case-detail"><summary>Three misses from the evaluation</summary><ol>${b.examples.map(([title, text]) => `<li><b>${keep(title)}</b><p>${keep(text)}</p></li>`).join('')}</ol></details>` : ''}</div>`
   if (b.t === 'journey') return `<nav class="case-route" aria-label="The path to next best action"><ol>${b.items.map((item, i) => `<li><button data-case-jump="${caseAttr(item.target)}"><span class="route-seal" aria-hidden="true">${two(i + 1)}</span><b>${keep(item.label)}</b><small>${keep(item.status)}</small></button></li>`).join('')}</ol></nav>`
   if (b.t === 'comparison') return `<figure class="case-visual-compare">${b.states.map((state, i) => `<div class="comparison-state"><p><span>${two(i + 1)}</span>${keep(state.label)}</p>${state.screen ? screenPhoto(state.detailSrc || state.src, 'large', state.cap, state.alt, state.src) : photo(state.src, 'large', state.cap, state.alt)}</div>`).join('')}<figcaption>${keep(b.note)}</figcaption></figure>`
-  if (b.t === 'evidence-pair') return `<div class="case-evidence-pair">${b.items.map(item => `<div class="evidence-pair-item"><p>${keep(item.label)}</p>${photo(item.src, 'large', item.cap, item.alt)}</div>`).join('')}</div>`
+  if (b.t === 'evidence-pair') return `<div class="case-evidence-pair${b.even ? ' even' : ''}">${b.items.map(item => `<div class="evidence-pair-item"><p>${keep(item.label)}</p>${photo(item.src, 'large', item.cap, item.alt)}</div>`).join('')}</div>`
   if (b.t === 'disclosure') return `<details class="case-detail"><summary>${keep(b.label)}</summary><p>${keep(b.body)}</p>${b.images.map(im => photo(im.src, 'text', im.cap, im.alt)).join('')}</details>`
+  if (b.t === 'specimen') return specimenHTML(b)
   return ''
 }
 // The body: one numbered section per heading. With `page`, a cover that only repeats the
@@ -367,7 +367,7 @@ function pageHTML(id) {
   // Every page offers the way on to the other case studies; on a locked preview it comes after the invitation.
   const nav = prev || next ? `<nav class="pnav${prev && next ? ' two' : ''}${P.contactLock ? ' after-lock' : ''}" aria-label="More to read">${prev}${next}</nav>` : ''
   const foot = `<footer class="pfoot">${P.contactLock ? say + nav : nav + say}<button class="pback" data-close>Back to the map</button></footer>`
-  return head + `<div class="pbody${L.blog ? ' blog' : ''}">${body}</div>` + foot
+  return chapRailHTML(L) + head + `<div class="pbody${L.blog ? ' blog' : ''}">${body}</div>` + foot
 }
 
 // ---------- Opening and closing ----------
@@ -377,7 +377,7 @@ let caseId = null, letterFrom = null, seq = 0, reveal = null, riseIO = null, sys
 const SETTLE = 'cubic-bezier(.22, 1, .36, 1)'
 // Pictures rise into place as they scroll into view.
 function watchRise() {
-  placeNotes()
+  placeNotes(); chapSpy()
   riseIO?.disconnect()
   const all = pageEl.querySelectorAll('.rise')
   if (reduce || !('IntersectionObserver' in window)) { pageEl.querySelectorAll('[data-system]').forEach(el => el.classList.add('play')); return all.forEach(el => el.classList.add('in')) }
@@ -417,7 +417,7 @@ function openCase(id) {
   if (caseId || !L) return
   caseId = id; letterFrom = document.activeElement; letterEl.dataset.openCase = id
   const my = ++seq
-  closeMenu(); levelPeek(null); closePanel(); markVisited(L.from)
+  levelPeek(null); closePanel(); markVisited(L.from)
   pageEl.innerHTML = pageHTML(id); letterEl.style.setProperty('--rc', ok(46, .12, fromOf(L).hue))
   letterEl.hidden = false; letterEl.classList.remove('in'); lscroll.scrollTop = 0; watchRise()
   history.replaceState(null, '', `#${id}/read`)

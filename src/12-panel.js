@@ -13,6 +13,8 @@ const figHTML = (src, alt = '') => src ? `<figure><img src="${abs(src)}" alt="${
 const picsHTML = (pics, grid) => pics ? `<div class="pics ${grid || ''}">${pics.map(src => `<img src="${abs(src)}" alt="" loading="lazy" decoding="async" onerror="this.remove()">`).join('')}</div>` : ''
 // The buildings that open into a full page; the rest only have their note.
 const opens = id => hasCase(id) || !!ROOMS[id]?.see
+// What a click does something for: a page to open, or (the lighthouse) a note of ways to write.
+const clickable = id => opens(id) || !!ROOMS[id]?.links
 // Their note opens a little window of the map, as the universe site opens one of sky: the final
 // design standing on a wash of its company's colour, or the story's cover pinned to it.
 function winHTML(id) {
@@ -38,6 +40,7 @@ const CROWNS = {
 const crownSVG = kind => CROWNS[kind] ? `<span class="emblem"><svg viewBox="0 0 40 40" aria-hidden="true">${CROWNS[kind]}</svg></span>` : ''
 function showRoom(id) {
   const B = ROOMS[id], realm = B.realm ? realmBy[B.realm] : null, c = realm ? ok(48, .11, realm.hue) : ok(50, .08, 70)
+  pillarRead(id)
   panelEl.classList.toggle('journal', !!B.blog); panelEl.classList.toggle('hcard', !B.blog); panelEl.classList.toggle('cartouche', BATCH.cardCartouche && !B.blog)
   note.style.setProperty('--c', c); panelEl.style.setProperty('--c', c)
   if (B.blog) { note.innerHTML = noteHTML(id); return }
@@ -85,10 +88,10 @@ function go(id, opts = {}) {
   if (!B && !R0 && id !== 'earlier') return
   if (caseId) return closeCase(() => go(id, opts))
   // A company, or the isles: just travel there. Its banner on the map already says who it was.
-  if (!B) { closePanel(); closeMenu(); const b = R0 ? (R0.key === 'home' ? GEO.aboutBox : R0.box) : ISLES; return flyTo(0, R0?.key === 'home' ? b.y1 - 260 : (b.y0 + b.y1) / 2, 0, 1100) }
+  if (!B) { closePanel(); const b = R0 ? (R0.key === 'home' ? GEO.aboutBox : R0.box) : ISLES; return flyTo(0, R0?.key === 'home' ? b.y1 - 260 : (b.y0 + b.y1) / 2, 0, 1100) }
   clearTimeout(hideT); current = id; cardFor = id; pinned = true; panelEl.classList.add('pinned')
   showRoom(id)
-  markSelected(id); closeMenu()
+  markSelected(id)
   panelEl.classList.remove('open'); leader.classList.remove('on')
   history.replaceState(null, '', '#' + id)
   const done = () => { if (cardFor !== id) return; if (opts.enter) openCase(id); else openCard() }

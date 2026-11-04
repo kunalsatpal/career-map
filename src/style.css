@@ -80,6 +80,55 @@ body.reading-case #sky { visibility: hidden; }
 .star path { fill: oklch(96% 0.03 88); stroke: oklch(30% 0.05 45); stroke-width: .8; stroke-linejoin: round; }
 .steam svg { display: block; margin: -26px 0 0 -6px; overflow: visible; }
 .steam path { fill: none; stroke: oklch(30% 0.05 45 / .45); stroke-width: 1; stroke-linecap: round; }
+/* Pieces with a trick of their own (16-pillars): a leaf, or petals, falling. And a word on a slip of paper. */
+.fall { position: absolute; left: 0; top: 0; width: 0; height: 0; pointer-events: none; will-change: transform, opacity; }
+.fall i { position: absolute; border-radius: 50% 0; border: .7px solid oklch(30% 0.05 45 / .7); }
+.fall.leaf i { left: -4px; top: -2px; width: 8px; height: 4px; background: oklch(70% 0.1 140); }
+.fall.petal i { left: -2.5px; top: -2px; width: 5px; height: 4px; background: oklch(90% 0.06 350); border-color: oklch(45% 0.06 350 / .6); }
+.wnote { position: absolute; left: 0; top: 0; width: 0; height: 0; pointer-events: none; }
+.wnote p { position: absolute; left: 0; bottom: 8px; translate: -50% 0; width: max-content; max-width: 240px; margin: 0; padding: 6px 11px 7px; text-align: center;
+  font: italic 400 .9375rem/1.3 var(--font-hand); color: var(--ink); background: var(--paper); border: 1px solid oklch(27% 0.04 42 / .4); border-radius: 2px; box-shadow: 0 3px 10px oklch(20% 0.03 45 / .16); }
+/* Cursors: a hand only where a click opens something; with the 3D city on, the map decides (09-city cityHover). */
+.room.inert, .lvl.inert .lv-t { cursor: default; }
+body.city3d .band .room { cursor: inherit; }
+/* Side missions (16-side): the cat, its paw prints, fireflies, the night watch. */
+.cat { position: absolute; left: 0; top: 0; width: 0; height: 0; pointer-events: none; }
+.cat svg { position: absolute; left: -15px; bottom: 0; display: block; overflow: visible; transform-origin: 50% 100%; pointer-events: auto; cursor: default; }
+.cat.asleep svg { cursor: pointer; }
+.cat.asleep svg { left: -17px; }
+.cat path { fill: oklch(24% 0.015 40); stroke: oklch(18% 0.02 40); stroke-width: 1.3; stroke-linejoin: round; stroke-linecap: round; }
+.cat .tail { fill: none; stroke: oklch(24% 0.015 40); stroke-width: 2.4; }
+.cat .fine { fill: none; stroke: oklch(45% 0.02 40); stroke-width: 1; }
+.cat .eye { fill: oklch(86% 0.15 95); transform-box: fill-box; transform-origin: center; transition: translate .25s ease-out; }
+.cat .tail { transform-box: view-box; transform-origin: 7px 23px; }
+.cat .zz { transform-box: fill-box; }
+.heart { position: absolute; left: 0; top: 0; width: 0; height: 0; pointer-events: none; will-change: transform, opacity; }
+.heart svg { position: absolute; left: -6px; top: -5.5px; overflow: visible; }
+.heart path { fill: var(--seal); stroke: var(--ink); stroke-width: .8; stroke-linejoin: round; }
+.cat .tuck { fill: none; stroke: oklch(62% 0.015 60); stroke-width: 1.1; }
+.cat .zz { font: italic 400 9px/1 var(--font-hand); fill: var(--ink-2); stroke: none; }
+.cat .zz.s { font-size: 7px; }
+.paw svg { display: block; overflow: visible; }
+.paw ellipse, .paw circle { fill: var(--ink); opacity: .7; }
+.fireflies { position: absolute; inset: 0; pointer-events: none; }
+.fireflies i { position: absolute; left: -7px; top: -7px; width: 14px; height: 14px; border-radius: 50%;
+  background: radial-gradient(closest-side, oklch(99% 0.06 100) 0 18%, oklch(93% 0.15 100 / .85) 30%, oklch(90% 0.14 100 / .3) 60%, transparent);
+  animation: ff-drift var(--t) ease-in-out var(--d) infinite alternate, ff-blink calc(var(--t) * .7) ease-in-out var(--d) infinite; }
+@keyframes ff-drift { to { translate: var(--dx) var(--dy); } }
+@keyframes ff-blink { 0%, 100% { opacity: .45; } 50% { opacity: 1; } }
+.night { position: fixed; inset: 0; z-index: 17; pointer-events: none; background: oklch(30% 0.06 262 / .6); mix-blend-mode: multiply; }
+.beam { position: fixed; left: 0; top: 0; z-index: 18; width: 0; height: 0; pointer-events: none; }
+.beam .sweep { position: absolute; left: -900px; top: -900px; width: 1800px; height: 1800px; transform: scaleY(.4); }
+.beam .rot { position: absolute; left: 0; top: 0; display: block; overflow: visible; opacity: 0; will-change: transform, opacity; }
+.beam b { position: absolute; left: -26px; top: -26px; width: 52px; height: 52px; border-radius: 50%; background: radial-gradient(closest-side, oklch(97% 0.09 92 / .95), oklch(94% 0.09 90 / .35) 55%, transparent); }
+/* How I work, read through: a star over each pillar read, and, with all five, the line that joins them. */
+.pstars { position: absolute; left: 0; top: 0; width: 1px; height: 1px; overflow: visible; pointer-events: none; }
+.pstars .st path { fill: oklch(84% 0.14 86); stroke: oklch(28% 0.05 45); stroke-width: 1.1; stroke-linejoin: round; }
+.pstars .st .halo { fill: oklch(90% 0.1 88 / .35); stroke: none; }
+.pstars .cg { fill: none; stroke: oklch(86% 0.12 86 / .7); stroke-width: 7; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1 1; }
+.pstars .cl { fill: none; stroke: oklch(28% 0.05 45 / .85); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1 1; }
+.strait-glow svg { display: block; overflow: visible; }
+.strait-glow line { stroke: oklch(88% 0.12 88); stroke-linecap: round; }
 .wreck { position: absolute; left: 0; top: 0; overflow: hidden; pointer-events: none; }
 .wreck img { position: absolute; left: 0; top: 0; animation: none; }
 .wreck .bow { clip-path: polygon(0 0, 50% 0, 46% 20%, 53% 38%, 45% 58%, 52% 76%, 47% 100%, 0 100%); transform-origin: 32% 84%; }
@@ -104,6 +153,8 @@ body.reading-case #sky { visibility: hidden; }
 .hello span { position: absolute; left: 0; bottom: 6px; translate: -50% 0; padding: 4px 9px 5px; white-space: nowrap; border: 1px solid oklch(27% 0.04 42 / .3); border-radius: 10px;
   font: italic 500 .875rem/1 var(--font-body); color: var(--ink); background: oklch(98.5% 0.008 84); box-shadow: 0 3px 8px oklch(20% 0.03 50 / .18); }
 .hello span::after { content: ''; position: absolute; left: 50%; bottom: -4px; width: 7px; height: 7px; translate: -50% 0; rotate: 45deg; background: inherit; border: inherit; border-width: 0 1px 1px 0; }
+.hello.small span { padding: 2px 6px 3px; border-radius: 7px; font-size: .75rem; }
+.hello.small span::after { width: 5px; height: 5px; bottom: -3px; }
 /* The stones the wizards lift, and the sparks from their wands. */
 .wip { position: absolute; left: 0; top: 0; display: none; pointer-events: none; }
 .wip.on { display: block; }
@@ -311,6 +362,9 @@ body.cards .eng.up, body.cards .ly-trees { display: none; }
 /* ---------- The title at the head of the road ---------- */
 .hub-name { font-family: var(--font-name); font-weight: 400; letter-spacing: .02em; fill: var(--ink); paint-order: stroke; stroke: oklch(93% 0.03 84 / .94); stroke-width: 12px; stroke-linejoin: round; }
 .hub-sub { font-family: var(--font-hand); font-style: italic; fill: var(--ink-2); text-anchor: middle; letter-spacing: .02em; paint-order: stroke; stroke: oklch(93% 0.03 84 / .94); stroke-width: 8px; stroke-linejoin: round; }
+/* BATCH.bareTitle: the halo takes the tone the paper actually renders at (grain and washes darken --paper),
+   so it still knocks out the trees behind the title without showing as a pale rim on bare paper. */
+.hub-name.bare, .hub-sub.bare { stroke: oklch(88% 0.031 90); }
 .region { font-family: var(--font-caps); fill: oklch(34% 0.045 45 / .85); letter-spacing: .32em; paint-order: stroke; stroke: oklch(93% 0.03 84 / .9); stroke-width: 7px; stroke-linejoin: round; font-variant-caps: small-caps; }
 
 /* ---------- Levels: a quiet name over each building ---------- */
@@ -318,13 +372,11 @@ body.cards .eng.up, body.cards .ly-trees { display: none; }
 .lvl .lv-t { position: absolute; left: 0; bottom: 0; translate: -50% 0; display: grid; justify-items: center; gap: 2px; width: max-content; max-width: 230px; padding: 2px 7px 3px; border: 0; border-radius: 2px;
   background: oklch(96% 0.02 84 / .88); box-shadow: 0 0 0 1px oklch(27% 0.04 42 / .2), 0 2px 6px oklch(10% 0.02 40 / .12); text-align: center; cursor: pointer; pointer-events: auto; transition: background .25s var(--ease-out), box-shadow .25s var(--ease-out); }
 .lvl .lv-t b { font: 400 1rem/1.15 var(--font-hand); color: var(--ink); }
-/* Where you are: a ring in its realm's colour. */
 /* A building with a full story to open wears an ink tag with an arrow; the rest, a paper slip. */
 .lvl.case .lv-t { background: oklch(30% 0.045 42 / .94); box-shadow: 0 0 0 1px oklch(20% 0.04 40 / .6), 0 3px 8px oklch(10% 0.02 40 / .28); }
 .lvl.case .lv-t b { color: oklch(95% 0.025 84); }
 .lvl.case .lv-t b::after { content: '\2192'; margin-left: 6px; font: 400 .875rem/1 var(--font-body); opacity: .75; }
 .lvl.case.peek .lv-t { background: oklch(24% 0.04 42); }
-.lvl.here .lv-t { box-shadow: 0 0 0 1.5px var(--c), 0 4px 10px oklch(10% 0.02 40 / .16); }
 .lvl .lv-k, .lvl .lv-cta { max-height: 0; overflow: hidden; opacity: 0; transition: max-height .3s var(--ease-out), opacity .25s; }
 /* Folded away, the outcome takes no width, so the slip fits its name. */
 .lvl .lv-k, .lvl .lv-cta { display: none; }
@@ -337,6 +389,7 @@ body.cards .eng.up, body.cards .ly-trees { display: none; }
 /* Earlier work carries its company's own mark, on a small signboard. */
 .logo { display: block; flex: none; width: 80px; height: 30px; overflow: hidden; }
 .logo img { display: block; width: 116px; height: 46px; margin: -8px 0 0 -18px; mix-blend-mode: multiply; }
+.ink-logos .logo img { filter: url(#inkstamp); opacity: .88; }
 .lvl.has-logo .lv-t { padding: 2px 4px 3px; background: oklch(96% 0.02 84 / .9); box-shadow: 0 0 0 1px oklch(27% 0.04 42 / .3), 0 4px 10px oklch(10% 0.02 40 / .2); }
 .lvl.has-logo .lv-t b { display: none; }
 .lab.realm .rib .logo { width: 104px; height: 40px; margin: -6px -4px -6px -8px; }
@@ -377,10 +430,6 @@ body.cards .eng.up, body.cards .ly-trees { display: none; }
 .rail small { font: italic 400 .75rem/1.2 var(--font-body); color: var(--ink-3); white-space: nowrap; }
 .rail button[aria-current="true"] span, .rail:hover span, .rail button:focus-visible span { opacity: 1; transform: none; }
 .rail:hover button:not([aria-current="true"]) span { opacity: .75; }
-.menu { top: 58px; right: 12px; display: grid; min-width: 220px; padding: 6px; }
-.menu[hidden] { display: none; }
-.menu a, .menu button { display: flex; justify-content: space-between; padding: 10px 12px; border: 0; border-radius: 3px; background: none; cursor: pointer; text-align: left; text-decoration: none; font: 400 1.0625rem/1.1 var(--font-hand); color: var(--ink); }
-.menu a:hover, .menu button:hover { background: var(--paper-2); }
 
 /* ---------- A case study, as a full page ---------- */
 #letter { position: fixed; inset: 0; z-index: 55; color: var(--ink); background: oklch(95.5% 0.024 84); }
@@ -886,7 +935,6 @@ body.reading-case #viewport, body.reading-case #dusk, body.reading-case #gl, bod
   /* Banners are names on a phone, where a swipe is the way to move: a tap goes through to the building. */
   body.m2 .lab.realm { pointer-events: none; }
   body.m2 .lclose, body.m2 .pback { min-height: 44px; }
-  body.m2 .menu a, body.m2 .menu button { min-height: 44px; align-items: center; }
 }
 
 /* ---------- First-visit warm-up (00-batches.js: prewarm) ---------- */
@@ -947,6 +995,8 @@ body.reading-case #viewport, body.reading-case #dusk, body.reading-case #gl, bod
 .evidence-pair-item > p { margin: 0 0 12px; color: var(--ink); font: 400 1.0625rem/1.3 var(--font-hand); }
 .case-evidence-pair .ph { width: 100%; margin: 0; }
 .case-evidence-pair .phb { width: 100%; }
+.case-evidence-pair.even { --wide: min(1240px, calc(100vw - 48px)); grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; }
+@media (max-width: 760px) { .case-evidence-pair.even { grid-template-columns: minmax(0, 1fr); } }
 @media (max-width: 760px) {
   .phero.case.desktop-product { grid-template-columns: 1fr; gap: 32px; padding: 76px 22px 40px; }
   .desktop-product .pland { width: min(560px, 100%); }
@@ -1472,3 +1522,126 @@ body.reading-case #viewport, body.reading-case #dusk, body.reading-case #gl, bod
 #letter .pbody .fb-btn { margin: 0; padding: 10px; border-radius: 8px; background: #067d38; color: #fff; font: 600 .9375rem/1.2 'Noto Sans', system-ui, sans-serif; }
 /* Steps inside a section: a small heading that sits close to its one sentence. */
 #letter .pbody section > h3 + p { margin-top: 0; }
+
+/* ---------- Specimens: the map's small delights, live on the page that tells their story ---------- */
+.pbody .specimen { --sw: min(860px, calc(100vw - 48px)); width: var(--sw); max-width: none; margin: 2.4em 0 2.6em calc((100% - var(--sw)) / 2); }
+.sp-head { display: flex; align-items: baseline; justify-content: space-between; gap: 6px 18px; flex-wrap: wrap; margin: 0 4px 10px; }
+#letter .pbody .sp-title { margin: 0; font: 400 1.0625rem/1.3 var(--font-caps); letter-spacing: .1em; font-variant-caps: small-caps; color: var(--ink); }
+#letter .pbody .sp-hint { margin: 0; font: italic 400 .9375rem/1.4 var(--font-read); color: var(--rc); }
+.sp-stage { position: relative; overflow: hidden; container-type: inline-size; border-radius: 6px; user-select: none; -webkit-user-select: none; touch-action: manipulation;
+  background: radial-gradient(90% 120% at 50% 100%, oklch(91% 0.035 82), oklch(94.5% 0.026 84) 70%);
+  box-shadow: inset 0 0 0 1px oklch(27% 0.04 42 / .28), inset 0 0 0 5px oklch(96.5% 0.02 84 / .8), inset 0 0 0 6px oklch(27% 0.04 42 / .12), 0 18px 34px -26px oklch(20% .03 50 / .45); }
+.sp-stage::before { content: ''; position: absolute; inset: 0; pointer-events: none; background: var(--grain) 0 0 / 512px 512px; opacity: .55; mix-blend-mode: multiply; }
+.sp-stage:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
+.sp-stage > img { display: block; width: 100%; height: auto; }
+.sp-foot { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px 18px; margin: 12px 4px 0; }
+.sp-foot figcaption { margin: 0; font: italic 400 1rem/1.45 var(--font-read); color: var(--ink-2); text-wrap: pretty; }
+.sp-btn { flex: none; min-height: 36px; padding: 7px 14px; border: 1px solid oklch(27% .04 42 / .28); border-radius: 999px; background: oklch(97% 0.015 84); color: var(--ink);
+  font: 400 .9375rem/1.2 var(--font-read); cursor: pointer; }
+.sp-btn:hover { color: oklch(98% .01 84); background: var(--rc); border-color: var(--rc); }
+.sp-stage .ripple, .sp-stage .wspark, .sp-stage .hello, .sp-stage .sp-step, .sp-stage .mlabel { position: absolute; left: 0; top: 0; pointer-events: none; }
+.sp-stage .sp-ring { transform-origin: 50% 50%; }
+
+/* The compass rose, and its needle. */
+.sp-compass .sp-stage { display: grid; place-items: center; height: 340px; }
+.sp-compass .sp-stage > .sp-rose { width: 300px; height: 300px; opacity: .92; }
+/* The rose's middle sits a hair right of and below the picture's centre. */
+.sp-needle { position: absolute; left: calc(50% + 2px); top: calc(50% + 3px); width: 120px; height: 120px; margin: -60px 0 0 -60px; pointer-events: none; }
+.sp-needle svg { display: block; width: 100%; height: 100%; transition: rotate .6s cubic-bezier(.2, .8, .3, 1); }
+.sp-needle .n { fill: oklch(36% 0.05 40); stroke: var(--ink); stroke-width: 1.2; }
+.sp-needle .s { fill: oklch(96% 0.02 84); stroke: var(--ink); stroke-width: 1.2; }
+.sp-needle circle { fill: oklch(94% 0.02 84); stroke: var(--ink); stroke-width: 1.2; }
+
+/* The sea: engraved water, the ship sailing to and fro, and the whale below. */
+.sp-sea .sp-stage { height: 300px; background:
+  repeating-linear-gradient(0deg, transparent 0 13px, oklch(30% 0.05 45 / .09) 13px 14px),
+  radial-gradient(90% 120% at 50% 100%, oklch(89% 0.035 200 / .6), oklch(94% 0.026 84) 75%); }
+.sp-ship { position: absolute; left: 0; top: 96px; width: 112px; animation: sp-sail 34s ease-in-out infinite; }
+.sp-ship > img { display: block; }
+@keyframes sp-sail { 0% { translate: 6cqw 0; scale: 1 1; } 47% { translate: calc(94cqw - 112px) 0; scale: 1 1; } 50% { translate: calc(94cqw - 112px) 0; scale: -1 1; }
+  97% { translate: 6cqw 0; scale: -1 1; } 100% { translate: 6cqw 0; scale: 1 1; } }
+.sp-whale { position: absolute; left: 0; top: 150px; width: 170px; pointer-events: none; }
+.sp-whale img { display: block; opacity: 0; }
+.sp-whale i { position: absolute; left: 30px; top: 70px; width: 110px; height: 34px; border-radius: 50%; border: 1.4px solid oklch(40% 0.04 50 / .55); opacity: 0; }
+
+/* The wizard's campus: a still of the map, and the wand's sparks and words over it. */
+.sp-wand .sp-stage > img { aspect-ratio: 12 / 7; object-fit: cover; }
+
+/* The secret: a blank stretch of the map with a faint road; the oath, then footprints and my name. */
+.sp-swear .sp-stage { height: 270px; }
+.sp-road { position: absolute; inset: 0; width: 100%; height: 100%; }
+.sp-road path { fill: none; stroke: oklch(30% 0.05 45 / .16); stroke-width: 14; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+#letter .pbody .sp-prompt { position: absolute; left: 0; right: 0; top: 30px; margin: 0; text-align: center; font: italic 400 1.0625rem/1.4 var(--font-read); color: var(--ink-2); transition: opacity .4s; }
+.sp-stage.sworn .sp-prompt { opacity: 0; }
+#letter .pbody .sp-ink { position: absolute; left: 0; right: 0; top: 22px; margin: 0; text-align: center; white-space: nowrap; font: 400 clamp(1.25rem, 3.2cqw, 1.75rem)/1.2 'Harry P', var(--font-body); color: oklch(30% 0.05 40); opacity: 0; }
+.sp-stage .sp-step svg { display: block; }
+
+/* The opening: a blank sheet over the title page, with a hole of ink-stained paper growing from the middle. */
+@property --sp-r { syntax: '<percentage>'; inherits: true; initial-value: 0%; }
+.sp-spread .sp-stage { --sp-r: 0%; }
+.sp-blank, .sp-bloom { position: absolute; inset: -2px; pointer-events: none; }
+.sp-blank { background: oklch(93.5% 0.028 84); -webkit-mask: radial-gradient(circle at 50% 56%, transparent var(--sp-r), #000 calc(var(--sp-r) + 7%)); mask: radial-gradient(circle at 50% 56%, transparent var(--sp-r), #000 calc(var(--sp-r) + 7%)); }
+.sp-bloom { background: radial-gradient(circle at 50% 56%, transparent calc(var(--sp-r) - 3%), oklch(32% 0.04 45 / .28) calc(var(--sp-r) + 2%), transparent calc(var(--sp-r) + 9%)); filter: blur(6px); }
+.specimen.in .sp-spread .sp-stage, .sp-spread.in .sp-stage { animation: sp-spread 3.2s .35s cubic-bezier(.55, .05, .7, .95) both; }
+@keyframes sp-spread { 0% { --sp-r: 0%; } 100% { --sp-r: 120%; } }
+@media (prefers-reduced-motion: reduce) {
+  .sp-spread .sp-stage { --sp-r: 120%; animation: none !important; }
+  .sp-ship { animation: none; translate: 30cqw 0; }
+  .sp-btn[data-sp-replay], .sp-btn[data-sp-say] { display: none; }
+}
+@media (max-width: 760px) {
+  .sp-compass .sp-stage { height: 280px; } .sp-compass .sp-stage > .sp-rose { width: 240px; height: 240px; } .sp-needle { width: 96px; height: 96px; margin: -48px 0 0 -48px; }
+  .sp-sea .sp-stage { height: 240px; } .sp-ship { top: 70px; } .sp-whale { top: 110px; }
+  .sp-foot { flex-direction: column; }
+}
+
+/* ---------- The chapters rail: a way along a long field note that keeps your place ---------- */
+.chap-rail { position: fixed; z-index: 3; left: 26px; top: 50%; translate: 0 -50%; width: 188px; opacity: 0; visibility: hidden; transition: opacity .3s, visibility 0s .3s; }
+.chap-rail.on { opacity: 1; visibility: visible; transition: opacity .3s; }
+#letter .chap-rail .cr-title { margin: 0 0 12px 28px; font: 600 .75rem/1 var(--font-read); letter-spacing: .14em; text-transform: uppercase; color: var(--ink-3); }
+.chap-rail ol { --gap: 6px; position: relative; display: grid; gap: var(--gap); margin: 0; padding: 0; list-style: none; }
+/* The line through the dots, and its filled part up to the chapter you're in. */
+.chap-rail ol::before, .chap-rail ol::after { content: ''; position: absolute; left: 7px; top: 12px; width: 1px; pointer-events: none; }
+.chap-rail ol::before { bottom: 12px; background: oklch(27% 0.04 42 / .2); }
+.chap-rail ol::after { height: calc((100% - 24px) * var(--p, 0)); background: var(--rc); transition: height .45s var(--ease-out); }
+.chap-rail li { margin: 0; }
+.chap-rail [data-chap] { position: relative; display: grid; grid-template-columns: 15px 1fr; column-gap: 13px; align-items: center; width: 100%; padding: 4px 6px 4px 0; border: 0; border-radius: 4px; background: none; color: var(--ink-2); text-align: left; cursor: pointer; }
+.cr-dot { grid-row: 1 / span 2; justify-self: center; z-index: 1; width: 9px; height: 9px; border-radius: 50%; background: oklch(95.5% 0.024 84); box-shadow: 0 0 0 1.2px oklch(27% 0.04 42 / .45); transition: background .3s, box-shadow .3s, scale .3s var(--ease-out); }
+.cr-year { font: 600 .6875rem/1.1 var(--font-num); letter-spacing: .06em; font-variant-numeric: lining-nums tabular-nums; color: var(--ink-3); }
+.cr-label { font: 400 .9375rem/1.25 var(--font-read); transition: color .2s; }
+.chap-rail [data-chap]:hover .cr-label { color: var(--ink); }
+.chap-rail [data-chap]:hover .cr-dot { box-shadow: 0 0 0 1.2px var(--ink); }
+.chap-rail [data-chap].past .cr-dot { background: var(--rc); box-shadow: 0 0 0 1.2px var(--rc); scale: .78; }
+.chap-rail [aria-current] .cr-dot { background: var(--rc); box-shadow: 0 0 0 3px oklch(95.5% 0.024 84), 0 0 0 4.2px color-mix(in oklch, var(--rc) 55%, transparent); scale: 1.2; }
+.chap-rail [aria-current] .cr-label { color: var(--ink); font-weight: 600; }
+.chap-rail [aria-current] .cr-year { color: var(--rc); }
+.chap-rail [data-chap]:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.chap-pill { display: none; }
+/* A narrower gutter: the dots alone, each with its name on hover; the current one keeps its name beside it. */
+@media (max-width: 1499px) {
+  .chap-rail { left: 16px; width: auto; }
+  #letter .chap-rail .cr-title, .chap-rail .cr-year { display: none; }
+  .chap-rail [data-chap] { grid-template-columns: 15px; padding: 5px 0; }
+  .chap-rail .cr-label { position: absolute; left: 26px; top: 50%; translate: 0 -50%; padding: 4px 10px; white-space: nowrap; border-radius: 3px; pointer-events: none; opacity: 0; translate: -4px -50%;
+    background: oklch(97% 0.015 84); box-shadow: 0 0 0 1px oklch(27% 0.04 42 / .2), 0 6px 14px oklch(20% .03 50 / .14); transition: opacity .2s, translate .2s var(--ease-out); }
+  .chap-rail [data-chap]:is(:hover, :focus-visible) .cr-label { opacity: 1; translate: 0 -50%; }
+}
+/* A phone or a small window: a pill at the foot with the chapter you're in, that opens the list. */
+@media (max-width: 1099px) {
+  .chap-rail { left: 50%; top: auto; bottom: 16px; translate: -50% 0; }
+  .chap-pill { display: flex; align-items: center; gap: 2px; padding: 4px; border-radius: 999px; background: oklch(97% 0.015 84 / .97); box-shadow: 0 0 0 1px oklch(27% 0.04 42 / .22), 0 10px 26px -8px oklch(20% .03 50 / .4); }
+  .chap-pill button { min-height: 40px; border: 0; border-radius: 999px; background: none; color: var(--ink); cursor: pointer; }
+  .cp-step { width: 40px; font: 400 1.375rem/1 var(--font-read); }
+  .cp-now { display: flex; align-items: baseline; gap: 10px; padding: 0 12px; font: 400 .9375rem/1 var(--font-read); white-space: nowrap; }
+  .cp-n { font: 600 .75rem/1 var(--font-num); letter-spacing: .04em; color: var(--rc); font-variant-numeric: tabular-nums; }
+  .chap-pill button:hover { background: var(--paper-2); }
+  .chap-rail ol { position: absolute; left: 50%; bottom: calc(100% + 10px); translate: -50% 6px; width: min(300px, calc(100vw - 32px)); max-height: 60vh; overflow: auto; padding: 14px 16px; border-radius: 10px;
+    background: oklch(97% 0.015 84); box-shadow: 0 0 0 1px oklch(27% 0.04 42 / .2), 0 18px 40px -12px oklch(20% .03 50 / .45); opacity: 0; visibility: hidden; transition: opacity .2s, translate .25s var(--ease-out), visibility 0s .25s; }
+  .chap-rail.open ol { opacity: 1; visibility: visible; translate: -50% 0; transition: opacity .2s, translate .25s var(--ease-out); }
+  .chap-rail ol::before, .chap-rail ol::after { left: 23px; top: 26px; }
+  .chap-rail ol::before { bottom: 26px; } .chap-rail ol::after { height: calc((100% - 52px) * var(--p, 0)); }
+  .chap-rail [data-chap] { grid-template-columns: 15px 1fr; padding: 6px 0; }
+  .chap-rail .cr-year { display: block; }
+  .chap-rail .cr-label { position: static; translate: none; padding: 0; opacity: 1; background: none; box-shadow: none; white-space: normal; }
+}
+@media (prefers-reduced-motion: reduce) { .chap-rail, .chap-rail ol, .cr-dot, .chap-rail ol::after { transition: none; } }
