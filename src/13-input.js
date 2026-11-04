@@ -78,8 +78,6 @@ function glide() {
 }
 // A click on the sheet: a building, a room on the plan, or nothing (which closes the note).
 function activate(target, X, Y) {
-  // The lighthouse's lamp room keeps the night watch (BATCH.nightWatch, 16-side).
-  if (lampRoomAt(X, Y)) return nightWatch()
   // A prop that does its trick on hover hands the click to its building (BATCH.propsShareHover)
   // when the building has a page or links to open; otherwise the click plays the trick again, the
   // barbell's next rep. On a touch screen, where nothing hovers, the tap plays the trick as well.

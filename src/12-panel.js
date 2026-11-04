@@ -41,6 +41,8 @@ const crownSVG = kind => CROWNS[kind] ? `<span class="emblem"><svg viewBox="0 0 
 function showRoom(id) {
   const B = ROOMS[id], realm = B.realm ? realmBy[B.realm] : null, c = realm ? ok(48, .11, realm.hue) : ok(50, .08, 70)
   pillarRead(id)
+  const fin = BATCH.finaleCard && id === 'home-hello'
+  panelEl.classList.toggle('finale', fin)
   panelEl.classList.toggle('journal', !!B.blog); panelEl.classList.toggle('hcard', !B.blog); panelEl.classList.toggle('cartouche', BATCH.cardCartouche && !B.blog)
   note.style.setProperty('--c', c); panelEl.style.setProperty('--c', c)
   if (B.blog) { note.innerHTML = noteHTML(id); return }
@@ -49,7 +51,7 @@ function showRoom(id) {
   // In a cartouche the headline is centred and set larger, so a line of numbers breaks after its dot, not before.
   const head = (B.tip ? B.tip[0] : B.stop ? B.title : B.stat || B.title).replace(/ · /g, BATCH.cardCartouche ? '&nbsp;· ' : ' · ')
   const line = B.tip ? B.tip[1] : B.stop ? [B.stat, B.body].filter(Boolean).join(' · ') : B.body
-  note.innerHTML = (opens(id) || B.hoverImg ? winHTML(id) : !B.tip ? figHTML(B.img, B.alt) : '') + picsHTML(B.pics, B.grid)
+  note.innerHTML = (fin ? '<p class="fkick">The end of the road</p>' : '') + (opens(id) || B.hoverImg ? winHTML(id) : !B.tip ? figHTML(B.img, B.alt) : '') + picsHTML(B.pics, B.grid)
     + (B.part?.t === 'pillar' ? `<div class="ehead">${crownSVG(B.part.kind)}<p class="headline">${head}</p></div>` : `<p class="headline">${head}</p>`) + (line ? `<p class="body">${line}</p>` : '')
     + (!B.tip && B.list ? `<ul>${B.list.map(li => `<li><span>${li}</span></li>`).join('')}</ul>` : '')
     + (B.links && !(BATCH.finale && id === 'home-hello') ? `<ul class="links">${B.links.map(([t, h]) => `<li><a href="${abs(h)}" target="_blank" rel="noopener">${t}</a></li>`).join('')}</ul>` : '')
@@ -61,6 +63,8 @@ function showRoom(id) {
     + (id === 'home-hello' ? `<a class="cta" href="mailto:kunalsatpal1@gmail.com?subject=${encodeURIComponent('Found you on the map')}"><span>Write to me <span aria-hidden="true">✉</span></span><span class="mail">kunalsatpal1@gmail.com</span></a>` : '')
     // The sign-off (BATCH.finale): one way to write, then everything else in a single line.
     + (BATCH.finale && id === 'home-hello' ? `<p class="also">${B.links.filter(([, h]) => !h.startsWith('mailto:')).map(([t, h]) => `<a href="${abs(h)}" target="_blank" rel="noopener">${t.replace(' (PDF)', '')}</a>`).join('<span aria-hidden="true"> · </span>')}</p>` : '')
+    // Signed, in the hand of the name on the map's title.
+    + (fin ? '<p class="fsign">Kunal</p>' : '')
 }
 // Ink writes itself onto the note: each line sweeps in, a beat after the last.
 function writeOn() {

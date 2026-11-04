@@ -135,7 +135,6 @@ function decorClick(id) {
   else if (D.kind === 'scope') { play(9, [0, 1, 0], .55); shootingStar(D) }
   else if (D.kind === 'fountain') { spurt(D, 14); ripples(D) }
   else if (D.kind === 'lamp') lamp(id)
-  else if (D.kind === 'owl') nightWatch()
   else if (D.kind === 'wizard') cast(id, SPELLS[spell++ % SPELLS.length])
 }
 function cast(id, words) { const D = DECOR[id]; decorPlay(id, 3, [0, 0, 1], 8 * D.k); flecks(wandTip(D), 'wspark', 12, 20); if (words) say(D, words) }

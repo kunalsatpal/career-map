@@ -103,7 +103,7 @@ body.reading-case #sky { visibility: hidden; }
 /* Cursors: a hand only where a click opens something; with the 3D city on, the map decides (09-city cityHover). */
 .room.inert, .lvl.inert .lv-t { cursor: default; }
 body.city3d .band .room { cursor: inherit; }
-/* Side missions (16-side): the cat, its paw prints, fireflies, the night watch. */
+/* Side missions (16-side): the cat, its paw prints, fireflies. */
 .cat { position: absolute; left: 0; top: 0; width: 0; height: 0; pointer-events: none; }
 .cat svg { position: absolute; left: -15px; bottom: 0; display: block; overflow: visible; transform-origin: 50% 100%; pointer-events: auto; cursor: default; }
 .cat.asleep svg { cursor: pointer; }
@@ -128,11 +128,6 @@ body.city3d .band .room { cursor: inherit; }
   animation: ff-drift var(--t) ease-in-out var(--d) infinite alternate, ff-blink calc(var(--t) * .7) ease-in-out var(--d) infinite; }
 @keyframes ff-drift { to { translate: var(--dx) var(--dy); } }
 @keyframes ff-blink { 0%, 100% { opacity: .45; } 50% { opacity: 1; } }
-.night { position: fixed; inset: 0; z-index: 17; pointer-events: none; background: oklch(30% 0.06 262 / .6); mix-blend-mode: multiply; }
-.beam { position: fixed; left: 0; top: 0; z-index: 18; width: 0; height: 0; pointer-events: none; }
-.beam .sweep { position: absolute; left: -900px; top: -900px; width: 1800px; height: 1800px; transform: scaleY(.4); }
-.beam .rot { position: absolute; left: 0; top: 0; display: block; overflow: visible; opacity: 0; will-change: transform, opacity; }
-.beam b { position: absolute; left: -26px; top: -26px; width: 52px; height: 52px; border-radius: 50%; background: radial-gradient(closest-side, oklch(97% 0.09 92 / .95), oklch(94% 0.09 90 / .35) 55%, transparent); }
 /* How I work, read through: a star over each pillar read, and, with all five, the line that joins them. */
 .pstars { position: absolute; left: 0; top: 0; width: 1px; height: 1px; overflow: visible; pointer-events: none; }
 .pstars .st path { fill: oklch(84% 0.14 86); stroke: oklch(28% 0.05 45); stroke-width: 1.1; stroke-linejoin: round; }
@@ -928,6 +923,11 @@ body.reading-case #viewport, body.reading-case #dusk, body.reading-case #gl, bod
 #panel.hcard.cartouche .note .go { border-radius: 1px; }
 #panel.hcard.cartouche .note .cta { justify-self: center; border-radius: 1px; }
 #panel.hcard.cartouche .close { top: 12px; right: 12px; }
+/* The lighthouse's note, the finale (BATCH.finaleCard). */
+#panel.finale .note .fkick { margin: 0 0 -2px; font: italic 400 .875rem/1.2 var(--font-body); color: var(--ink-3); letter-spacing: .02em; }
+#panel.finale .note .headline { max-width: 15em; padding-inline: 10px; font-size: 1.1875rem; }
+#panel.finale .note .also { margin-top: 4px; }
+#panel.finale .note .fsign { margin: 2px 0 0; font: 400 1.625rem/1 var(--font-name); color: var(--ink); rotate: -3deg; }
 
 /* ---------- Phones, second pass (00-batches.js: mobile2) ---------- */
 /* Everything here is for phones only: touch screens, or a screen as narrow as a phone's. */
@@ -1741,6 +1741,7 @@ const BATCH = {
   crispFog: true,        // names in the distance stay readable, then are gone: no ghost labels half-lost in the mist
   bareTitle: true,      // the halo behind the name and tagline is matched to the rendered paper, so it no longer reads as a white outline
   // Worlds, more to find
+  finaleCard: true,      // the lighthouse's note: "The end of the road" over the headline, and signed
   pillarStars: true,
   pillarCrowns: true,    // How I work's crowns, hovered: the tree rustles and drops a leaf, a pawn is moved, the brass bar ticks up, the hammer strikes, the slash turns
   cherryTree: true,      // About me: a cherry tree in blossom by the noodle stand; hovered, a few petals fall
@@ -1750,7 +1751,6 @@ const BATCH = {
   wanderCat: true,       // a cat naps beside the road; come near and it pads off to the next world, until it curls up by the lighthouse door
   catLife: true,         // the cat blinks and flicks its tail, watches the pointer come near, says mrrp, purrs asleep, and a heart if you pat it
   fireflies: true,       // linger in About me's yard and fireflies come out over the garden
-  nightWatch: true,      // click the lighthouse's lamp room: night falls, the beam sweeps once round, and day comes back          // About me: two friends on a bench by the table, who wave as you come by
 }
 
 'use strict'
@@ -2028,8 +2028,9 @@ const GEO = {
   roses: [{ x: 260, y: 2680, r: 150 }, { x: 1640, y: 930, r: 130 }],
   whales: [[150, 2961, 160, false], [1480, 1585, 170, true]],
   serpent: [1460, 2947, 260],
-  // The schooner rounds the Isle of Kunal; off the larger isle it keeps further out to the north.
-  ships: [LANE.slice(10, 19), BATCH.biggerIsle ? [[200, 1230], [390, 640], [1000, 420], [1560, 520], [1700, 1080], [1550, 1930], [300, 1630]] : [[200, 1230], [450, 780], [1500, 530], [1700, 1080], [1550, 1930], [300, 1630]]],
+  // The schooner rounds the Isle of Kunal; off the larger isle it keeps further out to the north. Coming
+  // back west it passes south of How I work, between it and the Field notes, never across the land.
+  ships: [LANE.slice(10, 19), [...(BATCH.biggerIsle ? [[200, 1230], [390, 640], [1000, 420], [1560, 520]] : [[200, 1230], [450, 780], [1500, 530]]), [1700, 1080], [1580, 1700], [1470, 2200], [1120, 2212], [820, 2208], [540, 2120], [400, 1700]]],
   gulls: [[300, 3380], [1350, 2080], [500, 630]],
 }
 
@@ -4006,10 +4007,7 @@ const BUILD = {
     latheF(q.cx, q.cy, [[R0 * 1.24, H0], [R0 * 1.24, H0 + 6 * k], [R0 * .62, H0 + 6 * k]], 16, DARK)
     latheF(q.cx, q.cy, [[R0 * .62, H0 + 6 * k], [R0 * .62, H0 + 34 * k]], 12, mat(LAMP, 'glass'))
     latheF(q.cx, q.cy, [[R0 * .74, H0 + 34 * k], [0, H0 + 62 * k]], 12, red); ballF(q.cx, q.cy, 2.6 * k, col3(40, .03, 60), H0 + 61 * k)
-    // The owl on the gallery: with BATCH.nightWatch a prop, that shuffles now and then like the others, takes
-    // the wand, and keeps the night watch when clicked (16-side).
-    const ox = q.cx + R0 * .3, oy = q.cy + R0 * 1.14, oz = H0 + 6 * k
-    BATCH.nightWatch ? decorF('owl', ox, oy, oz, 27 * 1.7 * k, 9 * k, () => owlF(ox, oy, oz, 1.7 * k), { base: oz }) : owlF(ox, oy, oz, 1.7 * k)
+    owlF(q.cx + R0 * .3, q.cy + R0 * 1.14, H0 + 6 * k, 1.7 * k)
     const kx = q.cx - 104 * k, ky = q.cy - 26 * k
     boxF(kx, ky, 62 * k, 44 * k, 0, 30 * k, mat(HOME.cream, 'plaster', OVL.lit)); gableF(kx, ky, 62 * k, 44 * k, 30 * k, 20 * k, mat(HOME.terracotta, 'tile'), mat(HOME.cream, 'plaster'), 'x')
     boxF(kx + 44 * k, ky + 8 * k, 9 * k, 9 * k, 40 * k, 22 * k, mat(col3(58, .06, 38), 'brick'), DARK)
@@ -5012,7 +5010,16 @@ function outside(poly, X, Y) {
 // outline beats near one (the front-most wins); the building already under the pointer
 // holds on until the pointer has clearly left it.
 const PICK_PAD = 28
+// The owl on the lighthouse's gallery is only scenery: the pointer over it is not over the lighthouse.
+function owlAt(X, Y) {
+  const q = ROOMS['home-hello']?.part
+  if (!q || !city.active) return false
+  const k = q.r / 46, R0 = q.r * .62, ox = q.cx + R0 * .3, oy = q.cy + R0 * 1.14, z = 196 * k + 6 * k, v = view()
+  const [x0, y0] = project(ox, oy, z * v.t, v), [x1, y1] = project(ox, oy, (z + 27 * 1.7 * k) * v.t, v), [xr] = project(ox + 8 * 1.7 * k, oy, z * v.t, v)
+  return Math.abs(X - x0) < Math.max(8, Math.abs(xr - x0) * 1.2) && Y < y0 + 4 && Y > y1 - 4
+}
 function cityPick(X, Y, held) {
+  if (owlAt(X, Y)) return null
   if (!city.active || !GLS || city.rise < .25) return null
   const v = view(), t = now()
   let best = null, bestD = Infinity, bestZ = Infinity, heldD = Infinity
@@ -5277,6 +5284,8 @@ const crownSVG = kind => CROWNS[kind] ? `<span class="emblem"><svg viewBox="0 0 
 function showRoom(id) {
   const B = ROOMS[id], realm = B.realm ? realmBy[B.realm] : null, c = realm ? ok(48, .11, realm.hue) : ok(50, .08, 70)
   pillarRead(id)
+  const fin = BATCH.finaleCard && id === 'home-hello'
+  panelEl.classList.toggle('finale', fin)
   panelEl.classList.toggle('journal', !!B.blog); panelEl.classList.toggle('hcard', !B.blog); panelEl.classList.toggle('cartouche', BATCH.cardCartouche && !B.blog)
   note.style.setProperty('--c', c); panelEl.style.setProperty('--c', c)
   if (B.blog) { note.innerHTML = noteHTML(id); return }
@@ -5285,7 +5294,7 @@ function showRoom(id) {
   // In a cartouche the headline is centred and set larger, so a line of numbers breaks after its dot, not before.
   const head = (B.tip ? B.tip[0] : B.stop ? B.title : B.stat || B.title).replace(/ · /g, BATCH.cardCartouche ? '&nbsp;· ' : ' · ')
   const line = B.tip ? B.tip[1] : B.stop ? [B.stat, B.body].filter(Boolean).join(' · ') : B.body
-  note.innerHTML = (opens(id) || B.hoverImg ? winHTML(id) : !B.tip ? figHTML(B.img, B.alt) : '') + picsHTML(B.pics, B.grid)
+  note.innerHTML = (fin ? '<p class="fkick">The end of the road</p>' : '') + (opens(id) || B.hoverImg ? winHTML(id) : !B.tip ? figHTML(B.img, B.alt) : '') + picsHTML(B.pics, B.grid)
     + (B.part?.t === 'pillar' ? `<div class="ehead">${crownSVG(B.part.kind)}<p class="headline">${head}</p></div>` : `<p class="headline">${head}</p>`) + (line ? `<p class="body">${line}</p>` : '')
     + (!B.tip && B.list ? `<ul>${B.list.map(li => `<li><span>${li}</span></li>`).join('')}</ul>` : '')
     + (B.links && !(BATCH.finale && id === 'home-hello') ? `<ul class="links">${B.links.map(([t, h]) => `<li><a href="${abs(h)}" target="_blank" rel="noopener">${t}</a></li>`).join('')}</ul>` : '')
@@ -5297,6 +5306,8 @@ function showRoom(id) {
     + (id === 'home-hello' ? `<a class="cta" href="mailto:kunalsatpal1@gmail.com?subject=${encodeURIComponent('Found you on the map')}"><span>Write to me <span aria-hidden="true">✉</span></span><span class="mail">kunalsatpal1@gmail.com</span></a>` : '')
     // The sign-off (BATCH.finale): one way to write, then everything else in a single line.
     + (BATCH.finale && id === 'home-hello' ? `<p class="also">${B.links.filter(([, h]) => !h.startsWith('mailto:')).map(([t, h]) => `<a href="${abs(h)}" target="_blank" rel="noopener">${t.replace(' (PDF)', '')}</a>`).join('<span aria-hidden="true"> · </span>')}</p>` : '')
+    // Signed, in the hand of the name on the map's title.
+    + (fin ? '<p class="fsign">Kunal</p>' : '')
 }
 // Ink writes itself onto the note: each line sweeps in, a beat after the last.
 function writeOn() {
@@ -5544,8 +5555,6 @@ function glide() {
 }
 // A click on the sheet: a building, a room on the plan, or nothing (which closes the note).
 function activate(target, X, Y) {
-  // The lighthouse's lamp room keeps the night watch (BATCH.nightWatch, 16-side).
-  if (lampRoomAt(X, Y)) return nightWatch()
   // A prop that does its trick on hover hands the click to its building (BATCH.propsShareHover)
   // when the building has a page or links to open; otherwise the click plays the trick again, the
   // barbell's next rep. On a touch screen, where nothing hovers, the tap plays the trick as well.
@@ -5829,7 +5838,6 @@ function decorClick(id) {
   else if (D.kind === 'scope') { play(9, [0, 1, 0], .55); shootingStar(D) }
   else if (D.kind === 'fountain') { spurt(D, 14); ripples(D) }
   else if (D.kind === 'lamp') lamp(id)
-  else if (D.kind === 'owl') nightWatch()
   else if (D.kind === 'wizard') cast(id, SPELLS[spell++ % SPELLS.length])
 }
 function cast(id, words) { const D = DECOR[id]; decorPlay(id, 3, [0, 0, 1], 8 * D.k); flecks(wandTip(D), 'wspark', 12, 20); if (words) say(D, words) }
@@ -6434,8 +6442,6 @@ if (BATCH.cherryTree) { const steam = ROOM_FX['life-anime']; ROOM_FX['life-anime
 //               up the road, to the isles of earlier work; the second time, on to the lighthouse, where
 //               it curls up, and stays.
 //   fireflies   linger in About me's yard and a few fireflies come out over the garden.
-//   nightWatch  click the lighthouse's lamp room: night falls, the beam sweeps once round, and day
-//               comes back.
 // Nothing here runs until it's called for, and every effect removes itself.
 // =====================================================================================
 
@@ -6610,64 +6616,6 @@ function firefliesOut(on) {
     box.appendChild(s)
   }
   box.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 1800, fill: 'both' })
-}
-
-// ---------- Night watch ----------
-// The lamp room: the glass at the top of the lighthouse (09-city lighthouse), where it stands on screen.
-function lampRoom(v = view()) {
-  const q = ROOMS['home-hello'].part, k = q.r / 46, R0 = q.r * .62
-  const [X, Y, z] = at3(q.cx, q.cy, 196 * k + 20 * k, v), [Xr] = at3(q.cx + R0 * .62, q.cy, 196 * k + 20 * k, v)
-  return { X, Y, z, r: Math.max(20, Math.abs(Xr - X) * 2.6) }
-}
-function lampRoomAt(X, Y) {
-  if (!BATCH.nightWatch || !city.active || worldAt !== WORLDS.length) return false
-  const L = lampRoom()
-  return L.z > NEAR && Math.hypot(X - L.X, Y - L.Y) < L.r
-}
-// The owl on the lighthouse's gallery sits just in front of the lamp room: clicking either, it calls
-// the night in, a hoot first.
-function owlHoots() {
-  const q = ROOMS['home-hello'].part, k = q.r / 46, R0 = q.r * .62
-  say({ x: q.cx + R0 * .3, y: q.cy + R0 * 1.14, base: 196 * k + 6 * k, h: 26 * k }, 'Hoo!', 'small')
-}
-let nightOn = false
-function nightWatch() {
-  if (nightOn || reduce) return
-  nightOn = true
-  try { owlHoots(); nightFalls() } catch (err) { nightOn = false; document.querySelectorAll('.night, .beam').forEach(el => el.remove()); console.warn('night watch:', err.message) }
-}
-function nightFalls() {
-  const night = document.createElement('div'), beam = document.createElement('div')
-  night.className = 'night'; beam.className = 'beam'
-  const DUR = 6400
-  // Two beams back to back, each a soft wedge of light fading along its length, on a disc squashed to
-  // lie on the sea as the map does. Each beam is its own layer, turned and faded by the compositor; a
-  // beam fades as it swings toward you, so the light plays on the sea and never across the tower or
-  // the island in front of it.
-  const ONE = (id, len) => `<svg class="rot" width="1800" height="1800" viewBox="-900 -900 1800 1800"><defs>`
-    + `<linearGradient id="bf${id}" x1="0" x2="1"><stop offset="0" stop-color="oklch(97% 0.05 92)" stop-opacity=".95"/><stop offset=".35" stop-color="oklch(96% 0.05 90)" stop-opacity=".45"/><stop offset="1" stop-color="oklch(95% 0.04 88)" stop-opacity="0"/></linearGradient>`
-    + `<filter id="bs${id}" x="-10%" y="-80%" width="120%" height="260%"><feGaussianBlur stdDeviation="6"/></filter></defs>`
-    + `<path d="M0 0L${len} -58Q${len + 30} 0 ${len} 58Z" fill="url(#bf${id})" filter="url(#bs${id})"/></svg>`
-  beam.innerHTML = `<div class="sweep">${ONE('a', 820)}${ONE('b', 700)}</div><b></b>`
-  document.body.append(night, beam)
-  night.animate([{ opacity: 0 }, { opacity: 1, offset: .18 }, { opacity: 1, offset: .8 }, { opacity: 0 }], { duration: DUR, easing: 'ease-in-out', fill: 'both' })
-  const [ra, rb] = beam.querySelectorAll('.rot'), halo = beam.querySelector('b')
-  // The turn: once round, slow at either end; the beams' strength rises and falls with the night.
-  const turn = t => { const k = clamp((t - DUR * .14) / (DUR * .64), 0, 1); return 160 + 360 * (k < .5 ? 2 * k * k : 1 - (-2 * k + 2) ** 2 / 2) }
-  const level = t => { const k = t / DUR; return k < .2 ? k / .2 : k > .76 ? Math.max(0, 1 - (k - .76) / .1) : 1 }
-  const t0 = performance.now()
-  const follow = () => {
-    if (performance.now() - t0 > DUR || caseId) { night.remove(); beam.remove(); nightOn = false; return }
-    const L = lampRoom(), t = performance.now() - t0, a = turn(t), lv = level(t)
-    beam.style.transform = tr(L.X, L.Y)
-    // Toward you is down the screen: a beam pointing that way (sin > 0) fades out.
-    const face = deg => lv * (1 - smoothstep(-.15, .45, Math.sin(deg * Math.PI / 180)))
-    const set = (el, deg, o) => { el.style.rotate = deg.toFixed(1) + 'deg'; el.style.opacity = o.toFixed(3); el.style.visibility = o < .02 ? 'hidden' : '' }
-    set(ra, a, face(a)); set(rb, a + 180, face(a + 180) * .7)
-    halo.style.opacity = lv.toFixed(3)
-    requestAnimationFrame(follow)
-  }
-  follow()
 }
 
 

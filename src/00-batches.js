@@ -39,6 +39,7 @@ const BATCH = {
   crispFog: true,        // names in the distance stay readable, then are gone: no ghost labels half-lost in the mist
   bareTitle: true,      // the halo behind the name and tagline is matched to the rendered paper, so it no longer reads as a white outline
   // Worlds, more to find
+  finaleCard: true,      // the lighthouse's note: "The end of the road" over the headline, and signed
   pillarStars: true,
   pillarCrowns: true,    // How I work's crowns, hovered: the tree rustles and drops a leaf, a pawn is moved, the brass bar ticks up, the hammer strikes, the slash turns
   cherryTree: true,      // About me: a cherry tree in blossom by the noodle stand; hovered, a few petals fall
@@ -48,5 +49,4 @@ const BATCH = {
   wanderCat: true,       // a cat naps beside the road; come near and it pads off to the next world, until it curls up by the lighthouse door
   catLife: true,         // the cat blinks and flicks its tail, watches the pointer come near, says mrrp, purrs asleep, and a heart if you pat it
   fireflies: true,       // linger in About me's yard and fireflies come out over the garden
-  nightWatch: true,      // click the lighthouse's lamp room: night falls, the beam sweeps once round, and day comes back          // About me: two friends on a bench by the table, who wave as you come by
 }

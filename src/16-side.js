@@ -5,8 +5,6 @@
 //               up the road, to the isles of earlier work; the second time, on to the lighthouse, where
 //               it curls up, and stays.
 //   fireflies   linger in About me's yard and a few fireflies come out over the garden.
-//   nightWatch  click the lighthouse's lamp room: night falls, the beam sweeps once round, and day
-//               comes back.
 // Nothing here runs until it's called for, and every effect removes itself.
 // =====================================================================================
 
@@ -181,63 +179,5 @@ function firefliesOut(on) {
     box.appendChild(s)
   }
   box.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 1800, fill: 'both' })
-}
-
-// ---------- Night watch ----------
-// The lamp room: the glass at the top of the lighthouse (09-city lighthouse), where it stands on screen.
-function lampRoom(v = view()) {
-  const q = ROOMS['home-hello'].part, k = q.r / 46, R0 = q.r * .62
-  const [X, Y, z] = at3(q.cx, q.cy, 196 * k + 20 * k, v), [Xr] = at3(q.cx + R0 * .62, q.cy, 196 * k + 20 * k, v)
-  return { X, Y, z, r: Math.max(20, Math.abs(Xr - X) * 2.6) }
-}
-function lampRoomAt(X, Y) {
-  if (!BATCH.nightWatch || !city.active || worldAt !== WORLDS.length) return false
-  const L = lampRoom()
-  return L.z > NEAR && Math.hypot(X - L.X, Y - L.Y) < L.r
-}
-// The owl on the lighthouse's gallery sits just in front of the lamp room: clicking either, it calls
-// the night in, a hoot first.
-function owlHoots() {
-  const q = ROOMS['home-hello'].part, k = q.r / 46, R0 = q.r * .62
-  say({ x: q.cx + R0 * .3, y: q.cy + R0 * 1.14, base: 196 * k + 6 * k, h: 26 * k }, 'Hoo!', 'small')
-}
-let nightOn = false
-function nightWatch() {
-  if (nightOn || reduce) return
-  nightOn = true
-  try { owlHoots(); nightFalls() } catch (err) { nightOn = false; document.querySelectorAll('.night, .beam').forEach(el => el.remove()); console.warn('night watch:', err.message) }
-}
-function nightFalls() {
-  const night = document.createElement('div'), beam = document.createElement('div')
-  night.className = 'night'; beam.className = 'beam'
-  const DUR = 6400
-  // Two beams back to back, each a soft wedge of light fading along its length, on a disc squashed to
-  // lie on the sea as the map does. Each beam is its own layer, turned and faded by the compositor; a
-  // beam fades as it swings toward you, so the light plays on the sea and never across the tower or
-  // the island in front of it.
-  const ONE = (id, len) => `<svg class="rot" width="1800" height="1800" viewBox="-900 -900 1800 1800"><defs>`
-    + `<linearGradient id="bf${id}" x1="0" x2="1"><stop offset="0" stop-color="oklch(97% 0.05 92)" stop-opacity=".95"/><stop offset=".35" stop-color="oklch(96% 0.05 90)" stop-opacity=".45"/><stop offset="1" stop-color="oklch(95% 0.04 88)" stop-opacity="0"/></linearGradient>`
-    + `<filter id="bs${id}" x="-10%" y="-80%" width="120%" height="260%"><feGaussianBlur stdDeviation="6"/></filter></defs>`
-    + `<path d="M0 0L${len} -58Q${len + 30} 0 ${len} 58Z" fill="url(#bf${id})" filter="url(#bs${id})"/></svg>`
-  beam.innerHTML = `<div class="sweep">${ONE('a', 820)}${ONE('b', 700)}</div><b></b>`
-  document.body.append(night, beam)
-  night.animate([{ opacity: 0 }, { opacity: 1, offset: .18 }, { opacity: 1, offset: .8 }, { opacity: 0 }], { duration: DUR, easing: 'ease-in-out', fill: 'both' })
-  const [ra, rb] = beam.querySelectorAll('.rot'), halo = beam.querySelector('b')
-  // The turn: once round, slow at either end; the beams' strength rises and falls with the night.
-  const turn = t => { const k = clamp((t - DUR * .14) / (DUR * .64), 0, 1); return 160 + 360 * (k < .5 ? 2 * k * k : 1 - (-2 * k + 2) ** 2 / 2) }
-  const level = t => { const k = t / DUR; return k < .2 ? k / .2 : k > .76 ? Math.max(0, 1 - (k - .76) / .1) : 1 }
-  const t0 = performance.now()
-  const follow = () => {
-    if (performance.now() - t0 > DUR || caseId) { night.remove(); beam.remove(); nightOn = false; return }
-    const L = lampRoom(), t = performance.now() - t0, a = turn(t), lv = level(t)
-    beam.style.transform = tr(L.X, L.Y)
-    // Toward you is down the screen: a beam pointing that way (sin > 0) fades out.
-    const face = deg => lv * (1 - smoothstep(-.15, .45, Math.sin(deg * Math.PI / 180)))
-    const set = (el, deg, o) => { el.style.rotate = deg.toFixed(1) + 'deg'; el.style.opacity = o.toFixed(3); el.style.visibility = o < .02 ? 'hidden' : '' }
-    set(ra, a, face(a)); set(rb, a + 180, face(a + 180) * .7)
-    halo.style.opacity = lv.toFixed(3)
-    requestAnimationFrame(follow)
-  }
-  follow()
 }
 

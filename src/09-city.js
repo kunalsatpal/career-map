@@ -470,10 +470,7 @@ const BUILD = {
     latheF(q.cx, q.cy, [[R0 * 1.24, H0], [R0 * 1.24, H0 + 6 * k], [R0 * .62, H0 + 6 * k]], 16, DARK)
     latheF(q.cx, q.cy, [[R0 * .62, H0 + 6 * k], [R0 * .62, H0 + 34 * k]], 12, mat(LAMP, 'glass'))
     latheF(q.cx, q.cy, [[R0 * .74, H0 + 34 * k], [0, H0 + 62 * k]], 12, red); ballF(q.cx, q.cy, 2.6 * k, col3(40, .03, 60), H0 + 61 * k)
-    // The owl on the gallery: with BATCH.nightWatch a prop, that shuffles now and then like the others, takes
-    // the wand, and keeps the night watch when clicked (16-side).
-    const ox = q.cx + R0 * .3, oy = q.cy + R0 * 1.14, oz = H0 + 6 * k
-    BATCH.nightWatch ? decorF('owl', ox, oy, oz, 27 * 1.7 * k, 9 * k, () => owlF(ox, oy, oz, 1.7 * k), { base: oz }) : owlF(ox, oy, oz, 1.7 * k)
+    owlF(q.cx + R0 * .3, q.cy + R0 * 1.14, H0 + 6 * k, 1.7 * k)
     const kx = q.cx - 104 * k, ky = q.cy - 26 * k
     boxF(kx, ky, 62 * k, 44 * k, 0, 30 * k, mat(HOME.cream, 'plaster', OVL.lit)); gableF(kx, ky, 62 * k, 44 * k, 30 * k, 20 * k, mat(HOME.terracotta, 'tile'), mat(HOME.cream, 'plaster'), 'x')
     boxF(kx + 44 * k, ky + 8 * k, 9 * k, 9 * k, 40 * k, 22 * k, mat(col3(58, .06, 38), 'brick'), DARK)
@@ -1476,7 +1473,16 @@ function outside(poly, X, Y) {
 // outline beats near one (the front-most wins); the building already under the pointer
 // holds on until the pointer has clearly left it.
 const PICK_PAD = 28
+// The owl on the lighthouse's gallery is only scenery: the pointer over it is not over the lighthouse.
+function owlAt(X, Y) {
+  const q = ROOMS['home-hello']?.part
+  if (!q || !city.active) return false
+  const k = q.r / 46, R0 = q.r * .62, ox = q.cx + R0 * .3, oy = q.cy + R0 * 1.14, z = 196 * k + 6 * k, v = view()
+  const [x0, y0] = project(ox, oy, z * v.t, v), [x1, y1] = project(ox, oy, (z + 27 * 1.7 * k) * v.t, v), [xr] = project(ox + 8 * 1.7 * k, oy, z * v.t, v)
+  return Math.abs(X - x0) < Math.max(8, Math.abs(xr - x0) * 1.2) && Y < y0 + 4 && Y > y1 - 4
+}
 function cityPick(X, Y, held) {
+  if (owlAt(X, Y)) return null
   if (!city.active || !GLS || city.rise < .25) return null
   const v = view(), t = now()
   let best = null, bestD = Infinity, bestZ = Infinity, heldD = Infinity

@@ -91,7 +91,7 @@ body.reading-case #sky { visibility: hidden; }
 /* Cursors: a hand only where a click opens something; with the 3D city on, the map decides (09-city cityHover). */
 .room.inert, .lvl.inert .lv-t { cursor: default; }
 body.city3d .band .room { cursor: inherit; }
-/* Side missions (16-side): the cat, its paw prints, fireflies, the night watch. */
+/* Side missions (16-side): the cat, its paw prints, fireflies. */
 .cat { position: absolute; left: 0; top: 0; width: 0; height: 0; pointer-events: none; }
 .cat svg { position: absolute; left: -15px; bottom: 0; display: block; overflow: visible; transform-origin: 50% 100%; pointer-events: auto; cursor: default; }
 .cat.asleep svg { cursor: pointer; }
@@ -116,11 +116,6 @@ body.city3d .band .room { cursor: inherit; }
   animation: ff-drift var(--t) ease-in-out var(--d) infinite alternate, ff-blink calc(var(--t) * .7) ease-in-out var(--d) infinite; }
 @keyframes ff-drift { to { translate: var(--dx) var(--dy); } }
 @keyframes ff-blink { 0%, 100% { opacity: .45; } 50% { opacity: 1; } }
-.night { position: fixed; inset: 0; z-index: 17; pointer-events: none; background: oklch(30% 0.06 262 / .6); mix-blend-mode: multiply; }
-.beam { position: fixed; left: 0; top: 0; z-index: 18; width: 0; height: 0; pointer-events: none; }
-.beam .sweep { position: absolute; left: -900px; top: -900px; width: 1800px; height: 1800px; transform: scaleY(.4); }
-.beam .rot { position: absolute; left: 0; top: 0; display: block; overflow: visible; opacity: 0; will-change: transform, opacity; }
-.beam b { position: absolute; left: -26px; top: -26px; width: 52px; height: 52px; border-radius: 50%; background: radial-gradient(closest-side, oklch(97% 0.09 92 / .95), oklch(94% 0.09 90 / .35) 55%, transparent); }
 /* How I work, read through: a star over each pillar read, and, with all five, the line that joins them. */
 .pstars { position: absolute; left: 0; top: 0; width: 1px; height: 1px; overflow: visible; pointer-events: none; }
 .pstars .st path { fill: oklch(84% 0.14 86); stroke: oklch(28% 0.05 45); stroke-width: 1.1; stroke-linejoin: round; }
@@ -916,6 +911,11 @@ body.reading-case #viewport, body.reading-case #dusk, body.reading-case #gl, bod
 #panel.hcard.cartouche .note .go { border-radius: 1px; }
 #panel.hcard.cartouche .note .cta { justify-self: center; border-radius: 1px; }
 #panel.hcard.cartouche .close { top: 12px; right: 12px; }
+/* The lighthouse's note, the finale (BATCH.finaleCard). */
+#panel.finale .note .fkick { margin: 0 0 -2px; font: italic 400 .875rem/1.2 var(--font-body); color: var(--ink-3); letter-spacing: .02em; }
+#panel.finale .note .headline { max-width: 15em; padding-inline: 10px; font-size: 1.1875rem; }
+#panel.finale .note .also { margin-top: 4px; }
+#panel.finale .note .fsign { margin: 2px 0 0; font: 400 1.625rem/1 var(--font-name); color: var(--ink); rotate: -3deg; }
 
 /* ---------- Phones, second pass (00-batches.js: mobile2) ---------- */
 /* Everything here is for phones only: touch screens, or a screen as narrow as a phone's. */

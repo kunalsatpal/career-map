@@ -177,7 +177,8 @@ const GEO = {
   roses: [{ x: 260, y: 2680, r: 150 }, { x: 1640, y: 930, r: 130 }],
   whales: [[150, 2961, 160, false], [1480, 1585, 170, true]],
   serpent: [1460, 2947, 260],
-  // The schooner rounds the Isle of Kunal; off the larger isle it keeps further out to the north.
-  ships: [LANE.slice(10, 19), BATCH.biggerIsle ? [[200, 1230], [390, 640], [1000, 420], [1560, 520], [1700, 1080], [1550, 1930], [300, 1630]] : [[200, 1230], [450, 780], [1500, 530], [1700, 1080], [1550, 1930], [300, 1630]]],
+  // The schooner rounds the Isle of Kunal; off the larger isle it keeps further out to the north. Coming
+  // back west it passes south of How I work, between it and the Field notes, never across the land.
+  ships: [LANE.slice(10, 19), [...(BATCH.biggerIsle ? [[200, 1230], [390, 640], [1000, 420], [1560, 520]] : [[200, 1230], [450, 780], [1500, 530]]), [1700, 1080], [1580, 1700], [1470, 2200], [1120, 2212], [820, 2208], [540, 2120], [400, 1700]]],
   gulls: [[300, 3380], [1350, 2080], [500, 630]],
 }
