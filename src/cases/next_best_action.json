@@ -57,7 +57,7 @@
   },
   {
    "t": "strip",
-   "label": "One member, one morning: how the AI summary changed",
+   "label": "Amelia’s message to her care team",
    "panels": [
     {
      "art": "message",
@@ -69,7 +69,17 @@
      "portrait": "./assets/case-member.svg",
      "quote": "Hi Darshan. The neck pain is this constant dull ache that never really goes away, and it makes it hard to concentrate on anything. My back feels tight and stiff, especially when I wake up in the morning or after sitting for a long time, like at work.",
      "from": "Amelia"
-    },
+    }
+   ]
+  },
+  {
+   "t": "h",
+   "text": "The solution"
+  },
+  {
+   "t": "strip",
+   "label": "What her PT sees, before and after",
+   "panels": [
     {
      "art": "before",
      "text": "Age, job and hometown first. Her need is buried.",
