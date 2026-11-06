@@ -104,7 +104,8 @@
     "alt": "The final CareHub member view for Amelia: the AI summary ‘Needs help with sudden pain increase’ at the top, with sourced insights and open tasks, beside the conversation with her own message."
    },
    "pairTitle": "What her PT sees",
-   "pairPortrait": "./assets/case-pt.svg"
+   "pairPortrait": "./assets/case-pt.svg",
+   "pairKicker": "Meanwhile"
   },
   {
    "t": "h",

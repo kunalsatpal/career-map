@@ -225,14 +225,18 @@ function caseInteraction(b, uid) {
   // A story told as a storyboard sheet: numbered frames in fine ink on hatched paper, the real artifacts as the drawings,
   // and hand-lettered notes with arrows pointing at what matters. Frames read left to right; on a phone they stack.
   if (b.t === 'strip') {
+    // One two-column grid for the whole board: who is speaking (portrait, kicker, title), then what they see.
     const [ctx, ...pair] = b.panels, img = F => `<img src="${abs(F.src)}" alt="${caseAttr(F.alt)}" loading="lazy" decoding="async">`
     const arrow = `<svg class="sb-arrow" viewBox="0 0 60 24" aria-hidden="true"><path d="M3 14 C 18 4, 36 4, 52 12" /><path d="M44 5 L53 12 L43 17" /></svg>`
-    const side = (F, i) => `<div class="sb-side sb-${F.art}"><p class="sb-label"><span>${keep(F.kicker)}</span>${keep(F.title)}</p>`
-      + `<div class="sb-frame"><div class="sb-shot">${img(F)}<span class="${F.art === 'before' ? 'sb-hl' : 'sb-ring'}" aria-hidden="true"></span></div>${F.tag ? `<span class="sb-tag">${keep(F.tag)}</span>` : ''}</div>`
+    const who = (portrait, kicker, title) => `<div class="sb-who">${portrait ? `<img class="sb-portrait" src="${abs(portrait)}" alt="" width="56" height="56">` : ''}<p class="sb-label"><span>${keep(kicker)}</span>${keep(title)}</p></div>`
+    const side = (F, i) => `<div class="sb-side sb-${F.art}"><p class="sb-state"><span>${keep(F.kicker)}</span>${keep(F.title)}</p>`
+      + `<div class="sb-frame">${i ? arrow : ''}<div class="sb-shot">${img(F)}<span class="sb-mark ${F.art === 'before' ? 'sb-hl' : 'sb-ring'}">${F.tag ? `<span class="sb-tag">${keep(F.tag)}</span>` : ''}</span></div></div>`
       + `<p class="sb-cap">${keep(F.text)}</p></div>`
     return `<figure class="case-board rise" aria-label="${caseAttr(b.label)}">`
-      + `<div class="sb-ctx">${ctx.quote ? `<div class="sb-chat"><p class="sb-bubble">${keep(ctx.quote)}</p><p class="sb-meta">${keep(ctx.from)}</p></div>` : `<div class="sb-msg">${img(ctx)}</div>`}<div>${ctx.portrait ? `<img class="sb-portrait" src="${abs(ctx.portrait)}" alt="" width="76" height="76">` : ''}<p class="sb-label"><span>${keep(ctx.kicker)}</span>${keep(ctx.title)}</p><p class="sb-cap">${keep(ctx.text)}</p></div></div>`
-      + `${b.pairTitle ? `<p class="sb-pairtitle">${b.pairPortrait ? `<img class="sb-portrait" src="${abs(b.pairPortrait)}" alt="" width="76" height="76">` : ''}${keep(b.pairTitle)}</p>` : ''}<div class="sb-pair">${side(pair[0], 0)}<span class="sb-gap" aria-hidden="true">${arrow}</span>${side(pair[1], 1)}</div>`
+      + `<div class="sb-row sb-ctx"><div class="sb-chat"><p class="sb-bubble">${keep(ctx.quote)}</p><p class="sb-meta">${keep(ctx.from)}</p></div>`
+      + `<div class="sb-ctxtext">${who(ctx.portrait, ctx.kicker, ctx.title)}<p class="sb-cap">${keep(ctx.text)}</p></div></div>`
+      + `<div class="sb-pairhead">${who(b.pairPortrait, b.pairKicker || 'Meanwhile', b.pairTitle)}</div>`
+      + `<div class="sb-row sb-pair">${side(pair[0], 0)}${side(pair[1], 1)}</div>`
       + `${b.view ? photo(b.view.src, 'large', b.view.cap, b.view.alt) : ''}`
       + `${b.punch ? `<figcaption class="sb-punch">${keep(b.punch)}</figcaption>` : ''}</figure>`
   }
