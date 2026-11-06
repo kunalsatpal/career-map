@@ -184,7 +184,7 @@ function chooseSpot(v, b) {
   }
   if (typeof DECOR !== 'undefined') for (let i = 1; i < DECOR.length; i++) {
     const D = DECOR[i], [x, y, z] = project(D.x, D.y, ((D.base || 0) + D.h * .5) * v.t, v)
-    if (z > NEAR && x > 0 && x < VW && y > 0 && y < VH) obs.push({ r: { x0: x - 14, y0: y - 14, x1: x + 14, y1: y + 14 }, w: .6 })
+    if (z > NEAR && x > 0 && x < VW && y > 0 && y < VH) obs.push({ r: { x0: x - 20, y0: y - 20, x1: x + 20, y1: y + 20 }, w: 1 })
   }
   let best = 'r', bestS = Infinity
   for (const spot of Object.keys(SPOT_BIAS)) {

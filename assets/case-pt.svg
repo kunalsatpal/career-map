@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none">
+  <defs>
+    <pattern id="etchP" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(35)"><path d="M0 0V5" stroke="#745838" stroke-width=".55" opacity=".3"/></pattern>
+    <clipPath id="inP"><circle cx="60" cy="60" r="49"/></clipPath>
+  </defs>
+  <g stroke="#59422d" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="60" cy="60" r="56" fill="#f1e3c8" stroke-width="1.6"/>
+    <circle cx="60" cy="60" r="49" fill="#ead8b6" stroke-width=".9"/>
+    <circle cx="60" cy="60" r="49" fill="url(#etchP)" stroke="none"/>
+    <g clip-path="url(#inP)">
+      <!-- A clinician's tunic with a V collar and a name badge. -->
+      <path d="M20 112c2-21 17-32 40-32s38 11 40 32Z" fill="#7f9c8a" stroke-width="1.6"/>
+      <path d="M20 112c2-21 17-32 40-32s38 11 40 32Z" fill="url(#etchP)" stroke="none"/>
+      <path d="M50 81l10 13 10-13" fill="#f1e3c8" stroke-width="1.2"/>
+      <rect x="70" y="93" width="11" height="8" rx="1.5" fill="#f1e3c8" stroke-width="1"/>
+      <path d="M72.5 96h6M72.5 98.5h4" stroke-width=".6"/>
+      <!-- Neck and head, short hair. -->
+      <path d="M54 69v12c3 3 9 3 12 0V69" fill="#e8cfa6" stroke-width="1.4"/>
+      <ellipse cx="60" cy="53" rx="15" ry="17.5" fill="#e8cfa6" stroke-width="1.5"/>
+      <path d="M45 50c0-13 7-20 15-20 10 0 16 6 15 19-2-5-6-8-11-9-5 4-12 6-19 10Z" fill="#59422d" stroke-width="1"/>
+      <!-- Spectacles. -->
+      <circle cx="54" cy="55" r="4.2" stroke-width="1.1"/><circle cx="66" cy="55" r="4.2" stroke-width="1.1"/>
+      <path d="M58.2 55h3.6M49.8 54l-4-1M70.2 54l4-1" stroke-width=".9"/>
+      <path d="M52.5 56.5q1.5 1 3 0M64.5 56.5q1.5 1 3 0" stroke-width=".9"/>
+      <path d="M56 63.5h8" stroke-width="1.2"/>
+    </g>
+  </g>
+</svg>

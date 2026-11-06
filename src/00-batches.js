@@ -45,7 +45,6 @@ const BATCH = {
   hammock: true,         // About me: the reading bench becomes a hammock with an open book; hovered, a page turns
   wavers: true,
   // Side missions, for whoever lingers or pokes about
-  wanderCat: true,       // a cat naps beside the road; come near and it pads off to the next world, until it curls up by the lighthouse door
-  catLife: true,         // the cat blinks and flicks its tail, watches the pointer come near, says mrrp, purrs asleep, and a heart if you pat it
+  pawTrail: true,       // the wizard has lost his cat: her ink paw prints wander near the road in each world; click one and she appears, says meow, and runs off
   fireflies: true,       // linger in About me's yard and fireflies come out over the garden
 }

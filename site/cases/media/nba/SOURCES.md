@@ -49,3 +49,18 @@ The deck holds 15 GIFs; the exports (PDF/PPTX) carry only their first frames.
   later summary iterations (c3b086d06e, f08525b8a1; pages 33–44), recommended actions (6dfc6262d8, ef85e1f3cb; page 48),
   a dark home dashboard (455d7210b3), five emoji (pages 45–46) and the highway photo (a99df30817; page 51).
 - The earlier user-supplied `exploration-1.gif` is the same exploration, re-encoded larger; it is no longer referenced.
+
+## Story strip (`story/`, added 2026-11-06)
+
+The sneak-peek section tells the AI summary as a four-panel strip. Panels 1–2 are drawn illustrations (inline SVG in
+`src/18-letter.js`, the `strip` block); panels 3–4 use deck screenshots:
+
+- `story/old-summary.jpg`: PDF page 6, the 2024 "Amelia's summary" card (age, job and hometown first; pain in sentence 3).
+- `story/new-summary.jpg`, `story/new-zoom.jpg`: PDF page 44, the final summary card for the same member (Amelia Holmes),
+  and its headline enlarged.
+- Amelia's quoted message in panel 1 is from the conversation on PDF page 44. All names and clinical details are deck
+  example data, not a real member.
+- Known source inconsistency: the page 44 card's headline says "sudden pain increase" while its first insight says pain
+  reduced by 30. The strip enlarges only the headline.
+- "~½ hour back for every PT, every day" is derived, not stated in the deck: 20 s saved per profile (5:40 → 5:20, page 25)
+  × 90–110 members a day (page 12), assuming one profile visit per member per day.

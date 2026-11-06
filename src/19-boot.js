@@ -28,7 +28,7 @@ function boot() {
     B.key = B.stat = `Field note · ${readMins(caseBody(id))} min read`
     if (text) B.body = (text.match(/^.{40,260}?[.!?](?=\s|$)/) || [text.slice(0, 220) + '…'])[0]
   }
-  buildLabels(); buildSky(); buildGym(); buildWip(); if (BATCH.wanderCat) buildCat(); markInert()
+  buildLabels(); buildSky(); buildGym(); buildWip(); markInert()
   // No cover: the map opens straight onto the title, and the eye leans in.
   const deep = decodeURIComponent(location.hash.slice(1))
   // One calm entrance (BATCH.calmOpen): a blank sheet stands over the page while the fonts load, the

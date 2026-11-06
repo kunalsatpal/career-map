@@ -1492,22 +1492,48 @@ function cityPick(X, Y, held) {
     const sp = pts.map(([x, y, z]) => project(x, y, z * v.t, v)), h = hull(sp)
     const xs = sp.map(p => p[0]), ys = sp.map(p => p[1]), size = Math.min(Math.max(...xs) - Math.min(...xs), Math.max(...ys) - Math.min(...ys))
     const d = outside(h, X, Y), pad = PICK_PAD + Math.max(0, 56 - size) / 2
-    if (id === held) heldD = d <= pad * 1.8 ? d : Infinity
+    if (id === held) heldD = d <= pad * 1.4 ? d : Infinity
     if (d > pad) continue
     const z = project(part.c[0], part.c[1], 0, v)[2]
     if (d < bestD - .5 || (Math.abs(d - bestD) <= .5 && z < bestZ)) { best = id; bestD = d; bestZ = z }
   }
-  return heldD < Infinity && bestD > 0 ? held : best
+  // The held building gives way as soon as another is clearly nearer, not only once the pointer is inside it.
+  return heldD < Infinity && (best === null || heldD <= bestD + HOLD_SLACK) ? held : best
 }
-let hoverRaf = 0, liftRaf = 0, pointedRoom = null
+const HOLD_SLACK = 10
+// The building a prop on the map belongs to, so hovering the prop keeps that building hovered.
+// A prop that serves several buildings (the Hinge wizard's site) keeps the one already hovered,
+// else the nearest of them.
+function propRoom(dec, X, Y) {
+  const D = DECOR[dec]
+  if (!D) return null
+  if (D.room) return D.room
+  if (!D.rooms?.length) return null
+  if (D.rooms.includes(peeked)) return peeked
+  const v = view()
+  let best = null, bd = Infinity
+  for (const id of D.rooms) {
+    const c = ROOMS[id]?.part?.c
+    if (!c) continue
+    const [x, y] = project(c[0], c[1], 0, v), d = Math.hypot(x - X, y - Y)
+    if (d < bd) { bd = d; best = id }
+  }
+  return best
+}
+let hoverRaf = 0, liftRaf = 0, pointedRoom = null, hoverXY = null
 function cityHover(X, Y, target) {
   if (!city.active) { const r = target?.closest?.('.room')?.dataset.id || null; if (r !== peeked && (r || !peeked || !levelOf[peeked]?.el.matches(':hover'))) levelPeek(r); return }
+  // The frame reads where the pointer is by then, not where it was when the frame was asked for.
+  hoverXY = [X, Y, target]
   if (flyId || hoverRaf) return
   hoverRaf = requestAnimationFrame(() => {
     hoverRaf = 0
+    const [X, Y, target] = hoverXY
+    // Over a building's name tag, that building is the one hovered, and nothing under the tag.
+    const tag = target?.closest?.('.lvl')?.dataset.id
     // A piece of decor under the pointer answers it (16-delight), and takes it from the building;
     // with BATCH.propsShareHover, a prop that belongs to a building plays and leaves it the hover.
-    const dec = decorAt(X, Y), share = BATCH.propsShareHover && DECOR[dec]?.room, id = dec && !share ? null : share || cityPick(X, Y, peeked)
+    const dec = tag ? 0 : decorAt(X, Y), share = BATCH.propsShareHover && dec && propRoom(dec, X, Y), id = tag || (dec && !share ? null : share || cityPick(X, Y, peeked))
     decorHover(dec)
     // The pointer arriving over a building: its wizard looks up, or its own trick plays (16-delight).
     if (id !== pointedRoom) { pointedRoom = id; if (id) { wizardNudge(id); roomHover(id) } }

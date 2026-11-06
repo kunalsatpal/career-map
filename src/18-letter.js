@@ -222,6 +222,20 @@ function caseInteraction(b, uid) {
     + `${b.pills ? `<div class="mo-flags" aria-label="${caseAttr(b.label || 'Notes')}">${b.label ? `<span class="mo-k">${keep(b.label)}</span>` : ''}${b.pills.map(x => `<span class="mo-flag"><i aria-hidden="true">⚑</i>${keep(x)}</span>`).join('')}</div>` : ''}</figure>`
   // A UI card with its problems called out: highlighted lines, labels with leader lines on the left, and a bracket on
   // the right. placeNotes() draws the lines to wherever the text wraps; on a phone the labels become a key.
+  // A story told as a storyboard sheet: numbered frames in fine ink on hatched paper, the real artifacts as the drawings,
+  // and hand-lettered notes with arrows pointing at what matters. Frames read left to right; on a phone they stack.
+  if (b.t === 'strip') {
+    const [ctx, ...pair] = b.panels, img = F => `<img src="${abs(F.src)}" alt="${caseAttr(F.alt)}" loading="lazy" decoding="async">`
+    const arrow = `<svg class="sb-arrow" viewBox="0 0 60 24" aria-hidden="true"><path d="M3 14 C 18 4, 36 4, 52 12" /><path d="M44 5 L53 12 L43 17" /></svg>`
+    const side = (F, i) => `<div class="sb-side sb-${F.art}"><p class="sb-label"><span>${keep(F.kicker)}</span>${keep(F.title)}</p>`
+      + `<div class="sb-frame"><div class="sb-shot">${img(F)}<span class="${F.art === 'before' ? 'sb-hl' : 'sb-ring'}" aria-hidden="true"></span></div>${F.tag ? `<span class="sb-tag">${keep(F.tag)}</span>` : ''}</div>`
+      + `<p class="sb-cap">${keep(F.text)}</p></div>`
+    return `<figure class="case-board rise" aria-label="${caseAttr(b.label)}">`
+      + `<div class="sb-ctx">${ctx.quote ? `<div class="sb-chat"><p class="sb-bubble">${keep(ctx.quote)}</p><p class="sb-meta"><span>${keep(ctx.from)}</span><span>${keep(ctx.at)}</span></p></div>` : `<div class="sb-msg">${img(ctx)}</div>`}<div>${ctx.portrait ? `<img class="sb-portrait" src="${abs(ctx.portrait)}" alt="" width="76" height="76">` : ''}<p class="sb-label"><span>${keep(ctx.kicker)}</span>${keep(ctx.title)}</p><p class="sb-cap">${keep(ctx.text)}</p></div></div>`
+      + `${b.pairTitle ? `<p class="sb-pairtitle">${b.pairPortrait ? `<img class="sb-portrait" src="${abs(b.pairPortrait)}" alt="" width="76" height="76">` : ''}${keep(b.pairTitle)}</p>` : ''}<div class="sb-pair">${side(pair[0], 0)}<span class="sb-gap" aria-hidden="true">${arrow}</span>${side(pair[1], 1)}</div>`
+      + `${b.view ? photo(b.view.src, 'large', b.view.cap, b.view.alt) : ''}`
+      + `${b.punch ? `<figcaption class="sb-punch">${keep(b.punch)}</figcaption>` : ''}</figure>`
+  }
   if (b.t === 'notes') { const C = b.card
     return `<figure class="case-notes rise" data-notes>${b.tag ? `<p class="cn-tag${b.tagTone ? ' ' + b.tagTone : ''}">${keep(b.tag)}</p>` : ''}${b.kicker ? `<p class="cn-kick">${b.kicker.map(keep).join('<span aria-hidden="true">|</span>')}</p>` : ''}<div class="cn-stage">`
       // Three kinds of card: the old paragraph summary (parts of its text highlighted), the new insight card, and the
@@ -231,8 +245,8 @@ function caseInteraction(b, uid) {
           + `<div class="fb-tags" data-note="1">${C.tags.map(t => `<span class="fb-tag"><i aria-hidden="true"></i>${keep(t)}</span>`).join('')}</div>`
           + `<p class="fb-box" data-note="2">${keep(C.placeholder)}</p><p class="fb-btn">${keep(C.button)}</p></div>`
         : C.kind === 'insight'
-        ? `<div class="cn-card cn-insight"><p class="ci-head"><span class="ms" aria-hidden="true">auto_awesome</span><b>${keep(C.title)}</b><span class="ci-when">${keep(C.when)}</span></p>`
-          + `<div class="ci-row" data-note="0">${C.insights.map(([t, src]) => `<p class="ci-ins">${keep(t)} ${src.map((n, k) => `<span class="ci-src"${k === 0 && C.insights[0][1] === src ? ' data-note="1"' : ''}>${n}</span>`).join(' ')}</p>`).join('')}</div>`
+        ? `<div class="cn-card cn-insight"><p class="ci-head" data-note="0"><span class="ms" aria-hidden="true">auto_awesome</span><b>${keep(C.title)}</b><span class="ci-when">${keep(C.when)}</span></p>`
+          + `<div class="ci-row">${C.insights.map(([t, src]) => `<p class="ci-ins">${keep(t)} ${src.map((n, k) => `<span class="ci-src"${k === 0 && C.insights[0][1] === src ? ' data-note="1"' : ''}>${n}</span>`).join(' ')}</p>`).join('')}</div>`
           + `<p class="ci-owner"><span class="ci-av">${keep(C.initials)}</span>${keep(C.owner)}<span class="ci-all">View all ▾</span></p>`
           + `<div class="ci-tasks" data-note="2">${C.tasks.map(([t, w]) => `<span class="ci-task"><b>${keep(t)}</b><em>${keep(w)}</em><span class="ms" aria-hidden="true">check_circle</span></span>`).join('')}</div></div>`
         : `<div class="cn-card"><p class="cn-meta"><span>${keep(C.meta)}</span><span class="cn-thumbs" aria-hidden="true"><span class="ms">thumb_down</span><span class="ms">thumb_up</span></span></p><p class="cn-name">${keep(C.name)}</p>`
@@ -362,7 +376,7 @@ function pageHTML(id) {
   // Every page ends with a way to get in touch (BATCH.pageFixes): write, or take the résumé.
   const cv = ROOMS['home-hello'].links.find(([t]) => /sum/.test(t)), title = plain(P.title || L.title)
   const say = P.contactLock
-    ? `<section class="contact-callout ink-lock" aria-labelledby="case-contact-title"><div class="ink-lock-mark" aria-hidden="true"><img src="${abs('./assets/case-lock.svg')}" alt="" width="420" height="300" loading="lazy" decoding="async"></div><p class="lock-kicker">Under NDA</p><h2 id="case-contact-title">The rest is under lock and key</h2><p>This is a preview. Write to me for the complete case study: the research, explorations and decisions behind it, walked through together on a call.</p><a class="contact-action" href="mailto:kunalsatpal1@gmail.com?subject=${encodeURIComponent(title + ' — complete case study')}"><span>Write to me <span aria-hidden="true">↗</span></span><span class="contact-mail">kunalsatpal1@gmail.com</span></a></section>`
+    ? `<section class="contact-callout ink-lock" aria-labelledby="case-contact-title"><div class="ink-lock-mark" aria-hidden="true"><img src="${abs('./assets/case-lock.svg')}" alt="" width="420" height="300" loading="lazy" decoding="async"></div><p class="lock-kicker">Under NDA</p><h2 id="case-contact-title">The rest is under lock and key</h2><p>${keep(P.lockLine || 'This is a preview. Write to me for the complete case study: the research, explorations and decisions behind it, walked through together on a call.')}</p><a class="contact-action" href="mailto:kunalsatpal1@gmail.com?subject=${encodeURIComponent(title + ' — complete case study')}"><span>Write to me <span aria-hidden="true">↗</span></span><span class="contact-mail">kunalsatpal1@gmail.com</span></a></section>`
     : BATCH.pageFixes || EXTRA_PAGES[id] ? `<p class="psay">Want to talk about ${L.blog ? 'this' : 'this work'}? <a href="mailto:kunalsatpal1@gmail.com?subject=${encodeURIComponent(title)}">Write to me at kunalsatpal1@gmail.com</a><span aria-hidden="true"> · </span><a href="${abs(cv[1])}" target="_blank" rel="noopener">Résumé</a></p>` : ''
   // Every page offers the way on to the other case studies; on a locked preview it comes after the invitation.
   const nav = prev || next ? `<nav class="pnav${prev && next ? ' two' : ''}${P.contactLock ? ' after-lock' : ''}" aria-label="More to read">${prev}${next}</nav>` : ''

@@ -45,6 +45,7 @@ const PAGES = {
   carehub_2: { kicker: 'Hinge Health · Case study preview', title: 'CareHub 2.0', summary: 'I was the lead IC on the visual refresh of CareHub, the workspace Hinge Health’s physical therapists and coaches use every day.', contactLock: true,
     hero: './site/cases/media/carehub/hover-bento.png', desktopHero: true, heroCutout: true, heroAlt: 'The CareHub 2.0 visual system: icons, a body map, buttons and Noto Sans type.' },
   next_best_action: { kicker: 'Hinge Health · Case study preview', title: 'Holistic Care', summary: 'A member-first redesign of CareHub: the member’s whole situation in one view, then AI that helps clinicians understand it.', contactLock: true,
+    lockLine: 'How we tested the AI’s accuracy, the ideas we dropped, and the AI recommendations still in design: write to me and I’ll walk you through it on a call.',
     hero: './site/cases/media/carehub/after-hd.jpg', desktopHero: true, heroCaption: 'The member-first CareHub member record', heroAlt: 'The refreshed CareHub member record: a labelled navigation rail, an AI summary with suggested actions, engagement, trends, the current focus with a body map, and the conversation.' },
   promo: { kicker: 'Gojek · GoFood growth', title: 'Solving for promo discovery', summary: 'Streamlining the promo journey: 4% incremental conversions and 5× ad revenue.',
     chips: [['4%', 'session conversions'], ['5×', 'ad revenue'], ['6', 'months of testing']], hero: './site/cases/media/phone_promo.png' },

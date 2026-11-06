@@ -66,7 +66,9 @@ function buildLabels() {
     labelLayer.appendChild(el); L.el = el
     const peekOn = () => levelPeek(L.id)
     el.addEventListener('pointerenter', peekOn); el.addEventListener('focusin', peekOn)
-    el.addEventListener('pointerleave', () => levelPeek(null)); el.addEventListener('focusout', () => levelPeek(null))
+    // Leaving a name with the mouse, the map's own pointer pick says what comes next (cityHover), so
+    // the building doesn't sink for a frame and rise again when the pointer lands on it.
+    el.addEventListener('pointerleave', e => { if (e.pointerType !== 'mouse' || !city.active || !onMap(e.relatedTarget)) levelPeek(null) }); el.addEventListener('focusout', () => levelPeek(null))
   }
 }
 // Peek at a level: its building lifts and glows, and a small note opens beside it.

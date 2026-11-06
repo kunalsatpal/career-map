@@ -4,6 +4,31 @@
  "blocks": [
   {
    "t": "h",
+   "text": "My role"
+  },
+  {
+   "t": "highlights",
+   "label": "My role at a glance",
+   "items": [
+    [
+     "Lead IC",
+     "Design lead",
+     "I led the member-first redesign of CareHub, end to end."
+    ],
+    [
+     "Prompts",
+     "Prompt design",
+     "I shaped the AI summary prompts: what to show, for which trigger, with examples."
+    ],
+    [
+     "Data",
+     "Data analysis",
+     "I turned workflow data and evaluation results into design priorities."
+    ]
+   ]
+  },
+  {
+   "t": "h",
    "text": "The problem"
   },
   {
@@ -32,70 +57,55 @@
   },
   {
    "t": "h",
-   "text": "A sneak peek"
+   "text": "A sneak peek: one member, one morning"
   },
   {
    "t": "p",
-   "html": "I led a member-first redesign: the member’s whole situation in one view, then AI that helps clinicians understand it."
+   "html": "Amelia is one of about 100 members her PT will see today. Here’s what the PT saw when she reached out, before and after."
   },
   {
-   "t": "img",
-   "size": "large",
-   "src": "./site/cases/media/nba/showcase/final.jpg",
-   "alt": "The final CareHub member view: every open task above the summary, beside the conversation.",
-   "cap": "Milestone 1, shipped: every open task above the summary, beside the conversation."
-  },
-  {
-   "t": "notes",
-   "tag": "Final design",
-   "tagTone": "new",
-   "card": {
-    "kind": "insight",
-    "title": "Needs help with sudden pain increase",
-    "when": "Updated 2h ago",
-    "insights": [
-     [
-      "Pain has reduced by 30 over 4 weeks after adding squats to the routine.",
-      [
-       1,
-       2
-      ]
-     ],
-     [
-      "Mentioned feeling stronger while climbing stairs in the health log on 24th Sept.",
-      [
-       1
-      ]
-     ]
-    ],
-    "initials": "SN",
-    "owner": "Susie N",
-    "tasks": [
-     [
-      "Unread message",
-      "3h"
-     ],
-     [
-      "Health log note",
-      "5h"
-     ]
-    ],
-    "notes": [
-     [
-      "good",
-      "Quick context to orient the team"
-     ],
-     [
-      "good",
-      "Every insight linked to its source"
-     ],
-     [
-      "good",
-      "The actual events happening"
-     ]
-    ]
+   "t": "strip",
+   "label": "One member, one morning: how the AI summary changed",
+   "panels": [
+    {
+     "art": "message",
+     "text": "Her neck pain won’t let up, and she tells her care team. Her PT opens her profile to reply.",
+     "src": "./site/cases/media/nba/story/amelia-msg.jpg",
+     "alt": "Amelia’s message: the neck pain is a constant dull ache that makes it hard to concentrate on anything.",
+     "title": "Amelia writes in",
+     "kicker": "10:50 am",
+     "portrait": "./assets/case-member.svg",
+     "quote": "Hi Darshan. The neck pain is this constant dull ache that never really goes away, and it makes it hard to concentrate on anything. My back feels tight and stiff, especially when I wake up in the morning or after sitting for a long time, like at work.",
+     "from": "Amelia",
+     "at": "10:50 am"
+    },
+    {
+     "art": "before",
+     "text": "It opens with her age, job and hometown. What she needs is buried in the paragraph.",
+     "src": "./site/cases/media/nba/story/old-summary.jpg",
+     "alt": "The old AI summary for Amelia: age, job and hometown first; her pain only in the third sentence.",
+     "title": "Old summary",
+     "tag": "Demographics and full history",
+     "kicker": "Before"
+    },
+    {
+     "art": "after",
+     "text": "It opens with what she needs, then the evidence, with every point linked to its source.",
+     "src": "./site/cases/media/nba/story/new-summary.jpg",
+     "alt": "The new summary card, headed ‘Needs help with sudden pain increase’, with sourced insights and open tasks below.",
+     "title": "New AI context",
+     "tag": "Her need, first line",
+     "kicker": "After"
+    }
+   ],
+   "punch": "Twenty seconds saved per member adds up to about half an hour back for every PT, every day.",
+   "view": {
+    "src": "./site/cases/media/nba/story/final-view.jpg",
+    "cap": "The final member view: Amelia’s need at the top, her own words beside it.",
+    "alt": "The final CareHub member view for Amelia: the AI summary ‘Needs help with sudden pain increase’ at the top, with sourced insights and open tasks, beside the conversation with her own message."
    },
-   "cap": "Milestone 2, evaluated: AI that sums up what changed and links every point to its source."
+   "pairTitle": "What her PT sees",
+   "pairPortrait": "./assets/case-pt.svg"
   },
   {
    "t": "h",
@@ -108,17 +118,22 @@
     [
      "~6%",
      "Less member-profile time",
-     "Milestone 1: 5 min 40 sec → 5 min 20 sec."
+     "Milestone 1, shipped: 5 min 40 sec → 5 min 20 sec."
     ],
     [
      "220 hrs",
      "Saved every day",
-     "Across a team of 600 providers."
+     "From Milestone 1, across 600 providers."
     ],
     [
      "$400k",
      "Monthly savings",
-     "A notional estimate."
+     "From Milestone 1, a notional estimate."
+    ],
+    [
+     "~4%",
+     "Less message-crafting time",
+     "Milestone 2, the AI summary, in evaluation."
     ]
    ]
   }

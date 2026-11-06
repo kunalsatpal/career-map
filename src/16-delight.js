@@ -70,10 +70,12 @@ function decorAt(X, Y) {
   let best = 0, bestD = Infinity
   for (let id = 1; id < DECOR.length; id++) {
     const D = DECOR[id]
-    if (!decorSeen(D, v, t)) continue
+    if (D.hidden || !decorSeen(D, v, t)) continue
     const b = D.base || 0, [x0, y0] = at3(D.x, D.y, b, v), [x1, y1] = at3(D.x, D.y, b + D.h, v), [xr, yr] = at3(D.x + D.r, D.y, b, v)
     const d = segDist(X, Y, x0, y0, x1, y1)
-    if (d < Math.max(14, Math.hypot(xr - x0, yr - y0) * 1.25) && d < bestD) { best = id; bestD = d }
+    // The one already under the pointer reaches a little further, so its edge doesn't flicker on and off.
+    const reach = Math.max(18, Math.hypot(xr - x0, yr - y0) * 1.25) * (id === decorHot ? 1.4 : 1)
+    if (d < reach && d < bestD) { best = id; bestD = d }
   }
   return best
 }
@@ -104,7 +106,7 @@ function decorHover(id) {
   if (ON_HOVER.has(DECOR[id].kind)) return decorClick(id)
   if (decorBusy(id)) return
   stir(id)
-  if (DECOR[id].kind === 'wizard') say(DECOR[id], pick(HELLO))
+  if (DECOR[id].kind === 'wizard') say(DECOR[id], wizardLine())
 }
 // The weights (and the controller) keep going while the pointer rests on them, a rep (or a combo)
 // each time, and stop as soon as it leaves.
@@ -155,7 +157,7 @@ function idleStir() {
   setTimeout(idleStir, 5200 + Math.random() * 3000)
   if (!decorLive() || document.hidden || decorRaf || assemblyRaf || flyId || drag || performance.now() - lastMove < 1800) return
   const v = view(), t = now(), on = []
-  for (let id = 1; id < DECOR.length; id++) if (id !== decorHot && DECOR[id].kind !== 'lamp' && decorSeen(DECOR[id], v, t, -30)) on.push(id)
+  for (let id = 1; id < DECOR.length; id++) if (id !== decorHot && DECOR[id].kind !== 'lamp' && !DECOR[id].hidden && decorSeen(DECOR[id], v, t, -30)) on.push(id)
   if (on.length) stir(pick(on), true)
 }
 setTimeout(idleStir, 9000)

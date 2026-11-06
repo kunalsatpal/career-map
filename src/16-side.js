@@ -1,133 +1,106 @@
 // =====================================================================================
 // Side missions: things that are there for whoever lingers or pokes about, and that never get in
 // the way of the road.
-//   wanderCat   a black cat naps beside the road at Hinge. Come near it and it stretches and pads off
-//               up the road, to the isles of earlier work; the second time, on to the lighthouse, where
-//               it curls up, and stays.
+//   pawTrail    the wizard has lost his cat: her paw prints wander near the road in each world; click
+//               one and there she is, "meow!", and off she runs.
 //   fireflies   linger in About me's yard and a few fireflies come out over the garden.
 // Nothing here runs until it's called for, and every effect removes itself.
 // =====================================================================================
 
-// ---------- The wandering cat ----------
-// A black cat. Sitting, seen side on as the engraver draws a creature on a chart, its eyes catching
-// the light; and curled up asleep.
-const CAT_SIT = '<svg width="30" height="26" viewBox="0 0 30 26"><path class="tail" d="M7 23Q1 23 1.5 17Q2 13 5 12"/><path d="M6 24Q5 15 10 12Q12 9 15 9L16 3.5L18.6 7.4H20.6L23 3.5L23.6 9.4Q26 12 24.4 15Q23.4 17.2 20.8 17.6Q22 20.5 21 24Z"/><path class="fine" d="M13 24V19"/><circle class="eye" cx="19.4" cy="12.4" r=".95"/><circle class="eye" cx="22.4" cy="12.4" r=".95"/></svg>'
-const CAT_CURL = '<svg width="34" height="22" viewBox="0 0 34 22"><path d="M3 19Q2.5 11 10.5 9Q17 7.6 22.4 9.6L23.4 4.6L26.4 8Q28 7.8 29.4 8.4L31.4 5L31.4 10.4Q33 13 31.6 15.8Q29.6 19.4 24 19.4H5Q3 19.4 3 19Z"/><path class="tuck" d="M4.8 18.4Q8.4 14.4 15 15.2Q19.6 15.8 22 18.6"/><path class="tuck" d="M26.4 13.4q1.1 .9 2.2 0"/><text class="zz" x="30" y="2">z</text><text class="zz s" x="33.6" y="-2.6">z</text></svg>'
-const CAT = { el: null, spots: [], i: 0, busy: false }
-function catSpots() {
-  const spots = [], clearOf = (x, y) => onLand(x, y) && !PARTS.some(p => Math.hypot(p.c[0] - x, p.c[1] - y) < p.size / 2 + 26)
-    && !TREES.some(([tx, ty]) => Math.hypot(tx - x, ty - y) < 42) && distTo(PATH_ALL, x, y) > 20
-    // Clear of everything that stands up off the paper (the road's trees, the woods, the hills, 04-ground
-    // CARDS): nothing just in front of it to hide it, nothing just behind it for it to stand over.
-    && !CARDS.some(c => Math.abs(c.x - x) < c.w / 2 + 16 && y > c.y - c.h - 20 && y < c.y + 40)
-  // Three places, so it's found twice and then stays: Hinge, where the road starts; the isles of earlier
-  // work; and, last, the lighthouse.
-  for (const w of WORLDS.filter(w => w.key === 'hinge' || w.key === 'earlier')) {
-    // Beside the road, near the middle of the world, whichever side is clear.
-    const mid = (w.y0 + w.y1) / 2
-    search: for (let dy = 0; dy < (w.y1 - w.y0) / 2 - 80; dy += 30) for (const y of [mid + dy, mid - dy]) for (const d of [-44, 44, -64, 64, -88, 88, -112, 112]) {
-      const x = pathAtY(y)[0] + d
-      if (clearOf(x, y)) { spots.push([x, y]); break search }
-    }
+// ---------- The wizard's cat ----------
+// The wizard at Hinge has lost his cat ("Have you seen my cat?"). As you come into each world on land, a
+// trail of her paw prints wanders over the open ground near the road, pressed into the paper and fading,
+// like the footprints. Click a print and her trail stops, and there she is, a ginger tabby, where it had
+// got to: "meow!", a moment sitting, and she fades away. The wizard thanks you, the next time you pass.
+const PAWS = { asked: false, found: false, thanked: false }
+const PAW = '<svg width="8" height="8" viewBox="-4 -4 8 8" aria-hidden="true"><ellipse cx="0" cy="1.2" rx="1.7" ry="1.4"/><circle cx="-1.9" cy="-1.4" r=".75"/><circle cx="0" cy="-2.3" r=".75"/><circle cx="1.9" cy="-1.4" r=".75"/></svg>'
+// A paw print every third step, a little to either side, as a cat's are; enough to be noticed, not more.
+// Her trail pauses while she's been found (PAWS.halt).
+function pawStamp(n) {
+  const pool = Array.from({ length: n }, () => sprite(PAW, 'paw step'))
+  let i = 0, k = 0
+  return (x, y, ang) => {
+    if (PAWS.halt || k++ % 3) return
+    const el = pool[i++ % n], side = i % 2 ? 4 : -4, a = ang * Math.PI / 180
+    el.style.transform = `translate(${f(x - Math.sin(a) * side - 4)}px,${f(y + Math.cos(a) * side - 4)}px) rotate(${f(ang + 90)}deg) scale(1.8)`
+    el.getAnimations().forEach(an => an.cancel())
+    el.dataset.x = f(x); el.dataset.y = f(y); el.dataset.a = f(ang); PAWS.head = [x, y, ang]; PAWS.headAt = performance.now()
+    // Each print is pressed in, a quick small settle as it lands; the first few of a trail a little darker,
+    // to catch the eye. Clickable while it shows, until it has all but faded.
+    const first = (PAWS.n = (PAWS.n || 0) + 1) <= 4
+    el.animate([{ scale: '1.5' }, { scale: '1' }], { duration: 240, easing: 'cubic-bezier(.2, .8, .3, 1)' })
+    el.animate([{ opacity: 0, pointerEvents: 'none' }, { opacity: first ? .9 : .75, offset: .04, pointerEvents: 'auto' }, { opacity: .55, offset: .55, pointerEvents: 'auto' }, { opacity: .08, offset: .93, pointerEvents: 'auto' }, { opacity: 0, pointerEvents: 'none' }], { duration: 7000, easing: 'linear', fill: 'forwards' })
   }
-  // The last place: curled up in the open beside the lighthouse, toward the post box, clear of its base.
-  const L = ROOMS['home-hello'].part
-  spots.push([L.cx + L.r * 1.5, L.cy + L.r * 1.3])
-  return spots
 }
-// It stands up off the paper, as the woods and trees do: its place is on the map, but it is drawn
-// upright, at the size things are there, and placed each frame (sideFrame).
-function catPlace() {
-  const last = CAT.i === CAT.spots.length - 1
-  CAT.el.innerHTML = last ? CAT_CURL : CAT_SIT
-  CAT.el.classList.toggle('asleep', last)
-  placeCat(view())
+// Open ground she'll walk on: land, off the road, clear of the buildings.
+const openGround = (x, y) => onLand(x, y) && distTo(PATH_ALL, x, y) > 16 && !PARTS.some(p => Math.hypot(p.c[0] - x, p.c[1] - y) < p.size / 2 + 14)
+// Her walk: from just beside the road, near the middle of the view, wandering north over the open ground, turning this
+// way and that, now and then doubling back a little.
+function wanderPath(w, to) {
+  const r = Math.random, [rx] = pathAtY(cam.cy - 60), side = r() < .5 ? -1 : 1
+  let x = rx + side * (30 + r() * 25), y = cam.cy - 60, h = -Math.PI / 2 + side * .4
+  if (!openGround(x, y)) { x = rx - side * (30 + r() * 25); h = -Math.PI / 2 - side * .4 }
+  if (!openGround(x, y)) { x = rx + side * (60 + r() * 30); h = -Math.PI / 2 + side * .4 }
+  const pts = [[x, y]]
+  for (let i = 0; i < 26 && y > w.y0 + 40; i++) {
+    const goal = to ? Math.atan2(to[1] - y, to[0] - x) : -Math.PI / 2
+    h += (r() - .5) * .9 + Math.sin(goal - h) * (to ? .35 : .12)
+    if (r() < .06) h += (r() < .5 ? -1 : 1) * 1.6
+    let nx = x + Math.cos(h) * 13, ny = y + Math.sin(h) * 13
+    if (!openGround(nx, ny)) { h += Math.PI * (.4 + r() * .4); nx = x + Math.cos(h) * 13; ny = y + Math.sin(h) * 13; if (!openGround(nx, ny)) continue }
+    x = nx; y = ny; pts.push([x, y])
+    if (to && Math.hypot(to[0] - x, to[1] - y) < 26) break
+  }
+  return pts
 }
+let pawWalk = null
+function pawTrail(w) {
+  if (reduce || !TILT) return
+  pawWalk ||= pawStamp(60)
+  const pts = wanderPath(w, null)
+  PAWS.n = 0
+  if (pts.length > 6) ride(pawWalk, pts, 90, 0)
+}
+if (BATCH.pawTrail) for (const w of WORLDS) if (w.key !== 'earlier') MOMENTS.push({ a: w.y0 + 160, b: w.y1 - 120, fire: () => pawTrail(w), armed: true })
+
+// The cat herself, only seen when you catch her up: a ginger tabby, in ink, standing up off the paper where
+// her trail has got to, a soft shadow under her; placed each frame (sideFrame). She leaves as she came:
+// she just fades away where she sat.
+const CAT_SIT = '<svg width="30" height="26" viewBox="0 0 30 26"><path class="tail" d="M7 23Q1 23 1.5 17Q2 13 5 12"/><path d="M6 24Q5 15 10 12Q12 9 15 9L16 3.5L18.6 7.4H20.6L23 3.5L23.6 9.4Q26 12 24.4 15Q23.4 17.2 20.8 17.6Q22 20.5 21 24Z"/><path class="stripe" d="M8.4 15.4Q10.4 15 11.4 16.6M7.6 18.6Q9.8 18 10.8 19.8M7.4 21.6Q9.4 21.2 10.2 22.6M18 9.6l.5 1.7M20.8 9.3l.1 1.7"/><path class="fine" d="M13 24V19"/><circle class="eye" cx="19.4" cy="12.4" r=".95"/><circle class="eye" cx="22.4" cy="12.4" r=".95"/></svg>'
+const CAT = { el: null, at: null }
 function placeCat(v) {
   if (!CAT.el) return
-  const [x, y] = CAT.spots[CAT.i], [X, Y, z] = at3(x, y, 0, v), show = z > NEAR && fogAt(z, v) < .5 && X > -40 && X < VW + 40 && Y > -40 && Y < VH + 40 && !caseId
+  const [X, Y, z] = at3(CAT.at[0], CAT.at[1], 0, v), show = z > NEAR && fogAt(z, v) < .5 && X > -60 && X < VW + 60 && Y > -60 && Y < VH + 60 && !caseId
   CAT.el.style.display = show ? '' : 'none'
-  if (show) CAT.el.style.transform = tr(X, Y, ` scale(${(depthScale(z, v) * .8).toFixed(3)})`)
+  if (show) CAT.el.style.transform = tr(X, Y, ` scale(${(depthScale(z, v) * .9).toFixed(3)})`)
 }
-function buildCat() {
-  CAT.spots = catSpots()
-  if (CAT.spots.length < 2) return
-  CAT.el = document.createElement('div'); CAT.el.className = 'cat'; CAT.el.setAttribute('aria-hidden', 'true')
-  labelLayer.prepend(CAT.el)
-  catPlace()
-  // It wakes only for a pointer that rests on it a moment, not one passing over on its way elsewhere.
-  let rest = 0
-  CAT.el.addEventListener('pointerenter', e => { if (e.pointerType === 'mouse') { clearTimeout(rest); rest = setTimeout(catWakes, 380) } })
-  CAT.el.addEventListener('pointerleave', () => clearTimeout(rest))
-  // A tap on a phone wakes it too, and doesn't start a drag of the map.
-  CAT.el.addEventListener('pointerdown', e => { e.stopPropagation(); if (e.pointerType !== 'mouse') catPet() })
-  // A click: wakes it, or, asleep by the lighthouse, pats it (catLife).
-  CAT.el.addEventListener('click', e => { e.stopPropagation(); BATCH.catLife ? catPet() : catWakes() })
+// A print clicked: her wandering trail stops, and there she is at the head of it (or by the print, if
+// her walk is over): "meow!", a moment sitting, then she's off.
+function pawClick(el) {
+  if (CAT.el || reduce) return
+  const [x, y, ang] = PAWS.head && performance.now() - (PAWS.headAt || 0) < 9000 ? PAWS.head : [+el.dataset.x, +el.dataset.y, +el.dataset.a]
+  const a = ang * Math.PI / 180
+  PAWS.halt = true; PAWS.found = true
+  CAT.el = document.createElement('div'); CAT.el.className = 'cat' + (Math.cos(a) < 0 ? ' left' : ''); CAT.el.setAttribute('aria-hidden', 'true')
+  CAT.el.innerHTML = `<i class="shadow"></i><div class="body">${CAT_SIT}</div>`
+  labelLayer.prepend(CAT.el); CAT.at = [x, y]
+  CAT.el.querySelector('.body').animate([{ scale: '.3', opacity: 0 }, { scale: '1.12', opacity: 1, offset: .6 }, { scale: '1', opacity: 1 }], { duration: 380, easing: 'cubic-bezier(.2, .8, .3, 1)' })
+  say({ x, y, base: 0, h: 16 }, 'meow!', 'small')
+  placeCat(view())
+  setTimeout(() => {
+    const cat = CAT.el
+    if (!cat) return
+    // She just vanishes, where she sat; her wandering trail can carry on after.
+    cat.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 600, easing: 'ease-in-out', fill: 'forwards' }).finished.then(() => { cat.remove(); if (CAT.el === cat) CAT.el = null; PAWS.halt = false })
+  }, 1900)
 }
-// Paw prints, pressed into the paper toward where it's going, fading as it goes.
-const PAW = '<svg width="8" height="8" viewBox="-4 -4 8 8" aria-hidden="true"><ellipse cx="0" cy="1.2" rx="1.7" ry="1.4"/><circle cx="-1.9" cy="-1.4" r=".75"/><circle cx="0" cy="-2.3" r=".75"/><circle cx="1.9" cy="-1.4" r=".75"/></svg>'
-function pawsToward([x0, y0], [x1, y1]) {
-  const L = Math.hypot(x1 - x0, y1 - y0) || 1, ux = (x1 - x0) / L, uy = (y1 - y0) / L, ang = Math.atan2(uy, ux) * 180 / Math.PI + 90
-  for (let i = 0; i < 7; i++) {
-    const side = i % 2 ? 3 : -3, x = x0 + ux * (10 + i * 11) - uy * side, y = y0 + uy * (10 + i * 11) + ux * side
-    const p = sprite(PAW, 'paw'); p.style.transform = `translate(${f(x - 4)}px,${f(y - 4)}px) rotate(${f(ang)}deg)`
-    p.animate([{ opacity: 0 }, { opacity: .75, offset: .1 }, { opacity: 0 }], { duration: 2600, delay: i * 110, fill: 'both' }).finished.then(() => p.remove(), () => p.remove())
-  }
-}
-function catWakes() {
-  if (CAT.busy || reduce) return
-  const last = CAT.i === CAT.spots.length - 1, svg = CAT.el.firstChild
-  // Asleep by the lighthouse: it only purrs, two slow breaths.
-  if (last) {
-    CAT.busy = true; catSays('prrr…')
-    svg.animate([{ transform: 'scale(1)' }, { transform: 'scale(1.06, .94)' }, { transform: 'scale(1)' }], { duration: 1100, iterations: 2, easing: 'ease-in-out' }).finished.then(() => { CAT.busy = false }, () => { CAT.busy = false })
-    return
-  }
-  CAT.busy = true
-  catSays('mrrp?')
-  const from = CAT.spots[CAT.i], to = CAT.spots[CAT.i + 1]
-  // A long stretch, then off up the road.
-  svg.animate([{ transform: 'none' }, { transform: 'scale(1.18, .82) skewX(-8deg)', offset: .45 }, { transform: 'none' }], { duration: 700, easing: 'ease-in-out' }).finished.then(() => {
-    pawsToward(from, [from[0] + (to[0] - from[0]) * .1, from[1] - 90])
-    return CAT.el.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 450, fill: 'both' }).finished
-  }).then(() => {
-    CAT.i++; catPlace()
-    return CAT.el.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 600, fill: 'both' }).finished
-  }).then(() => { CAT.busy = false }, () => { CAT.busy = false })
-}
-
-// Little things it does (catLife): a word in a bubble; now and then a blink or a flick of the tail; its
-// eyes following the pointer as it comes near, and a tilt of the head; a heart, if you pat it asleep.
-function catSays(text) { const [x, y] = CAT.spots[CAT.i]; say({ x, y, base: 0, h: 10 }, text, 'small') }
-const catShown = () => CAT.el && CAT.el.style.display !== 'none' && !document.hidden && !reduce
-setInterval(() => {
-  if (!BATCH.catLife || !catShown() || CAT.busy) return
-  const svg = CAT.el.firstChild, asleep = CAT.i === CAT.spots.length - 1
-  if (asleep) { svg.querySelectorAll('.zz').forEach((z, i) => z.animate([{ translate: '0 0', opacity: 1 }, { translate: '1px -3px', opacity: .3 }, { translate: '0 0', opacity: 1 }], { duration: 2200, delay: i * 300, easing: 'ease-in-out' })); return }
-  if (Math.random() < .55) svg.querySelectorAll('.eye').forEach(e => e.animate([{ scale: '1 1' }, { scale: '1 .1', offset: .5 }, { scale: '1 1' }], { duration: 180 }))
-  else svg.querySelector('.tail')?.animate([{ rotate: '0deg' }, { rotate: '-16deg', offset: .3 }, { rotate: '8deg', offset: .65 }, { rotate: '0deg' }], { duration: 900, easing: 'ease-in-out' })
-}, 4200)
-let catNear = false, catLook = 0
-addEventListener('pointermove', e => {
-  if (!BATCH.catLife || e.pointerType !== 'mouse' || catLook) return
-  catLook = requestAnimationFrame(() => {
-    catLook = 0
-    if (!catShown() || CAT.busy || CAT.i === CAT.spots.length - 1) return
-    const svg = CAT.el.firstChild, r = svg.getBoundingClientRect(), cx = r.x + r.width * .7, cy = r.y + r.height * .45
-    const dx = e.clientX - cx, dy = e.clientY - cy, d = Math.hypot(dx, dy), near = d < 120
-    svg.querySelectorAll('.eye').forEach(el => { el.style.translate = near && d ? `${(dx / d * .7).toFixed(2)}px ${(dy / d * .6).toFixed(2)}px` : '' })
-    // Coming near: it looks up, a tilt of the head toward you.
-    if (near && !catNear) svg.animate([{ rotate: '0deg' }, { rotate: (dx < 0 ? -5 : 5) + 'deg', offset: .4 }, { rotate: '0deg' }], { duration: 600, easing: 'ease-in-out' })
-    catNear = near
-  })
-}, { passive: true })
-const HEART = '<svg width="12" height="11" viewBox="-6 -5.5 12 11"><path d="M0 4.6C-4.6 1.4 -5.4 -1.2 -4.2 -3.2C-3 -5 -.8 -4.4 0 -2.6C.8 -4.4 3 -5 4.2 -3.2C5.4 -1.2 4.6 1.4 0 4.6Z"/></svg>'
-function catPet() {
-  if (!BATCH.catLife || reduce || !CAT.el) return
-  if (CAT.i !== CAT.spots.length - 1) return catWakes()
-  const r = CAT.el.firstChild.getBoundingClientRect(), o = labelLayer.getBoundingClientRect(), X = r.x - o.x + r.width + 4, Y = r.y - o.y + r.height * .3
-  // Off to its side, clear of any bubble over its head, drifting up and away.
-  fly('heart', HEART, [{ transform: tr(X, Y, ' scale(.4)'), opacity: 0 }, { transform: tr(X + 6, Y - 8, ' scale(1)'), opacity: 1, offset: .3 }, { transform: tr(X + 12, Y - 28, ' scale(.9)'), opacity: 0 }], { duration: 1500, easing: 'ease-out' })
+// What the wizard says when you come by (16-delight decorHover).
+function wizardLine() {
+  if (!BATCH.pawTrail) return pick(HELLO)
+  // He only thanks you if he asked you first; and once she's been found, he has no need to ask.
+  if (PAWS.found && PAWS.asked && !PAWS.thanked) { PAWS.thanked = true; return 'You found her? Thank you!' }
+  if (!PAWS.asked && !PAWS.found) { PAWS.asked = true; return 'Have you seen my cat?' }
+  return !PAWS.found && Math.random() < .3 ? 'Still no sign of my cat…' : pick(HELLO)
 }
 
 // ---------- Cursors ----------

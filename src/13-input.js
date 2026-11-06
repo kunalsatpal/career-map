@@ -27,9 +27,11 @@ addEventListener('pointerdown', e => {
 })
 // Where the mouse rests, so the building under it is found again once the map stops moving.
 let pointerAt = null
+// The names over the buildings sit in their own layer, above the map but part of it.
+const onMap = t => vp.contains(t) || !!t?.closest?.('#labels')
 addEventListener('pointermove', e => {
-  if (e.pointerType === 'mouse') pointerAt = vp.contains(e.target) ? [e.clientX, e.clientY] : null
-  if (!drag || e.pointerId !== drag.id) { if (!drag && e.pointerType === 'mouse' && vp.contains(e.target)) cityHover(e.clientX, e.clientY, e.target); return }
+  if (e.pointerType === 'mouse') pointerAt = onMap(e.target) ? [e.clientX, e.clientY] : null
+  if (!drag || e.pointerId !== drag.id) { if (!drag && e.pointerType === 'mouse' && onMap(e.target)) cityHover(e.clientX, e.clientY, e.target); return }
   if (!drag.moved && Math.abs(e.clientY - drag.sy) > 6) { drag.moved = true; document.body.classList.add('dragging'); levelPeek(null) }
   if (!drag.moved) return
   const dy = e.clientY - drag.y, now = performance.now(), dt = now - drag.t
@@ -78,10 +80,12 @@ function glide() {
 }
 // A click on the sheet: a building, a room on the plan, or nothing (which closes the note).
 function activate(target, X, Y) {
+  // A paw print of the wizard's cat (16-side), while it shows, comes before whatever is under it.
+  if (target.closest?.('.paw')) return pawClick(target.closest('.paw'))
   // A prop that does its trick on hover hands the click to its building (BATCH.propsShareHover)
   // when the building has a page or links to open; otherwise the click plays the trick again, the
   // barbell's next rep. On a touch screen, where nothing hovers, the tap plays the trick as well.
-  const dec = decorAt(X, Y), share = BATCH.propsShareHover && dec && ON_HOVER.has(DECOR[dec].kind) && DECOR[dec].room
+  const dec = decorAt(X, Y), share = BATCH.propsShareHover && dec && ON_HOVER.has(DECOR[dec].kind) && propRoom(dec, X, Y)
   // Under a finger a building comes first, and decor answers only where there is none (BATCH.mobile2).
   if (dec && !share && BATCH.mobile2 && coarse) { const built = cityPick(X, Y, peeked); if (built) return clickPlace(built) }
   if (share && (coarse || hasCase(share) || ROOMS[share].see || ROOMS[share].links)) { if (decorHot !== dec) decorClick(dec); return clickPlace(share) }
