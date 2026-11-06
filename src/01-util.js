@@ -8,7 +8,7 @@ const coarse = matchMedia('(pointer: coarse)').matches
 // A touch phone: a coarse pointer and a small screen (its shorter side, so turning it doesn't change it).
 // A desktop or laptop is never one, whatever its window size; the phone-only batches check this.
 const PHONE = coarse && Math.min(screen.width, screen.height) <= 760
-const PHONE_LAYERS = PHONE && BATCH.phoneLayers, PHONE_FRAME = PHONE && BATCH.phoneFrame, PHONE_START = PHONE && BATCH.phoneStart, PHONE_LITE = PHONE && BATCH.phoneLite
+const PHONE_LAYERS = PHONE && BATCH.phoneLayers, PHONE_FRAME = PHONE && BATCH.phoneFrame, PHONE_START = PHONE && BATCH.phoneStart, PHONE_LITE = PHONE && BATCH.phoneLite, PHONE_SWIPE = PHONE && BATCH.phoneSwipe
 const $ = id => document.getElementById(id)
 const SVGNS = 'http://www.w3.org/2000/svg'
 const SITE = 'https://kunalsatpal.com/kunalsatpal.com/'

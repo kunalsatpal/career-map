@@ -37,7 +37,7 @@ addEventListener('pointermove', e => {
   if (!drag.moved && Math.abs(e.clientY - drag.sy) > 6) { drag.moved = true; document.body.classList.add('dragging'); levelPeek(null) }
   if (!drag.moved) return
   const dy = e.clientY - drag.y, now = performance.now(), dt = now - drag.t
-  nudge(dy)
+  if (PHONE_SWIPE) leanTo(e.clientY - drag.sy, drag.cy0); else nudge(dy)
   if (dt > 0) vel = dy / dt
   drag.y = e.clientY; drag.t = now
 })
@@ -66,8 +66,19 @@ function stopsOnRoad() {
   }
   return roadStops = s.map(y => clamp(y, END_Y, START_Y)).sort((a, b) => b - a).filter((y, i, a) => !i || a[i - 1] - y > 150)
 }
+// A phone's swipe (BATCH.phoneSwipe): while the finger moves, the map only leans toward the stop it is heading
+// for, at most a third of the way, so it never runs past it; let go, and the swipe carries you there. Before,
+// the map followed the finger one to one, and a phone-length swipe (about 1,200 units of road) ran past the
+// next stop, so letting go flew it back to the nearest one: a lurch forward and a jump back on every swipe.
+function leanTo(dy, cy0) {
+  const S = stopsOnRoad(), fwd = dy > 0 || (PHONE_START && cy0 >= START_Y - 1), to = fwd ? S.find(y => y < cy0 - 30) : S.findLast(y => y > cy0 + 30)
+  if (to == null) return
+  const k = clamp(Math.abs(dy) / (VH * .45), 0, 1)
+  cam.cy = cy0 + (to - cy0) * .3 * (1 - (1 - k) ** 2); clampCam(); moved(); requestRender()
+}
 function swipeTo(dy, cy0) {
-  if (Math.abs(dy) < 24 && Math.abs(vel) < .25) return
+  // Too small to be a swipe: on a phone the map comes back from its lean (BATCH.phoneSwipe).
+  if (Math.abs(dy) < 24 && Math.abs(vel) < .25) { if (PHONE_SWIPE && Math.abs(cam.cy - cy0) > .5) flyTo(0, cy0, 0, 250); return }
   const S = stopsOnRoad(), fwd = dy > 0 || (PHONE_START && cy0 >= START_Y - 1), ahead = y => fwd ? y < cy0 - 30 : y > cy0 + 30
   let to = fwd ? S.find(ahead) : S.findLast(ahead)
   if (to == null) return

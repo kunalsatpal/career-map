@@ -53,4 +53,5 @@ const BATCH = {
   phoneFrame: true,      // each city is framed in the middle of the screen, not cut off at the side the road runs past
   phoneStart: true,      // at the start of the road a swipe either way begins the walk; there is nothing behind you
   phoneLite: true,       // a phone that can't keep up (well under 20 fps while moving) drops to the flat ink map
+  phoneSwipe: true,      // a swipe leans the map toward the next stop, then carries you there: it no longer runs past the stop under the finger and jumps back
 }
