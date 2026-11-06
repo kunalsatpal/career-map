@@ -928,6 +928,12 @@ body.reading-case #viewport, body.reading-case #dusk, body.reading-case #gl, bod
   body.m2 .lclose, body.m2 .pback { min-height: 44px; }
 }
 
+/* ---------- Phones, third pass (00-batches.js: phoneLayers) ---------- */
+/* Only on a touch phone (body.phone, set from PHONE in 01-util), never on a desktop. A footprint, tyre mark or
+   paw print is its own compositor layer only while it fades (its animation promotes it), not for good: the
+   compositor then has a few dozen layers to carry every frame instead of hundreds. */
+body.ph-layers .sprite.step, body.ph-layers .gymprint { will-change: auto; }
+
 /* ---------- First-visit warm-up (00-batches.js: prewarm) ---------- */
 /* Copies drawn once, all but invisible, at the middle of the screen, so the graphics card builds their
    programs during the opening. They are taken away after a moment. */

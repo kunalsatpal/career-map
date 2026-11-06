@@ -17,7 +17,7 @@ const PAW = '<svg width="8" height="8" viewBox="-4 -4 8 8" aria-hidden="true"><e
 // A paw print every third step, a little to either side, as a cat's are; enough to be noticed, not more.
 // Her trail pauses while she's been found (PAWS.halt).
 function pawStamp(n) {
-  const pool = Array.from({ length: n }, () => sprite(PAW, 'paw step'))
+  const pool = idlePool(Array.from({ length: n }, () => sprite(PAW, 'paw step')))
   let i = 0, k = 0
   return (x, y, ang) => {
     if (PAWS.halt || k++ % 3) return
@@ -29,7 +29,7 @@ function pawStamp(n) {
     // to catch the eye. Clickable while it shows, until it has all but faded.
     const first = (PAWS.n = (PAWS.n || 0) + 1) <= 4
     el.animate([{ scale: '1.5' }, { scale: '1' }], { duration: 240, easing: 'cubic-bezier(.2, .8, .3, 1)' })
-    el.animate([{ opacity: 0, pointerEvents: 'none' }, { opacity: first ? .9 : .75, offset: .04, pointerEvents: 'auto' }, { opacity: .55, offset: .55, pointerEvents: 'auto' }, { opacity: .08, offset: .93, pointerEvents: 'auto' }, { opacity: 0, pointerEvents: 'none' }], { duration: 7000, easing: 'linear', fill: 'forwards' })
+    letGo(el.animate([{ opacity: 0, pointerEvents: 'none' }, { opacity: first ? .9 : .75, offset: .04, pointerEvents: 'auto' }, { opacity: .55, offset: .55, pointerEvents: 'auto' }, { opacity: .08, offset: .93, pointerEvents: 'auto' }, { opacity: 0, pointerEvents: 'none' }], { duration: 7000, easing: 'linear', fill: 'forwards' }))
   }
 }
 // Open ground she'll walk on: land, off the road, clear of the buildings.

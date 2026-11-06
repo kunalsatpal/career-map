@@ -4,6 +4,16 @@
 // =====================================================================================
 const FOOT = (cls = '') => `<svg class="foot ${cls}" width="24" height="16" viewBox="-12 -8 24 16" aria-hidden="true"><path d="${footD(0, 0, 0)}"/></svg>`
 const sprite = (html, cls = '') => { const el = document.createElement('div'); el.className = 'sprite ' + cls; el.innerHTML = html; ground.appendChild(el); return el }
+// Phones (BATCH.phoneLayers): a print that has faded lets its animation go, so it stops holding a
+// compositor layer; it ends at opacity 0 either way, which is where its class leaves it. On a desktop the
+// animation is kept, as before.
+const letGo = PHONE_LAYERS ? an => { const el = an.effect.target; el.hidden = false; an.onfinish = () => { an.cancel(); el.hidden = true }; return an } : an => an
+// Between fades a phone's prints are taken out of the drawing altogether (hidden), so the compositor has
+// nothing of them to sort through; letGo brings each back as it is pressed in.
+const idlePool = pool => { if (PHONE_LAYERS) for (const el of pool) el.hidden = true; return pool }
+// The runner's prints and the scooter's tyre track are laid several a second, so on a phone they fade sooner
+// (and their pools are smaller to match): fewer are fading, each a layer, at any one time. Each still fades
+// out whole before its element is used again. My own footprints up the road are unchanged.
 // Every moving thing keeps the box it moves in; off screen, its animations rest.
 const LIFE = []
 const lives = (el, pts, pad = 160) => { const xs = pts.map(p => p[0]), ys = pts.map(p => p[1]); LIFE.push({ el, box: { x0: Math.min(...xs) - pad, x1: Math.max(...xs) + pad, y0: Math.min(...ys) - pad, y1: Math.max(...ys) + pad }, on: true }) }
@@ -17,27 +27,27 @@ function lifeCull() {
   }
 }
 function trail(n, cls) {
-  const pool = Array.from({ length: n }, () => sprite(FOOT(cls), 'step'))
+  const pool = idlePool(Array.from({ length: n }, () => sprite(FOOT(cls), 'step')))
   let i = 0, side = 1
   return (x, y, ang) => {
     const el = pool[i++ % n]; side = -side
     const px = x + Math.cos((ang + 90) * Math.PI / 180) * 5 * side, py = y + Math.sin((ang + 90) * Math.PI / 180) * 5 * side
     el.style.transform = `translate(${f(px - 12)}px,${f(py - 8)}px) rotate(${f(ang + side * 6)}deg)`
     el.getAnimations().forEach(a => a.cancel())
-    el.animate([{ opacity: 0 }, { opacity: .9, offset: .03 }, { opacity: .65, offset: .35 }, { opacity: 0 }], { duration: cls ? 2600 : 5600, easing: 'linear', fill: 'forwards' })
+    letGo(el.animate([{ opacity: 0 }, { opacity: .9, offset: .03 }, { opacity: .65, offset: .35 }, { opacity: 0 }], { duration: cls ? (PHONE_LAYERS ? 1500 : 2600) : 5600, easing: 'linear', fill: 'forwards' }))
   }
 }
 // A tyre's track: short marks pressed in a line just behind the wheel, fading as it goes on.
 // Two edges and a chevron tread between them, so a run of marks reads as a tyre, not a line.
 const TREAD = '<svg class="tread" width="12" height="8" viewBox="-6 -4 12 8" aria-hidden="true"><path d="M-5 -2.6H5M-5 2.6H5M-4.2 -2.6L-2.4 0L-4.2 2.6M-0.9 -2.6L0.9 0L-0.9 2.6M2.4 -2.6L4.2 0L2.4 2.6"/></svg>'
 function treads(n) {
-  const pool = Array.from({ length: n }, () => sprite(TREAD, 'step'))
+  const pool = idlePool(Array.from({ length: n }, () => sprite(TREAD, 'step')))
   let i = 0
   return (x, y, ang) => {
     const el = pool[i++ % n]
     el.style.transform = `translate(${f(x - 6)}px,${f(y - 4)}px) rotate(${f(ang)}deg)`
     el.getAnimations().forEach(a => a.cancel())
-    el.animate([{ opacity: 0 }, { opacity: .8, offset: .04 }, { opacity: .45, offset: .4 }, { opacity: 0 }], { duration: 2400, easing: 'linear', fill: 'forwards' })
+    letGo(el.animate([{ opacity: 0 }, { opacity: .8, offset: .04 }, { opacity: .45, offset: .4 }, { opacity: 0 }], { duration: PHONE_LAYERS ? 1000 : 2400, easing: 'linear', fill: 'forwards' }))
   }
 }
 // Ride a path at a speed (units a second), a little to one side of it: a mark every few units,
@@ -109,7 +119,7 @@ function startLife() {
   loop(schooner, GEO.ships[1].map(([x, y]) => [x - 29, y - 50]), 170000, { closed: true, flip: true })
   // Someone is out running on the track: small, quick footsteps going round its middle lane,
   // only while the track is in view.
-  const run = trail(18, 'run'), TK = GEO.track, RX = TK.rx - 12, RY = TK.ry - 11
+  const run = trail(PHONE_LAYERS ? 10 : 18, 'run'), TK = GEO.track, RX = TK.rx - 12, RY = TK.ry - 11
   let ra = 0
   const lap = () => {
     if (document.hidden) return setTimeout(lap, 1000)
@@ -122,7 +132,7 @@ function startLife() {
   }
   setTimeout(lap, 1200)
   // A scooter runs the road past Gojek and back: only its tyre track shows, pressed in as it goes.
-  const roadRun = sample(ROAD, 40).filter(([, y]) => y > 5800 && y < 6400), wheel = treads(40)
+  const roadRun = sample(ROAD, 40).filter(([, y]) => y > 5800 && y < 6400), wheel = treads(PHONE_LAYERS ? 16 : 40)
   let back = false
   const runRoad = () => { const pts = back ? roadRun.slice().reverse() : roadRun; back = !back; ride(wheel, pts, 150, back ? 4 : -4, () => setTimeout(runRoad, 2600)) }
   setTimeout(runRoad, 2000)

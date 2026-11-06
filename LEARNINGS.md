@@ -179,6 +179,16 @@ On a truly first visit (a computer whose macOS shader cache has never seen the p
   - How I work and About me used to build together as one city; now they build separately (`workBuild`).
   - The first try, at 40% down the screen, felt too late.
 
+### Phones: layers, not pixels
+
+A lag evaluation on 6 Nov compared nine device profiles. Desktops were smooth. Phones were the problem, and three fixes came out of it, all phone-only (`PHONE` in `01-util.js`, switches `phoneLayers`, `phoneFrame`, `phoneStart` and `phoneLite`). A desktop or laptop never takes these paths, which was checked by comparing every label placement and the ground transform at 25 points along the road, old build against new.
+
+- **What it cost.** During a swipe the page had 334 compositor layers. Most were footprints, tyre marks and paw prints: each sprite kept its layer for good through `will-change` and a fade held with `fill: 'forwards'`, even when invisible. Chrome re-layerizes and commits every layer each frame.
+- **The fix.** On a phone a print holds a layer only while it fades. Between fades it is `hidden`, so it isn't in the paint tree at all. The fast trails (the scooter's tyre track, the runners) fade sooner, so fewer overlap. Worlds out of sight leave the sheet. Result: 334 layers down to 87, and main-thread time per frame down by about 30% (Layerize −40%, Commit −47%).
+- **Framing.** A phone shows a narrow strip of the sheet, and the camera followed the road, so cities beside it were cut off with no way to pan. `phoneX` (`17-phone.js`) follows the buildings near the place being looked at instead.
+- **The weakest phones.** With software WebGL the 3D map ran at 1–2 fps. Such a phone now goes straight to the flat ink map, and so does any phone whose frames stay over 60 ms while moving; there it runs at 8–29 fps. A slow phone that can keep up stays 3D: with the CPU slowed 12× it went from 27 to 41 fps.
+- **The lesson:** count layers (`LayerTree` in CDP), not only frames. A fast desktop GPU hides a layer count that a phone's main thread can't carry.
+
 ## 10. Things to try together
 
 1. **Add a building type.** Follow "Make a new kind of building" in `EDITING.md`, modelled on the science tower (`labtower` in `09-city.js` and `04-ground.js`). `lessons/03-add-a-building-standing-stones.diff` shows an earlier end-to-end example, for reading only.

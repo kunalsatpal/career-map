@@ -1270,6 +1270,8 @@ function failGL(err) { console.warn('3D city unavailable:', err?.message || err)
 function startGL() {
   gl = cv.getContext('webgl2', { alpha: true, premultipliedAlpha: true, antialias: false, depth: false, stencil: false, powerPreference: 'high-performance' })
   if (!gl) throw new Error('no webgl2')
+  // A phone whose WebGL is drawn in software (BATCH.phoneLite) takes the flat ink map from the start.
+  if (PHONE_LITE && softwareGL(gl)) { const g = gl; gl = null; document.body.classList.add('lite'); g.getExtension('WEBGL_lose_context')?.loseContext(); throw new Error('software WebGL on this phone') }
   const par = gl.getExtension('KHR_parallel_shader_compile')
   const t0 = performance.now()
   buildFaces(); const data = buildPieces(), count = data.length / FLOATS

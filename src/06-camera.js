@@ -174,7 +174,8 @@ const fitScale = () => mobile() ? VW / 1100 : clamp((VW - 40) / (W * .92), .45, 
 function setAnchor() { cam.s = fitScale(); cam.ax = VW / 2; cam.ay = VH * (mobile() ? .5 : .56) }
 const yLimits = () => [END_Y, START_Y]
 // Across, the eye keeps the road in view, more closely on narrow screens.
-function followX(y) { return lerp(W / 2, eyeX(y), mobile() ? .95 : .9) }
+// On a phone (BATCH.phoneFrame) the eye frames the city in view instead (phoneX, 17-phone.js).
+function followX(y) { return PHONE_FRAME ? phoneX(y) : lerp(W / 2, eyeX(y), mobile() ? .95 : .9) }
 function clampCam() { cam.cy = clamp(cam.cy, END_Y, START_Y); cam.cx = followX(cam.cy) }
 // World units travelled per pixel of scrolling, at the place being looked at.
 // The same flick carries you a little further across open land and sea, a little less through a

@@ -19,7 +19,9 @@ addEventListener('wheel', e => {
 
 let drag = null, vel = 0, dragged = false
 // The map follows the hand: pull it toward you to go forward.
-const nudge = dY => { if (dY < 0 && cam.cy >= START_Y - 1) return wrongWay(); cam.cy -= dY * perPx(); clampCam(); moved(); requestRender() }
+// At the start of the road on a phone (BATCH.phoneStart), a swipe up, the way a phone page scrolls, is
+// not the wrong way: there is nothing behind you, so it holds still and, let go, begins the walk (swipeTo).
+const nudge = dY => { if (dY < 0 && cam.cy >= START_Y - 1) return PHONE_START ? undefined : wrongWay(); cam.cy -= dY * perPx(); clampCam(); moved(); requestRender() }
 addEventListener('pointerdown', e => {
   if ((e.pointerType === 'mouse' && e.button !== 0) || e.target.closest?.(BLOCK) || busy()) return
   cancelMotion()
@@ -66,7 +68,7 @@ function stopsOnRoad() {
 }
 function swipeTo(dy, cy0) {
   if (Math.abs(dy) < 24 && Math.abs(vel) < .25) return
-  const S = stopsOnRoad(), fwd = dy > 0, ahead = y => fwd ? y < cy0 - 30 : y > cy0 + 30
+  const S = stopsOnRoad(), fwd = dy > 0 || (PHONE_START && cy0 >= START_Y - 1), ahead = y => fwd ? y < cy0 - 30 : y > cy0 + 30
   let to = fwd ? S.find(ahead) : S.findLast(ahead)
   if (to == null) return
   // A long drag that has already passed the next stop settles on the nearest one instead.

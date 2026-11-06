@@ -1,7 +1,7 @@
 // =====================================================================================
 // Boot.
 // =====================================================================================
-function onRender(v) { placeLabels(v); cityFrame(v); placeCard(v); placeRail(v); placeSky(v); placeGym(v); placeWip(); placeLit(v); placeStars(v); sideFrame(v); playMoments() }
+function onRender(v) { placeLabels(v); cityFrame(v); placeCard(v); placeRail(v); placeSky(v); placeGym(v); placeWip(); placeLit(v); placeStars(v); sideFrame(v); playMoments(); if (PHONE) phoneRender(v) }
 function onSettle() { cityFrame(view()); cardOnSettle(); lifeCull(); if (pointerAt && city.active && !caseId) cityHover(...pointerAt) }
 function boot() {
   ground.style.width = W + 'px'; ground.style.height = H + 'px'

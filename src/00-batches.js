@@ -47,4 +47,10 @@ const BATCH = {
   // Side missions, for whoever lingers or pokes about
   pawTrail: true,       // the wizard has lost his cat: her ink paw prints wander near the road in each world; click one and she appears, says meow, and runs off
   fireflies: true,       // linger in About me's yard and fireflies come out over the garden
+  // Phones, third pass (after the 6 Nov lag evaluation). Only on a touch phone (PHONE in 01-util: a coarse
+  // pointer and a small screen); a desktop or laptop never takes these paths, whatever its window size.
+  phoneLayers: true,     // footprints, tyre tracks and paw prints hold a compositor layer only while they fade; worlds out of sight leave the sheet
+  phoneFrame: true,      // each city is framed in the middle of the screen, not cut off at the side the road runs past
+  phoneStart: true,      // at the start of the road a swipe either way begins the walk; there is nothing behind you
+  phoneLite: true,       // a phone that can't keep up (well under 20 fps while moving) drops to the flat ink map
 }

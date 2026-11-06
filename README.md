@@ -20,7 +20,7 @@ That's it; `INSTALL.md` has the step-by-step for a new machine, and `EDITING.md`
 - Scroll, drag, ↑/↓, Space or Page Up/Down move along the road. ←/→ jump between stops. Home and End go to the start and the end.
 - Hover over a building to see its note. Buildings with a red wax seal hold a full case study or field note: click one to open it. Esc or "Back to the map" closes it.
 - Small things on the map answer the pointer: rest on the barbell, click a lamp or a tree, poke the ship.
-- On a phone, swipe down to move on, one stop per swipe; a chip at the foot of the screen says where you are. Tap a building for its note.
+- On a phone, swipe down to move on, one stop per swipe (at the very start a swipe either way begins); a chip at the foot of the screen says where you are. Tap a building for its note. A phone too slow for the 3D city gets the flat ink map instead.
 - With `prefers-reduced-motion` set, the camera stays top-down and the cities appear without animating.
 
 ## Build it
@@ -62,6 +62,7 @@ The pictures in `site/` are not inlined: the page loads them from the folder, so
 | `src/14-citycard.js` | Experiment, switched off (`CITY_CARD = false`): a city's overview card docked beside it |
 | `src/15-flow.js` | The progress rail, the phone's place chip, and the menu |
 | `src/16-delight.js` | Small interactions: trees to cut, lamps to light, props that move, the ship that sinks, the secrets |
+| `src/17-phone.js` | Phones only (`PHONE`: a coarse pointer and a small screen): each city framed on screen, worlds out of sight taken off the sheet, and the drop to the flat map on a phone that can't keep up |
 | `src/17-prewarm.js` | First-visit warm-up: draws every kind of label, card and effect once, nearly invisible, while the title is up |
 | `src/17-reader.js` | Plain-page version for screen readers and print |
 | `src/18-spread.js` | The opening: a blank sheet while the page warms up, then the ink spreads from the middle to the edges (WebGL) |

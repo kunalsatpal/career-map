@@ -940,6 +940,12 @@ body.reading-case #viewport, body.reading-case #dusk, body.reading-case #gl, bod
   body.m2 .lclose, body.m2 .pback { min-height: 44px; }
 }
 
+/* ---------- Phones, third pass (00-batches.js: phoneLayers) ---------- */
+/* Only on a touch phone (body.phone, set from PHONE in 01-util), never on a desktop. A footprint, tyre mark or
+   paw print is its own compositor layer only while it fades (its animation promotes it), not for good: the
+   compositor then has a few dozen layers to carry every frame instead of hundreds. */
+body.ph-layers .sprite.step, body.ph-layers .gymprint { will-change: auto; }
+
 /* ---------- First-visit warm-up (00-batches.js: prewarm) ---------- */
 /* Copies drawn once, all but invisible, at the middle of the screen, so the graphics card builds their
    programs during the opening. They are taken away after a moment. */
@@ -1784,6 +1790,12 @@ const BATCH = {
   // Side missions, for whoever lingers or pokes about
   pawTrail: true,       // the wizard has lost his cat: her ink paw prints wander near the road in each world; click one and she appears, says meow, and runs off
   fireflies: true,       // linger in About me's yard and fireflies come out over the garden
+  // Phones, third pass (after the 6 Nov lag evaluation). Only on a touch phone (PHONE in 01-util: a coarse
+  // pointer and a small screen); a desktop or laptop never takes these paths, whatever its window size.
+  phoneLayers: true,     // footprints, tyre tracks and paw prints hold a compositor layer only while they fade; worlds out of sight leave the sheet
+  phoneFrame: true,      // each city is framed in the middle of the screen, not cut off at the side the road runs past
+  phoneStart: true,      // at the start of the road a swipe either way begins the walk; there is nothing behind you
+  phoneLite: true,       // a phone that can't keep up (well under 20 fps while moving) drops to the flat ink map
 }
 
 'use strict'
@@ -1793,6 +1805,10 @@ const BATCH = {
 const W = 1900, H = 8600
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches
 const coarse = matchMedia('(pointer: coarse)').matches
+// A touch phone: a coarse pointer and a small screen (its shorter side, so turning it doesn't change it).
+// A desktop or laptop is never one, whatever its window size; the phone-only batches check this.
+const PHONE = coarse && Math.min(screen.width, screen.height) <= 760
+const PHONE_LAYERS = PHONE && BATCH.phoneLayers, PHONE_FRAME = PHONE && BATCH.phoneFrame, PHONE_START = PHONE && BATCH.phoneStart, PHONE_LITE = PHONE && BATCH.phoneLite
 const $ = id => document.getElementById(id)
 const SVGNS = 'http://www.w3.org/2000/svg'
 const SITE = 'https://kunalsatpal.com/kunalsatpal.com/'
@@ -3125,7 +3141,8 @@ const fitScale = () => mobile() ? VW / 1100 : clamp((VW - 40) / (W * .92), .45, 
 function setAnchor() { cam.s = fitScale(); cam.ax = VW / 2; cam.ay = VH * (mobile() ? .5 : .56) }
 const yLimits = () => [END_Y, START_Y]
 // Across, the eye keeps the road in view, more closely on narrow screens.
-function followX(y) { return lerp(W / 2, eyeX(y), mobile() ? .95 : .9) }
+// On a phone (BATCH.phoneFrame) the eye frames the city in view instead (phoneX, 17-phone.js).
+function followX(y) { return PHONE_FRAME ? phoneX(y) : lerp(W / 2, eyeX(y), mobile() ? .95 : .9) }
 function clampCam() { cam.cy = clamp(cam.cy, END_Y, START_Y); cam.cx = followX(cam.cy) }
 // World units travelled per pixel of scrolling, at the place being looked at.
 // The same flick carries you a little further across open land and sea, a little less through a
@@ -3433,6 +3450,16 @@ function placeLevelsNarrow(v) {
 // =====================================================================================
 const FOOT = (cls = '') => `<svg class="foot ${cls}" width="24" height="16" viewBox="-12 -8 24 16" aria-hidden="true"><path d="${footD(0, 0, 0)}"/></svg>`
 const sprite = (html, cls = '') => { const el = document.createElement('div'); el.className = 'sprite ' + cls; el.innerHTML = html; ground.appendChild(el); return el }
+// Phones (BATCH.phoneLayers): a print that has faded lets its animation go, so it stops holding a
+// compositor layer; it ends at opacity 0 either way, which is where its class leaves it. On a desktop the
+// animation is kept, as before.
+const letGo = PHONE_LAYERS ? an => { const el = an.effect.target; el.hidden = false; an.onfinish = () => { an.cancel(); el.hidden = true }; return an } : an => an
+// Between fades a phone's prints are taken out of the drawing altogether (hidden), so the compositor has
+// nothing of them to sort through; letGo brings each back as it is pressed in.
+const idlePool = pool => { if (PHONE_LAYERS) for (const el of pool) el.hidden = true; return pool }
+// The runner's prints and the scooter's tyre track are laid several a second, so on a phone they fade sooner
+// (and their pools are smaller to match): fewer are fading, each a layer, at any one time. Each still fades
+// out whole before its element is used again. My own footprints up the road are unchanged.
 // Every moving thing keeps the box it moves in; off screen, its animations rest.
 const LIFE = []
 const lives = (el, pts, pad = 160) => { const xs = pts.map(p => p[0]), ys = pts.map(p => p[1]); LIFE.push({ el, box: { x0: Math.min(...xs) - pad, x1: Math.max(...xs) + pad, y0: Math.min(...ys) - pad, y1: Math.max(...ys) + pad }, on: true }) }
@@ -3446,27 +3473,27 @@ function lifeCull() {
   }
 }
 function trail(n, cls) {
-  const pool = Array.from({ length: n }, () => sprite(FOOT(cls), 'step'))
+  const pool = idlePool(Array.from({ length: n }, () => sprite(FOOT(cls), 'step')))
   let i = 0, side = 1
   return (x, y, ang) => {
     const el = pool[i++ % n]; side = -side
     const px = x + Math.cos((ang + 90) * Math.PI / 180) * 5 * side, py = y + Math.sin((ang + 90) * Math.PI / 180) * 5 * side
     el.style.transform = `translate(${f(px - 12)}px,${f(py - 8)}px) rotate(${f(ang + side * 6)}deg)`
     el.getAnimations().forEach(a => a.cancel())
-    el.animate([{ opacity: 0 }, { opacity: .9, offset: .03 }, { opacity: .65, offset: .35 }, { opacity: 0 }], { duration: cls ? 2600 : 5600, easing: 'linear', fill: 'forwards' })
+    letGo(el.animate([{ opacity: 0 }, { opacity: .9, offset: .03 }, { opacity: .65, offset: .35 }, { opacity: 0 }], { duration: cls ? (PHONE_LAYERS ? 1500 : 2600) : 5600, easing: 'linear', fill: 'forwards' }))
   }
 }
 // A tyre's track: short marks pressed in a line just behind the wheel, fading as it goes on.
 // Two edges and a chevron tread between them, so a run of marks reads as a tyre, not a line.
 const TREAD = '<svg class="tread" width="12" height="8" viewBox="-6 -4 12 8" aria-hidden="true"><path d="M-5 -2.6H5M-5 2.6H5M-4.2 -2.6L-2.4 0L-4.2 2.6M-0.9 -2.6L0.9 0L-0.9 2.6M2.4 -2.6L4.2 0L2.4 2.6"/></svg>'
 function treads(n) {
-  const pool = Array.from({ length: n }, () => sprite(TREAD, 'step'))
+  const pool = idlePool(Array.from({ length: n }, () => sprite(TREAD, 'step')))
   let i = 0
   return (x, y, ang) => {
     const el = pool[i++ % n]
     el.style.transform = `translate(${f(x - 6)}px,${f(y - 4)}px) rotate(${f(ang)}deg)`
     el.getAnimations().forEach(a => a.cancel())
-    el.animate([{ opacity: 0 }, { opacity: .8, offset: .04 }, { opacity: .45, offset: .4 }, { opacity: 0 }], { duration: 2400, easing: 'linear', fill: 'forwards' })
+    letGo(el.animate([{ opacity: 0 }, { opacity: .8, offset: .04 }, { opacity: .45, offset: .4 }, { opacity: 0 }], { duration: PHONE_LAYERS ? 1000 : 2400, easing: 'linear', fill: 'forwards' }))
   }
 }
 // Ride a path at a speed (units a second), a little to one side of it: a mark every few units,
@@ -3538,7 +3565,7 @@ function startLife() {
   loop(schooner, GEO.ships[1].map(([x, y]) => [x - 29, y - 50]), 170000, { closed: true, flip: true })
   // Someone is out running on the track: small, quick footsteps going round its middle lane,
   // only while the track is in view.
-  const run = trail(18, 'run'), TK = GEO.track, RX = TK.rx - 12, RY = TK.ry - 11
+  const run = trail(PHONE_LAYERS ? 10 : 18, 'run'), TK = GEO.track, RX = TK.rx - 12, RY = TK.ry - 11
   let ra = 0
   const lap = () => {
     if (document.hidden) return setTimeout(lap, 1000)
@@ -3551,7 +3578,7 @@ function startLife() {
   }
   setTimeout(lap, 1200)
   // A scooter runs the road past Gojek and back: only its tyre track shows, pressed in as it goes.
-  const roadRun = sample(ROAD, 40).filter(([, y]) => y > 5800 && y < 6400), wheel = treads(40)
+  const roadRun = sample(ROAD, 40).filter(([, y]) => y > 5800 && y < 6400), wheel = treads(PHONE_LAYERS ? 16 : 40)
   let back = false
   const runRoad = () => { const pts = back ? roadRun.slice().reverse() : roadRun; back = !back; ride(wheel, pts, 150, back ? 4 : -4, () => setTimeout(runRoad, 2600)) }
   setTimeout(runRoad, 2000)
@@ -4846,6 +4873,8 @@ function failGL(err) { console.warn('3D city unavailable:', err?.message || err)
 function startGL() {
   gl = cv.getContext('webgl2', { alpha: true, premultipliedAlpha: true, antialias: false, depth: false, stencil: false, powerPreference: 'high-performance' })
   if (!gl) throw new Error('no webgl2')
+  // A phone whose WebGL is drawn in software (BATCH.phoneLite) takes the flat ink map from the start.
+  if (PHONE_LITE && softwareGL(gl)) { const g = gl; gl = null; document.body.classList.add('lite'); g.getExtension('WEBGL_lose_context')?.loseContext(); throw new Error('software WebGL on this phone') }
   const par = gl.getExtension('KHR_parallel_shader_compile')
   const t0 = performance.now()
   buildFaces(); const data = buildPieces(), count = data.length / FLOATS
@@ -5557,7 +5586,9 @@ addEventListener('wheel', e => {
 
 let drag = null, vel = 0, dragged = false
 // The map follows the hand: pull it toward you to go forward.
-const nudge = dY => { if (dY < 0 && cam.cy >= START_Y - 1) return wrongWay(); cam.cy -= dY * perPx(); clampCam(); moved(); requestRender() }
+// At the start of the road on a phone (BATCH.phoneStart), a swipe up, the way a phone page scrolls, is
+// not the wrong way: there is nothing behind you, so it holds still and, let go, begins the walk (swipeTo).
+const nudge = dY => { if (dY < 0 && cam.cy >= START_Y - 1) return PHONE_START ? undefined : wrongWay(); cam.cy -= dY * perPx(); clampCam(); moved(); requestRender() }
 addEventListener('pointerdown', e => {
   if ((e.pointerType === 'mouse' && e.button !== 0) || e.target.closest?.(BLOCK) || busy()) return
   cancelMotion()
@@ -5604,7 +5635,7 @@ function stopsOnRoad() {
 }
 function swipeTo(dy, cy0) {
   if (Math.abs(dy) < 24 && Math.abs(vel) < .25) return
-  const S = stopsOnRoad(), fwd = dy > 0, ahead = y => fwd ? y < cy0 - 30 : y > cy0 + 30
+  const S = stopsOnRoad(), fwd = dy > 0 || (PHONE_START && cy0 >= START_Y - 1), ahead = y => fwd ? y < cy0 - 30 : y > cy0 + 30
   let to = fwd ? S.find(ahead) : S.findLast(ahead)
   if (to == null) return
   // A long drag that has already passed the next stop settles on the nearest one instead.
@@ -5743,6 +5774,8 @@ const RAIL = [{ key: 'start', name: 'Start', years: '' }, ...WORLDS]
 rail.innerHTML = `<ol>${RAIL.map((w, i) => `<li><button data-world="${i}" aria-label="${w.name}${w.years ? `, ${w.years}` : ''}"><i></i><span><b>${w.name}</b>${w.years && !BATCH.railNames ? `<small>${w.years}</small>` : ''}</span></button></li>`).join('')}</ol>`
 let worldAt = -1
 document.body.classList.toggle('m2', BATCH.mobile2)
+// Phones, third pass (00-batches.js): their CSS hangs off these classes, so a desktop never matches it.
+document.body.classList.toggle('phone', PHONE); document.body.classList.toggle('ph-layers', PHONE_LAYERS)
 rail.classList.toggle('polish', BATCH.railPolish); rail.classList.toggle('up', BATCH.railUp)
 // Phones (BATCH.mobile): the rail's place in one line, "3 / 7 · Cult.fit", at the foot of the screen.
 const whereChip = BATCH.mobile ? Object.assign(document.createElement('p'), { className: 'ui where', hidden: true }) : null
@@ -6281,7 +6314,7 @@ function buildGym() {
   if (reduce) return
   GYM.a = ROOMS['cult-fitclub'].part
   GYM.el = document.createElement('div'); GYM.el.className = 'gym'; GYM.el.setAttribute('aria-hidden', 'true')
-  GYM.prints = Array.from({ length: 36 }, () => { const el = document.createElement('div'); el.className = 'gymprint'; el.innerHTML = FOOT(''); GYM.el.appendChild(el); return { el, x: 0, y: 0, a: 0 } })
+  GYM.prints = Array.from({ length: PHONE_LAYERS ? 16 : 36 }, () => { const el = document.createElement('div'); el.className = 'gymprint'; el.innerHTML = FOOT(''); GYM.el.appendChild(el); if (PHONE_LAYERS) el.hidden = true; return { el, x: 0, y: 0, a: 0 } })
   labelLayer.appendChild(GYM.el)
   let t = 0, side = 1
   const lap = () => {
@@ -6292,7 +6325,7 @@ function buildGym() {
         P.x = GYM.a.cx + Math.cos(ang) * r; P.y = GYM.a.cy + Math.sin(ang) * r; P.a = dir
         placePrint(P, view())
         P.el.getAnimations().forEach(c => c.cancel())
-        P.el.animate([{ opacity: 0 }, { opacity: .8, offset: .04 }, { opacity: .45, offset: .45 }, { opacity: 0 }], { duration: 3400, easing: 'linear', fill: 'forwards' })
+        letGo(P.el.animate([{ opacity: 0 }, { opacity: .8, offset: .04 }, { opacity: .45, offset: .45 }, { opacity: 0 }], { duration: PHONE_LAYERS ? 1500 : 3400, easing: 'linear', fill: 'forwards' }))
       }
     }
     // About a stride of 12 along the ring each step.
@@ -6327,7 +6360,7 @@ function placeGym(v) {
   const near = Math.abs(cam.cy - 5250) < 900, on = built && near ? 1 : 0
   if (near && TILT && !built && !GYM.wait) GYM.wait = setTimeout(() => { GYM.wait = 0; requestRender() }, 500)
   if (on !== GYM.on) { GYM.on = on; GYM.el.classList.toggle('on', !!on) }
-  if (on) for (const P of GYM.prints) placePrint(P, v)
+  if (on) for (const P of GYM.prints) if (!P.el.hidden) placePrint(P, v)
 }
 
 // =====================================================================================
@@ -6521,7 +6554,7 @@ const PAW = '<svg width="8" height="8" viewBox="-4 -4 8 8" aria-hidden="true"><e
 // A paw print every third step, a little to either side, as a cat's are; enough to be noticed, not more.
 // Her trail pauses while she's been found (PAWS.halt).
 function pawStamp(n) {
-  const pool = Array.from({ length: n }, () => sprite(PAW, 'paw step'))
+  const pool = idlePool(Array.from({ length: n }, () => sprite(PAW, 'paw step')))
   let i = 0, k = 0
   return (x, y, ang) => {
     if (PAWS.halt || k++ % 3) return
@@ -6533,7 +6566,7 @@ function pawStamp(n) {
     // to catch the eye. Clickable while it shows, until it has all but faded.
     const first = (PAWS.n = (PAWS.n || 0) + 1) <= 4
     el.animate([{ scale: '1.5' }, { scale: '1' }], { duration: 240, easing: 'cubic-bezier(.2, .8, .3, 1)' })
-    el.animate([{ opacity: 0, pointerEvents: 'none' }, { opacity: first ? .9 : .75, offset: .04, pointerEvents: 'auto' }, { opacity: .55, offset: .55, pointerEvents: 'auto' }, { opacity: .08, offset: .93, pointerEvents: 'auto' }, { opacity: 0, pointerEvents: 'none' }], { duration: 7000, easing: 'linear', fill: 'forwards' })
+    letGo(el.animate([{ opacity: 0, pointerEvents: 'none' }, { opacity: first ? .9 : .75, offset: .04, pointerEvents: 'auto' }, { opacity: .55, offset: .55, pointerEvents: 'auto' }, { opacity: .08, offset: .93, pointerEvents: 'auto' }, { opacity: 0, pointerEvents: 'none' }], { duration: 7000, easing: 'linear', fill: 'forwards' }))
   }
 }
 // Open ground she'll walk on: land, off the road, clear of the buildings.
@@ -6658,6 +6691,80 @@ function firefliesOut(on) {
   box.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 1800, fill: 'both' })
 }
 
+
+// =====================================================================================
+// Phones, third pass (00-batches.js: phoneFrame, phoneLayers, phoneLite). Everything here runs only on a
+// touch phone (PHONE, 01-util.js); on a desktop or laptop none of it is reached.
+// =====================================================================================
+
+// Where the eye looks across, on a phone (BATCH.phoneFrame). The road swings from side to side while a
+// phone shows only a narrow strip of the sheet, so a city beside the road was left half off the screen
+// with no way to pan to it. Here the eye follows the buildings near the place being looked at, weighted
+// by size, and the road only where there are none (the sea, the open land between worlds). The weights
+// are smooth along the road, so the eye eases across as you travel; it never strays far from the road.
+function phoneX(y) {
+  const road = lerp(W / 2, eyeX(y), .95)
+  const P = phoneX.pts ||= PARTS.map(p => [p.c[0], p.c[1], Math.sqrt(p.size)])
+  const at = y - 100
+  let sw = 0, sx = 0
+  for (const [x, py, k] of P) { const w = k * Math.exp(-(((py - at) / 450) ** 2)); sw += w; sx += w * x }
+  if (sw < 1e-6) return road
+  const want = clamp(sx / sw, road - 320, road + 320)
+  return lerp(road, want, smoothstep(4, 30, sw))
+}
+
+// Called with every picture on a phone (19-boot onRender).
+function phoneRender(v) {
+  if (PHONE_LAYERS) cullBands(v)
+  if (PHONE_LITE) watchFrames()
+}
+
+// The ink drawing is one SVG per world, each its own compositor layer. Worlds wholly behind the eye or
+// beyond the far edge of the view leave the sheet (display: none) until they come back into range, so
+// the compositor carries two or three of them, not ten.
+function cullBands(v) {
+  const B = cullBands.list ||= [...ground.querySelectorAll('svg.band')].map(el => { const y0 = parseFloat(el.style.top); return { el, y0, y1: y0 + +el.getAttribute('height'), on: true } })
+  const gv = groundView(v), lo = gv.y0 - 400, hi = gv.y1 + 400
+  for (const b of B) {
+    const on = b.y1 > lo && b.y0 < hi
+    if (on !== b.on) { b.on = on; b.el.style.display = on ? '' : 'none' }
+  }
+}
+
+// A phone that can't keep up (BATCH.phoneLite). While the map is moving (the opening lean-in included),
+// the time between pictures is watched in runs of 16; if 12 of a run took longer than 60 ms (well under 20
+// a second, held for a second or more, not a passing stall) the 3D city and the tilted camera are let go,
+// and the map carries on as its flat ink drawing, the way it shows without WebGL2. One way only, for the
+// rest of the visit. Nothing is timed while the map stands still or a page is open.
+function watchFrames() {
+  const S = watchFrames.s ||= { last: 0, n: 0, slow: 0 }
+  if (!TILT || caseId || document.hidden) { S.last = 0; return }
+  const t = document.timeline.currentTime, dt = t - S.last
+  if (dt <= 0) return
+  S.last = t
+  if (dt > 2500 || !document.body.classList.contains('moving')) return
+  S.n++; if (dt > 60) S.slow++
+  if (S.n < 16) return
+  if (S.slow >= 12) goLite()
+  S.n = S.slow = 0
+}
+function goLite() {
+  if (!TILT) return
+  console.info('This phone can’t keep up with the 3D map: switching to the flat ink map.')
+  const ctx = gl
+  failGL(new Error('too slow on this phone'))
+  cv.style.display = 'none'
+  try { ctx?.getExtension('WEBGL_lose_context')?.loseContext() } catch {}
+  document.body.classList.add('lite')
+  cam.intro = 0; clampCam(); render()
+}
+// WebGL drawn on the CPU (a phone whose graphics chip the browser won't use): the 3D city would run at a
+// frame or two a second there.
+function softwareGL(g) {
+  const ext = g.getExtension('WEBGL_debug_renderer_info')
+  const name = String(ext ? g.getParameter(ext.UNMASKED_RENDERER_WEBGL) : g.getParameter(g.RENDERER))
+  return /swiftshader|llvmpipe|softpipe|software|microsoft basic render/i.test(name)
+}
 
 // =====================================================================================
 // First-visit smoothness (BATCH.prewarm). The graphics card builds a program the first time it
@@ -7658,7 +7765,7 @@ function prepareSpread(loader) {
 // =====================================================================================
 // Boot.
 // =====================================================================================
-function onRender(v) { placeLabels(v); cityFrame(v); placeCard(v); placeRail(v); placeSky(v); placeGym(v); placeWip(); placeLit(v); placeStars(v); sideFrame(v); playMoments() }
+function onRender(v) { placeLabels(v); cityFrame(v); placeCard(v); placeRail(v); placeSky(v); placeGym(v); placeWip(); placeLit(v); placeStars(v); sideFrame(v); playMoments(); if (PHONE) phoneRender(v) }
 function onSettle() { cityFrame(view()); cardOnSettle(); lifeCull(); if (pointerAt && city.active && !caseId) cityHover(...pointerAt) }
 function boot() {
   ground.style.width = W + 'px'; ground.style.height = H + 'px'

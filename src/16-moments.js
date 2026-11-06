@@ -139,7 +139,7 @@ function buildGym() {
   if (reduce) return
   GYM.a = ROOMS['cult-fitclub'].part
   GYM.el = document.createElement('div'); GYM.el.className = 'gym'; GYM.el.setAttribute('aria-hidden', 'true')
-  GYM.prints = Array.from({ length: 36 }, () => { const el = document.createElement('div'); el.className = 'gymprint'; el.innerHTML = FOOT(''); GYM.el.appendChild(el); return { el, x: 0, y: 0, a: 0 } })
+  GYM.prints = Array.from({ length: PHONE_LAYERS ? 16 : 36 }, () => { const el = document.createElement('div'); el.className = 'gymprint'; el.innerHTML = FOOT(''); GYM.el.appendChild(el); if (PHONE_LAYERS) el.hidden = true; return { el, x: 0, y: 0, a: 0 } })
   labelLayer.appendChild(GYM.el)
   let t = 0, side = 1
   const lap = () => {
@@ -150,7 +150,7 @@ function buildGym() {
         P.x = GYM.a.cx + Math.cos(ang) * r; P.y = GYM.a.cy + Math.sin(ang) * r; P.a = dir
         placePrint(P, view())
         P.el.getAnimations().forEach(c => c.cancel())
-        P.el.animate([{ opacity: 0 }, { opacity: .8, offset: .04 }, { opacity: .45, offset: .45 }, { opacity: 0 }], { duration: 3400, easing: 'linear', fill: 'forwards' })
+        letGo(P.el.animate([{ opacity: 0 }, { opacity: .8, offset: .04 }, { opacity: .45, offset: .45 }, { opacity: 0 }], { duration: PHONE_LAYERS ? 1500 : 3400, easing: 'linear', fill: 'forwards' }))
       }
     }
     // About a stride of 12 along the ring each step.
@@ -185,5 +185,5 @@ function placeGym(v) {
   const near = Math.abs(cam.cy - 5250) < 900, on = built && near ? 1 : 0
   if (near && TILT && !built && !GYM.wait) GYM.wait = setTimeout(() => { GYM.wait = 0; requestRender() }, 500)
   if (on !== GYM.on) { GYM.on = on; GYM.el.classList.toggle('on', !!on) }
-  if (on) for (const P of GYM.prints) placePrint(P, v)
+  if (on) for (const P of GYM.prints) if (!P.el.hidden) placePrint(P, v)
 }
