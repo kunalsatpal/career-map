@@ -56,20 +56,12 @@
    ]
   },
   {
-   "t": "h",
-   "text": "A sneak peek: one member, one morning"
-  },
-  {
-   "t": "p",
-   "html": "Amelia is one of about 100 members her PT will see today. Here’s what the PT saw when she reached out, before and after."
-  },
-  {
    "t": "strip",
    "label": "One member, one morning: how the AI summary changed",
    "panels": [
     {
      "art": "message",
-     "text": "Her neck pain won’t let up, and she tells her care team. Her PT opens her profile to reply.",
+     "text": "Her neck pain won’t let up.",
      "src": "./site/cases/media/nba/story/amelia-msg.jpg",
      "alt": "Amelia’s message: the neck pain is a constant dull ache that makes it hard to concentrate on anything.",
      "title": "Amelia writes in",
@@ -80,7 +72,7 @@
     },
     {
      "art": "before",
-     "text": "It opens with her age, job and hometown. What she needs is buried in the paragraph.",
+     "text": "Age, job and hometown first. Her need is buried.",
      "src": "./site/cases/media/nba/story/old-summary.jpg",
      "alt": "The old AI summary for Amelia: age, job and hometown first; her pain only in the third sentence.",
      "title": "Old summary",
@@ -89,7 +81,7 @@
     },
     {
      "art": "after",
-     "text": "It opens with what she needs, then the evidence, with every point linked to its source.",
+     "text": "Her need first, every point sourced.",
      "src": "./site/cases/media/nba/story/new-summary.jpg",
      "alt": "The new summary card, headed ‘Needs help with sudden pain increase’, with sourced insights and open tasks below.",
      "title": "New AI context",
@@ -97,10 +89,9 @@
      "kicker": "After"
     }
    ],
-   "punch": "Twenty seconds saved per member adds up to about half an hour back for every PT, every day.",
    "view": {
     "src": "./site/cases/media/nba/story/final-view.jpg",
-    "cap": "The final member view: Amelia’s need at the top, her own words beside it.",
+    "cap": "The final member view, with Amelia’s message beside it.",
     "alt": "The final CareHub member view for Amelia: the AI summary ‘Needs help with sudden pain increase’ at the top, with sourced insights and open tasks, beside the conversation with her own message."
    },
    "pairTitle": "What her PT sees",
