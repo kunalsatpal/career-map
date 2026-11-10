@@ -10,7 +10,7 @@ const FULL_OF = { 'cult-fitclub': 'Fitclub', 'cult-cart': 'cart_abandonment', 'g
 const HINGE_PAGE = 'hinge-share'
 const EXTRA_PAGES = !BATCH.hingePage ? {} : { [HINGE_PAGE]: { title: 'What I can share', realm: 'hinge', from: 'hinge-carehub', cases: [
   { k: 'CareHub 2.0', body: 'Owned the design of its core, the member record, the queue and AI actions, replacing the legacy tool. It is used by every PT and coach, with a 6% efficiency gain.' },
-  { k: 'AI next-best-action', body: 'Set a member-first direction and staged roadmap: surface the full situation, make context understandable, then recommend actions. The first milestone reduced member-profile time by about 6%.' },
+  { k: 'AI next-best-action', body: 'Set a member-first direction and staged roadmap: surface the full situation, make context understandable, then recommend actions. The first release reduced member-profile time by about 6%.' },
   { k: 'Care-team workflows', body: 'Simplified the everyday workflows care teams run in CareHub: time per member down 8% for PTs and 16% for coaches.' },
   { k: 'Video visits', body: 'Redesigned video visits between members and their care team: recording rates up from 53% to 95%, and visit time down 4.5%.' },
 ] } }
@@ -231,8 +231,8 @@ function caseInteraction(b, uid) {
     const arrow = `<svg class="sb-arrow" viewBox="0 0 60 24" aria-hidden="true"><path d="M3 14 C 18 4, 36 4, 52 12" /><path d="M44 5 L53 12 L43 17" /></svg>`
     const who = (portrait, kicker, title) => `<div class="sb-who">${portrait ? `<img class="sb-portrait" src="${abs(portrait)}" alt="" width="56" height="56">` : ''}<p class="sb-label"><span>${keep(kicker)}</span>${keep(title)}</p></div>`
     const side = (F, i) => `<div class="sb-side sb-${F.art}"><p class="sb-state"><span>${keep(F.kicker)}</span>${keep(F.title)}</p>`
-      + `<div class="sb-frame">${i ? arrow : ''}<div class="sb-shot">${img(F)}<span class="sb-mark ${F.art === 'before' ? 'sb-hl' : 'sb-ring'}">${F.tag ? `<span class="sb-tag">${keep(F.tag)}</span>` : ''}</span></div></div>`
-      + `<p class="sb-cap">${keep(F.text)}</p></div>`
+      + `<div class="sb-frame">${i ? arrow : ''}<div class="sb-shot">${img(F)}${(F.marks || []).map(([l, t, w, h]) => `<span class="sb-mark" style="left:${l}%;top:${t}%;width:${w}%;height:${h}%" aria-hidden="true"></span>`).join('')}</div></div>`
+      + (F.facts ? `<dl class="sb-facts">${F.facts.map(([k, v]) => `<div><dt>${keep(k)}</dt><dd>${keep(v)}</dd></div>`).join('')}</dl>` : `<p class="sb-cap">${keep(F.text)}</p>`) + `</div>`
     return `<figure class="case-board rise" aria-label="${caseAttr(b.label)}">`
       + `${ctx ? `<div class="sb-row sb-ctx"><div class="sb-chat"><p class="sb-bubble">${keep(ctx.quote)}</p><p class="sb-meta">${keep(ctx.from)}</p></div>`
         + `<div class="sb-ctxtext">${who(ctx.portrait, ctx.kicker, ctx.title)}<p class="sb-cap">${keep(ctx.text)}</p></div></div>` : ''}`

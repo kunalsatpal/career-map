@@ -34,8 +34,8 @@ const CASES = {
   'hinge-ai': [
     { k: 'The evidence', body: 'Members had 2.8 open workflows on average, while the interface showed one at a time. The baseline analysis recorded an 88% click rate on Interactions and a daily workload of 90–110 members. PTs and coaches described discovering related work late and repeatedly checking other tabs.' },
     { k: 'The direction', body: 'I set a member-first strategy and staged roadmap toward next-best-action recommendations, working across clinical, data and engineering.' },
-    { k: 'Milestone 1: see the whole situation', body: 'Related workflows were hidden behind a single task. Bringing them into the member view, while preserving space for the conversation, reduced member-profile time by about 6%: 5 min 40 sec to 5 min 20 sec.' },
-    { k: 'Milestone 2: understand what matters', body: 'We replaced long, difficult-to-verify summaries with concise context and visible sources, informed by prompt iteration, expert review and end-user evaluation. Results: about 1% less time per member and 4% less message-crafting time.' },
+    { k: 'See the whole situation', body: 'Related workflows were hidden behind a single task. Bringing them into the member view, while preserving space for the conversation, reduced member-profile time by about 6%: 5 min 40 sec to 5 min 20 sec.' },
+    { k: 'Understand what matters', body: 'We replaced long, difficult-to-verify summaries with concise context and visible sources, informed by prompt iteration, expert review and end-user evaluation. Results: about 1% less time per member and 4% less message-crafting time.' },
     { k: 'What remained', body: 'AI correctness was only about 74% in evaluation. Reviews found missing information, too much emphasis on pain and conclusions beyond the evidence. Action recommendations remained design work in progress at this stage.' },
   ],
 }

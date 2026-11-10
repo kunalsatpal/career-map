@@ -82,20 +82,22 @@
    "panels": [
     {
      "art": "before",
-     "text": "Age, job and hometown first. Her need is buried.",
+     "text": "Age, job and hometown come first. Her pain is on line four.",
+     "facts": [["Opens with", "Age, job, hometown"], ["Her pain", "Line 4"]],
+     "marks": [[18.4, 50.6, 34.6, 7.4]],
      "src": "./site/cases/media/nba/story/old-summary.jpg",
      "alt": "The old AI summary for Amelia: age, job and hometown first; her pain only in the third sentence.",
      "title": "Old summary",
-     "tag": "Demographics and full history",
      "kicker": "Before"
     },
     {
      "art": "after",
-     "text": "Her need first, every point sourced.",
+     "text": "Her need is the first line, and every point is sourced.",
+     "facts": [["Opens with", "Her need"], ["Her pain", "Line 1"]],
+     "marks": [[1.4, 6.6, 42, 11.6]],
      "src": "./site/cases/media/nba/story/new-summary.jpg",
      "alt": "The new summary card, headed ‘Needs help with sudden pain increase’, with sourced insights and open tasks below.",
      "title": "New AI context",
-     "tag": "Her need, first line",
      "kicker": "After"
     }
    ],
@@ -119,22 +121,22 @@
     [
      "~6%",
      "Less member-profile time",
-     "Milestone 1, shipped: 5 min 40 sec → 5 min 20 sec."
+     "Shipped: 5 min 40 sec → 5 min 20 sec."
     ],
     [
      "220 hrs",
      "Saved every day",
-     "From Milestone 1, across 600 providers."
+     "Across 600 providers."
     ],
     [
      "$400k",
      "Monthly savings",
-     "From Milestone 1, a notional estimate."
+     "A notional estimate."
     ],
     [
      "~4%",
      "Less message-crafting time",
-     "Milestone 2, the AI summary, in evaluation."
+     "From the new AI context, in evaluation."
     ]
    ]
   }
