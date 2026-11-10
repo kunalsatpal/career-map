@@ -11,11 +11,6 @@ There are no frameworks, no 3D libraries and no npm packages: it's plain JavaScr
 
 That's it; `INSTALL.md` has the step-by-step for a new machine, and `EDITING.md` explains how to change buildings, words, pages and the camera. It runs straight from disk and needs WebGL2. Every picture is in the folder; only the Google Fonts come from the web, so offline it falls back to Georgia. It's tested in Chrome on macOS. It opens straight onto the title. Everything below is for working on it.
 
-**Ground rules**
-- This stays local. It's for learning only: don't host it, publish it, or push it to a personal GitHub account.
-- If you want version control, a local `git init` is fine. If it ever has to go on GitHub, an engineer creates the repo in an approved Hinge Health org, with signed commits.
-- The portfolio content is Kunal's. Keep it within Hinge Health.
-
 **Controls**
 - Scroll, drag, ↑/↓, Space or Page Up/Down move along the road. ←/→ jump between stops. Home and End go to the start and the end.
 - Hover over a building to see its note. Buildings with a red wax seal hold a full case study or field note: click one to open it. Esc or "Back to the map" closes it.
