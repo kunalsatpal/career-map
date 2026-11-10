@@ -1690,3 +1690,13 @@ body.ph-layers .sprite.step, body.ph-layers .gymprint { will-change: auto; }
   .sb-arrow { left: 50%; top: calc(var(--sb-gap) / -2 - 40px); rotate: 90deg; }
   .sb-frame { padding: 20px; }
 }
+
+/* Phones: a note pointing to kunalsatpal.com instead of the map (phoneAway, 19-boot.js). */
+html.away, html.away body { touch-action: auto; overscroll-behavior: auto; }
+html.away body > *:not(.away-note) { display: none !important; }
+.away-note { position: fixed; inset: 0; z-index: 100; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; padding: 32px 28px; text-align: center; background: oklch(95% 0.022 84); color: var(--ink); }
+.away-note .away-name { font: 400 2.75rem/1 'Harry P', Georgia, serif; }
+.away-note h2 { margin: 8px 0 0; font: 500 1.5rem/1.25 'EB Garamond', Georgia, serif; }
+.away-note p { margin: 0; max-width: 22rem; color: var(--ink-2); font: 400 1.125rem/1.45 'EB Garamond', Georgia, serif; }
+.away-note .btn { margin-top: 8px; position: static; }
+.away-note .away-mail { color: var(--ink-2); font: 400 1rem/1.4 'EB Garamond', Georgia, serif; }

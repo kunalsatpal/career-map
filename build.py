@@ -22,6 +22,8 @@ html = f'''<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Kunal Satpal — A map of the work</title>
+<!-- Phones go straight to kunalsatpal.com: the map is made for bigger screens. Same test as PHONE (01-util.js), so tablets stay. -->
+<script>if (matchMedia('(pointer: coarse)').matches && Math.min(screen.width, screen.height) <= 760) location.replace('https://kunalsatpal.com/')</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400,0..1,0&icon_names=app_registration,area_chart,arrow_right,auto_awesome,cancel,chat,check_circle,done,home,list,mode_heat,queue,rocket,sentiment_dissatisfied,sentiment_satisfied,sentiment_very_dissatisfied,sentiment_very_satisfied,settings_accessibility,tab,task,thumb_down,thumb_up,video_camera_front,videocam,warning&display=block" rel="stylesheet" media="print" onload="this.media='all'" data-font>

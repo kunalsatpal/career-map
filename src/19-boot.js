@@ -70,4 +70,18 @@ function boot() {
   addEventListener('resize', () => { VW = innerWidth; VH = innerHeight; setAnchor(); clampCam(); cityResize(); ground.style.setProperty('--lw', lineWeight(cam.s)); if (cardFor) measureCard(); render(); clearTimeout(resizeT); resizeT = setTimeout(render, 120) })
   window.__map = { cam, go, flyTo, fitAll, render, view, project, city, cam, LEVELS, ROOMS, DECOR, decorAt, decorState: () => [decorRaf, decorIdle], openCase, scrollBy, pick: (x, y) => cityPick(x, y), gls: () => GLS && ({ p: !!GLS.pieceP.u, s: !!GLS.shadowP.u, c: !!GLS.compP.u }) }
 }
-boot()
+// Phones are sent to kunalsatpal.com before the page loads (build.py). If that redirect is blocked, they get this note instead of the map, pointing
+// to the same place. Nothing heavy (paper, drawing, WebGL) is built on a phone.
+function phoneAway() {
+  document.documentElement.classList.add('away')
+  $('loader')?.remove()
+  const note = document.createElement('section')
+  note.className = 'away-note'; note.setAttribute('aria-labelledby', 'away-title')
+  note.innerHTML = '<b class="away-name">Kunal Satpal</b>'
+    + '<h2 id="away-title">This map is made for a bigger screen</h2>'
+    + '<p>Open it on a laptop or desktop to explore it. On your phone, my portfolio is at kunalsatpal.com.</p>'
+    + '<a class="btn ink" href="https://kunalsatpal.com/">Go to kunalsatpal.com</a>'
+    + '<a class="away-mail" href="mailto:kunalsatpal1@gmail.com">kunalsatpal1@gmail.com</a>'
+  document.body.appendChild(note)
+}
+if (PHONE) phoneAway(); else boot()
