@@ -4,6 +4,18 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Kunal Satpal — A map of the work</title>
+<!-- What a shared link shows (LinkedIn, X, Slack, iMessage). The picture is site/img/og-career-map.jpg. -->
+<meta name="description" content="Kunal Satpal's design portfolio as a hand-drawn map: every company is a city that builds itself as you arrive, and every project is a building you can open.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://kunalsatpal.com/career-map/">
+<meta property="og:title" content="Kunal Satpal — A map of the work">
+<meta property="og:description" content="A design portfolio you travel through. Every company is a city that builds itself as you arrive; every project is a building you can open.">
+<meta property="og:image" content="https://kunalsatpal.com/career-map/site/img/og-career-map.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="A hand-drawn parchment map with the Hinge Health city standing in 3D beside a winding road.">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 41 39'%3E%3Crect x='-4' y='-4' width='41' height='39' rx='8' fill='%23f4ead7'/%3E%3Cg fill='%23372017'%3E%3Crect y='1.09' width='7.68' height='28.36' rx='1.4'/%3E%3Cpath d='M31.24.92c.77 0 1.4.63 1.4 1.4v25.52c0 .77-.63 1.4-1.4 1.4h-6.1c-.27 0-.52-.11-.7-.31L12.18 15.08 24.44 1.22c.18-.19.43-.3.7-.3z'/%3E%3C/g%3E%3C/svg%3E">
 <!-- Phones go straight to kunalsatpal.com: the map is made for bigger screens. Same test as PHONE (01-util.js), so tablets stay. -->
 <script>if (matchMedia('(pointer: coarse)').matches && Math.min(screen.width, screen.height) <= 760) location.replace('https://kunalsatpal.com/')</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -320,6 +332,7 @@ body.cards .eng.up, body.cards .ly-trees { display: none; }
   box-shadow: 0 0 0 1px oklch(27% 0.04 42 / .22), 0 2px 4px oklch(20% 0.03 45 / .08), 0 16px 34px -6px oklch(22% 0.035 45 / .32); }
 #panel.hcard .note { gap: 8px; padding: 16px 18px 18px; }
 #panel.hcard .note .headline { margin: 0; font: 600 1.1875rem/1.25 var(--font-body); color: var(--ink); text-wrap: balance; }
+#panel.hcard .note .headline .h-data { white-space: nowrap; }
 #panel.hcard .note .body, #panel.hcard .note li { color: var(--ink-2); font-size: 1rem; line-height: 1.4; }
 #panel.hcard .note .status { margin: 2px 0 0; font: 500 .9375rem/1.2 var(--font-body); font-variant-caps: all-small-caps; letter-spacing: .1em; color: color-mix(in oklch, var(--c), oklch(25% 0.03 42) 25%); }
 #panel.hcard .note .status a { color: inherit; text-underline-offset: 3px; }
@@ -1124,6 +1137,8 @@ body.ph-layers .sprite.step, body.ph-layers .gymprint { will-change: auto; }
 .cta .mail { font-size: .875em; opacity: .82; user-select: all; overflow-wrap: anywhere; }
 .contact-action { flex-direction: column; gap: 4px; }
 .contact-action .contact-mail { font-size: .875rem; letter-spacing: .02em; opacity: .85; user-select: all; }
+/* The button labels are in small caps; the address under them is written as it is typed. */
+:is(.cta .mail, .contact-action .contact-mail) { font-variant-caps: normal; text-transform: none; letter-spacing: .01em; }
 
 
 /* ---------- Pictures of words, set again as words ---------- */
@@ -1714,6 +1729,23 @@ html.away body > *:not(.away-note) { display: none !important; }
 .away-note p { margin: 0; max-width: 22rem; color: var(--ink-2); font: 400 1.125rem/1.45 'EB Garamond', Georgia, serif; }
 .away-note .btn { margin-top: 8px; position: static; }
 .away-note .away-mail { color: var(--ink-2); font: 400 1rem/1.4 'EB Garamond', Georgia, serif; }
+
+/* Email links (MAIL_SAY in 01-util.js): "Write to me", "Copy email" on hover or focus, "Email copied ✓" once
+   clicked. The three labels share one grid cell, so the link is always as wide as the longest and never jumps. */
+.mail-say { display: inline-grid; }
+:is(.btn, .cta, .contact-action) > .mail-say { justify-items: center; }
+/* Labels cross-fade: the outgoing one lifts away, the incoming one rises into place. */
+.mail-say > span { grid-area: 1 / 1; white-space: nowrap; opacity: 0; translate: 0 .45em; transition: opacity .22s var(--ease-out), translate .28s var(--ease-out); }
+.mail-say .ms-rest { translate: 0 -.45em; }
+a:not(.copied) .mail-say .ms-rest, a.copied .mail-say .ms-done { opacity: 1; translate: 0 0; }
+a:not(.copied):focus-visible .mail-say .ms-rest { opacity: 0; translate: 0 -.45em; }
+a:not(.copied):focus-visible .mail-say .ms-hover { opacity: 1; translate: 0 0; }
+@media (hover: hover) {
+  a:not(.copied):hover .mail-say .ms-rest { opacity: 0; translate: 0 -.45em; }
+  a:not(.copied):hover .mail-say .ms-hover { opacity: 1; translate: 0 0; }
+}
+a.copied .mail-say .ms-hover { translate: 0 -.45em; }
+@media (prefers-reduced-motion: reduce) { .mail-say > span { translate: none !important; transition: opacity .15s linear; } }
 </style>
 </head>
 <body>
@@ -1734,7 +1766,7 @@ html.away body > *:not(.away-note) { display: none !important; }
   <b>Kunal Satpal</b>
 </header>
 <nav class="ui top" aria-label="Links">
-  <a class="btn ink" href="mailto:kunalsatpal1@gmail.com">Email Me</a>
+  <a class="btn ink" href="mailto:kunalsatpal1@gmail.com"><span class="mail-say"><span class="ms-rest">Write to me</span><span class="ms-hover" aria-hidden="true">Copy email</span><span class="ms-done" aria-hidden="true">Email copied ✓</span></span></a>
   <a class="btn round wide" href="https://kunalsatpal.com/kunalsatpal_resume.pdf" target="_blank" rel="noopener">Resume <span aria-hidden="true">↗</span></a>
 </nav>
 <nav class="ui rail" id="rail" aria-label="Where you are on the road"></nav>
@@ -1830,6 +1862,9 @@ const $ = id => document.getElementById(id)
 const SVGNS = 'http://www.w3.org/2000/svg'
 const SITE = 'https://kunalsatpal.com/kunalsatpal.com/'
 // Pictures travel with the map, in its own site/ folder; pages and links point to the website.
+// Every email link wears this label: "Write to me", "Copy email" on hover or focus, "Email copied ✓" once
+// clicked (13-input.js copies the address; style.css stacks the three so the width never jumps).
+const MAIL_SAY = '<span class="mail-say"><span class="ms-rest">Write to me</span><span class="ms-hover" aria-hidden="true">Copy email</span><span class="ms-done" aria-hidden="true">Email copied ✓</span></span>'
 const abs = p => !p ? null : /^(https?:|mailto:)/.test(p) ? p : /^(\.\/)?(site|assets)\//.test(p) ? p.replace(/^\.\//, '') : SITE + p.replace(/^\.\//, '')
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c])
 
@@ -1946,7 +1981,7 @@ const ROOMS = {
     list: ['Peak traffic of 200K daily visits', 'Designed for students, recruiters and the placement office'], img: './site/img/team_iit.jpg' },
   'iit-team': { tip: ['A team of 12+ designers', "Built and led IMG's design team, making products for 10,000+ students."], realm: 'iit', quiet: true, title: 'Design team', hall: 'the studio', key: 'A team of 12+ designers', stat: 'A team of 12+ designers', body: 'As Head of Design at IMG, I built a team of 12+ designers making products for 10,000+ students.',
     list: ['Set up design reviews and a shared process', 'Mentored designers who went on to product roles'] },
-  'cult-fitclub': { tip: ['Launched across Cult and Mind', "Designed Cult.fit's loyalty program to lift retention first and cross-sell second."], realm: 'cult', title: 'Fitclub V2', hall: 'the arena', key: 'Loyalty, across Cult and Mind', stat: 'Launched across Cult and Mind', body: "Designed Fitclub V2, Cult.fit's loyalty program, to increase retention first and cross-sell products second.",
+  'cult-fitclub': { tag: 'Launched across Cult and Mind', tip: ['Fitclub V2 · Loyalty program', "Designed Cult.fit's loyalty program to lift retention first and cross-sell second."], realm: 'cult', title: 'Fitclub V2', hall: 'the arena', key: 'Loyalty, across Cult and Mind', stat: 'Launched across Cult and Mind', body: "Designed Fitclub V2, Cult.fit's loyalty program, to increase retention first and cross-sell products second.",
     list: ['Rewards, streaks and plan selection in one journey', 'Built with product, engineering and marketing'], img: './site/img/fitclub.png', href: './case.html?c=Fitclub' },
   'cult-ds': { tip: ['Contributed to the Aurora design system', 'Shared components for app and web, built with a team of four designers.'], realm: 'cult', title: 'Design system', hall: 'the guild hall', key: 'The first one, with a team of four', stat: 'The first one, built with a team of four', body: "Co-built Cult.fit's first app and web design system with a team of four designers.",
     list: ['Shared components across app and web', 'Category icon system across fitness, food and care'], img: './site/img/proof_icons.png' },
@@ -1958,12 +1993,12 @@ const ROOMS = {
     list: ['4% incremental session conversions', '5× ad revenue'], img: './site/cases/m/fe0ed5eb7d.png', href: './case.html?c=promo' },
   'gojek-visits': { tip: ['2.5× visits · 2× conversion', 'Redesigned the GoFood promotions page, end to end.'], realm: 'gojek', title: 'Promotions page', hall: 'the banner hall', key: '2.5× visits · 2× conversion', stat: '2.5× visits · 2× conversion', body: 'Redesigned the promotions experience end to end.', list: ['2.5× page visits', '2× page conversion'], img: './site/img/proof_promo.jpg' },
   'gojek-experiments': { tip: ['20+ experiments · +2% promo redemption', 'A year of tests on GoFood promotions, which also changed how people perceive them.'], realm: 'gojek', title: 'Promo experiments', hall: 'the kitchens', key: '20+ experiments in a year', stat: '20+ experiments in a year', body: 'Ran more than 20 experiments in a year on promotions.', list: ['Promo redemption up 2%', 'Better perception of promos'] },
-  'hinge-carehub': { hoverImg: true, hoverSrc: './site/cases/media/carehub/hover-bento.png', hoverCutout: true, underConstruction: false, tip: ['A 6% gain in PT efficiency', 'Led the CareHub 2.0 visual refresh. Mover’s Award 2025.'], realm: 'hinge', title: 'CareHub 2.0', hall: 'the great hall', key: 'Before & after · Case study preview', stat: 'The platform every PT and coach works in', body: "Lead IC on the CareHub visual refresh, with one more designer over six months. Mover’s Award 2025.",
+  'hinge-carehub': { hoverImg: true, hoverSrc: './site/cases/media/carehub/hover-bento.png', hoverCutout: true, underConstruction: false, tip: [['CareHub 2.0', '6% more efficient PTs'], 'Led the visual refresh of the tool every PT and coach uses. Mover’s Award 2025.'], realm: 'hinge', title: 'CareHub 2.0', hall: 'the great hall', key: 'Before & after · Case study preview', stat: 'The platform every PT and coach works in', body: "Lead IC on the CareHub visual refresh, with one more designer over six months. Mover’s Award 2025.",
     list: ['Used by every physical therapist and coach', 'Visual refresh: reported 6% gain in PT efficiency'], img: './site/cases/media/carehub/after.png', href: '#hinge-carehub/read' },
-  'hinge-ai': { underConstruction: false, tip: ['Holistic care ~ $400 monthly savings', 'Then ~4% less time crafting messages. A member-first AI roadmap: see the whole situation, then understand what matters.'], realm: 'hinge', title: 'AI next-best-action', hall: 'the observatory', key: '~6% less member-profile time', stat: 'A member-first path to next best action', body: 'Set the strategy and roadmap for a member-first CareHub, building toward next-best-action recommendations.',
+  'hinge-ai': { underConstruction: false, tip: [['AI next-best-action', '~$400k saved a month'], 'A member-first AI roadmap, saving care teams 220 hours a day.'], realm: 'hinge', title: 'AI next-best-action', hall: 'the observatory', key: '~$400k saved a month', stat: 'A member-first path to next best action', body: 'Set the strategy and roadmap for a member-first CareHub, building toward next-best-action recommendations.',
     list: ['~6% less member-profile time', '~1% less time per member and ~4% less message-crafting time'], img: './site/cases/media/nba/final-carehub.jpg', href: '#hinge-ai/read' },
-  'hinge-workflows': { tip: ['8% faster for PTs · 16% for coaches', 'Simplified the everyday workflows care teams run in CareHub.'], realm: 'hinge', title: 'Care-team workflows', hall: 'the cloister', key: '8% faster for PTs · 16% for coaches', stat: '8% faster for PTs · 16% for coaches', soon: true, body: 'Simplified care-team workflows across CareHub.', list: ['Time per member down 8% for PTs and 16% for coaches'] },
-  'hinge-video': { tip: ['Recording 53% → 95%', 'Redesigned video visits between members and their care team; visit time down 4.5%.'], realm: 'hinge', title: 'Video visits', hall: 'the mirror tower', key: 'Recording 53% → 95%', stat: 'Recording 53% → 95%', soon: true, body: 'Redesigned video visits between members and their care team.', list: ['Recording rates up from 53% to 95%', 'Visit time down 4.5%'] },
+  'hinge-workflows': { tip: [['Care-team workflows', 'Up to 16% faster'], 'Simplified the everyday work care teams do in CareHub.'], realm: 'hinge', title: 'Care-team workflows', hall: 'the cloister', key: 'Up to 16% faster', stat: 'Up to 16% faster', soon: true, body: 'Simplified care-team workflows across CareHub.', list: ['Time per member down by up to 16%'] },
+  'hinge-video': { tip: [['Video visits', '4.5% more efficient'], 'Redesigned the calls between members and their care team.'], realm: 'hinge', title: 'Video visits', hall: 'the mirror tower', key: '4.5% more efficient', stat: '4.5% more efficient', soon: true, body: 'Redesigned video visits between members and their care team.', list: ['Visit time down 4.5%'] },
   'blog-portfolio': { realm: 'writing', blog: true, title: 'Designing and iterating my portfolio', hall: 'the observatory', img: './site/img/blog_portfolio.png' },
   'blog-curefit': { realm: 'writing', blog: true, title: 'My experience at Cure.fit', hall: 'the gym hall', img: './site/img/blog_cult.jpg' },
   'blog-whatsapp': { realm: 'writing', blog: true, title: 'A 4-hour sprint: WhatsApp Polls', hall: 'the clock house', img: './site/img/blog_whatsapp.png' },
@@ -1980,7 +2015,7 @@ const ROOMS = {
   'work-code': { realm: 'home', group: 'work', world: 'work', title: 'Code and motion', hall: 'a pillar with a code sign', stat: 'I code, and I design motion.',
     body: 'I prototype in code and design the motion, including the code and animation behind this map.' },
   'home-hello': { realm: 'home', title: 'Say hello', hall: 'the lighthouse', key: 'Say hello', stat: 'Available for conversations about design, AI products and remote work.',
-    links: [['kunalsatpal1@gmail.com', 'mailto:kunalsatpal1@gmail.com'], ['Résumé (PDF)', 'https://kunalsatpal.com/kunalsatpal_resume.pdf'], ['LinkedIn', 'https://www.linkedin.com/in/kunalsatpal1/']] },
+    links: [['Write to me', 'mailto:kunalsatpal1@gmail.com'], ['Résumé (PDF)', 'https://kunalsatpal.com/kunalsatpal_resume.pdf'], ['LinkedIn', 'https://www.linkedin.com/in/kunalsatpal1/']] },
   'life-lift': { realm: 'home', title: 'I lift every day', hall: 'off duty', key: 'Physically fit, and sane while shipping', stat: 'Physically fit, and sane while shipping products.', img: './site/img/goku-nimbus-toon.webp', alt: 'Goku riding the Flying Nimbus' },
   'life-books': { realm: 'home', title: 'Weekends are for books', hall: 'off duty', key: 'Mostly non-fiction', stat: 'Mostly non-fiction; fiction when I need to unwind.', pics: Array.from({ length: 12 }, (_, i) => `./site/img/book_${i + 1}.jpg`), grid: 'books' },
   'life-games': { realm: 'home', title: 'Breaks mean a controller', hall: 'off duty', key: 'God of War, forever', stat: 'To slay gods or kick goals. God of War forever; most hours in FIFA.', pics: ['./site/img/gow.png', './site/img/fifa.png'], grid: 'games' },
@@ -3324,7 +3359,7 @@ function buildLabels() {
   for (const L of LEVELS) {
     const B = ROOMS[L.id], realm = B.realm ? realmBy[B.realm] : null, about = B.realm === 'home', c = realm ? ok(50, .12, realm.hue) : ok(52, .08, 70)
     const el = document.createElement('div'); el.className = 'lvl' + (about ? ' about' : '') + (B.logo ? ' has-logo' : '') + (opens(L.id) ? ' case' : '') + (B.group === 'work' && BATCH.pillarNames ? ' plaque' : B.group || B.quiet || /^life-/.test(L.id) ? ' quiet' : '') + (visited.has(L.id) ? ' done' : ''); el.dataset.id = L.id; el.style.setProperty('--c', c)
-    const cta = hasCase(L.id) ? (letterOf(letterFor(L.id)).blog ? 'Read the blog' : B.caseLabel || 'Read the case study') : B.see ? B.seeLabel || 'Read the story' : '', k = (B.tip || [])[0] || B.stat || B.key || B.body
+    const cta = hasCase(L.id) ? (letterOf(letterFor(L.id)).blog ? 'Read the blog' : B.caseLabel || 'Read the case study') : B.see ? B.seeLabel || 'Read the story' : '', k = B.tag || [(B.tip || [])[0]].flat().at(-1) || B.stat || B.key || B.body
     el.innerHTML = `<button class="lv-t" data-go="${L.id}" aria-label="${B.title}. ${k || ''}">${B.logo ? logoHTML(B.logo) : ''}<b>${B.short || B.title}</b>${k ? `<span class="lv-k">${k}</span>` : ''}${cta ? `<span class="lv-cta">${cta} →</span>` : ''}</button>`
     labelLayer.appendChild(el); L.el = el
     const peekOn = () => levelPeek(L.id)
@@ -5401,18 +5436,21 @@ function showRoom(id) {
   // As on the universe site: the outcome is the headline, one line supports it, and one accent
   // says what else there is. The building's name is already on its tag, so it is not repeated.
   // In a cartouche the headline is centred and set larger, so a line of numbers breaks after its dot, not before.
-  const head = (B.tip ? B.tip[0] : B.stop ? B.title : B.stat || B.title).replace(/ · /g, BATCH.cardCartouche ? '&nbsp;· ' : ' · ')
+  // A headline can come in two parts, [idea, data]: the work's name, then its number, in one line
+  // ("CareHub 2.0 · 6% more efficient PTs"). The number's phrase is kept whole, so a long line breaks after the dot.
+  const dot = t => t.replace(/ · /g, BATCH.cardCartouche ? '&nbsp;· ' : ' · ')
+  const head = Array.isArray(B.tip?.[0]) ? `${dot(B.tip[0][0] + ' · ')}<span class="h-data">${B.tip[0][1]}</span>` : dot(B.tip ? B.tip[0] : B.stop ? B.title : B.stat || B.title)
   const line = B.tip ? B.tip[1] : B.stop ? [B.stat, B.body].filter(Boolean).join(' · ') : B.body
   note.innerHTML = (opens(id) || B.hoverImg ? winHTML(id) : !B.tip ? figHTML(B.img, B.alt) : '') + picsHTML(B.pics, B.grid)
     + (B.part?.t === 'pillar' ? `<div class="ehead">${crownSVG(B.part.kind)}<p class="headline">${head}</p></div>` : `<p class="headline">${head}</p>`) + (line ? `<p class="body">${line}</p>` : '')
     + (!B.tip && B.list ? `<ul>${B.list.map(li => `<li><span>${li}</span></li>`).join('')}</ul>` : '')
-    + (B.links && !(BATCH.finale && id === 'home-hello') ? `<ul class="links">${B.links.map(([t, h]) => `<li><a href="${abs(h)}" target="_blank" rel="noopener">${t}</a></li>`).join('')}</ul>` : '')
-    + (B.underConstruction ? '<p class="status">Full case study under construction · Preview available</p>' : B.nda ? `<p class="status">Under NDA · <a class="ext" href="mailto:kunalsatpal1@gmail.com?subject=${encodeURIComponent(B.title)}">ask me about it · kunalsatpal1@gmail.com</a></p>`
+    + (B.links && !(BATCH.finale && id === 'home-hello') ? `<ul class="links">${B.links.map(([t, h]) => h.startsWith('mailto:') ? `<li><a href="${h}">${MAIL_SAY}</a></li>` : `<li><a href="${abs(h)}" target="_blank" rel="noopener">${t}</a></li>`).join('')}</ul>` : '')
+    + (B.underConstruction ? '<p class="status">Full case study under construction · Preview available</p>' : B.nda ? `<p class="status">Under NDA · <a class="ext" href="mailto:kunalsatpal1@gmail.com?subject=${encodeURIComponent(B.title)}">${MAIL_SAY}</a></p>`
       : B.soon ? '<p class="status">Case study coming soon</p>' : '')
     + (hasCase(id) ? `<button class="go" data-enter="${id}">${B.caseLabel || 'Read now'} <span>· ${readMins(caseBody(letterFor(id)))} min →</span></button>`
       : B.see ? `<button class="go" data-letter="${B.see}">${B.seeLabel || 'Read the story'} <span>· ${readMins(caseBody(B.see))} min →</span></button>`
       : B.href ? `<a class="cta" href="${abs(B.href)}" target="_blank" rel="noopener">${B.cta || 'Read the case study'} <span aria-hidden="true">↗</span></a>` : '')
-    + (id === 'home-hello' ? `<a class="cta" href="mailto:kunalsatpal1@gmail.com?subject=${encodeURIComponent('Found you on the map')}"><span>Write to me <span aria-hidden="true">✉</span></span><span class="mail">kunalsatpal1@gmail.com</span></a>` : '')
+    + (id === 'home-hello' ? `<a class="cta" href="mailto:kunalsatpal1@gmail.com?subject=${encodeURIComponent('Found you on the map')}">${MAIL_SAY}<span class="mail">kunalsatpal1@gmail.com</span></a>` : '')
     // The sign-off (BATCH.finale): one way to write, then everything else in a single line.
     + (BATCH.finale && id === 'home-hello' ? `<p class="also">${B.links.filter(([, h]) => !h.startsWith('mailto:')).map(([t, h]) => `<a href="${abs(h)}" target="_blank" rel="noopener">${t.replace(' (PDF)', '')}</a>`).join('<span aria-hidden="true"> · </span>')}</p>` : '')
 }
@@ -5701,6 +5739,28 @@ document.addEventListener('click', e => {
   const fl = e.target.closest('[data-flow]'); if (fl) { e.preventDefault(); return go(LEVELS[0].id) }
   const t = e.target.closest('[data-go]'); if (t && !vp.contains(t)) { e.preventDefault(); t.classList.contains('lv-t') ? clickPlace(t.dataset.go) : go(t.dataset.go) }
 })
+// Email links (every mailto: on the page). Few people have a mail app set up, so a click doesn't open
+// one: it copies the address and the label (MAIL_SAY) reads "Email copied ✓" for a moment. The links
+// stay real mailto: links, so right-click "Copy email address" and Cmd/middle-click still work; if the
+// clipboard refuses, the click falls back to the mail app.
+function copyText(text) {
+  const old = () => { const t = document.createElement('textarea'); t.value = text; t.setAttribute('readonly', ''); t.style.cssText = 'position:fixed;opacity:0'; document.body.appendChild(t); t.select(); let ok = false; try { ok = document.execCommand('copy') } catch {} t.remove(); return ok }
+  return navigator.clipboard?.writeText ? navigator.clipboard.writeText(text).then(() => true, old) : Promise.resolve(old())
+}
+let mailLive = null
+function mailCopied(a) {
+  clearTimeout(a._mailT); a.classList.add('copied')
+  if (!mailLive) { mailLive = document.createElement('p'); mailLive.className = 'visually-hidden'; mailLive.setAttribute('aria-live', 'polite'); document.body.appendChild(mailLive) }
+  mailLive.textContent = ''; requestAnimationFrame(() => { mailLive.textContent = 'Email address copied' })
+  a._mailT = setTimeout(() => a.classList.remove('copied'), 1800)
+}
+document.addEventListener('click', e => {
+  const a = e.target.closest?.('a[href^="mailto:"]')
+  if (!a || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return
+  e.preventDefault(); e.stopPropagation()
+  const href = a.getAttribute('href')
+  copyText(decodeURIComponent(href.slice(7).split('?')[0])).then(ok => ok ? mailCopied(a) : (location.href = href))
+}, true)
 // From one level to the next, from wherever you are.
 function stepLevel(d) {
   const cur = cardFor && levelOf[cardFor] ? levelOf[cardFor].n - 1 : Math.max(-1, here)
@@ -5843,7 +5903,7 @@ const DEC_U = new Float32Array(24), DEC_A = new Float32Array(24)
 // How long each kind of movement lasts, in seconds.
 const DEC_T = { 1: 6.2, 2: 3.3, 3: 2.2, 4: 7, 5: 4.1, 6: 3.6, 7: 1.5, 8: 1.5, 9: 4 }
 const WAND = `url("data:image/svg+xml,${encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 26 26"><path d="M7 7L23 23" stroke="#fbf3e2" stroke-width="4.6" stroke-linecap="round"/><path d="M7 7L23 23" stroke="#3b2618" stroke-width="2.6" stroke-linecap="round"/><path d="M5 .8l1.1 2.6 2.7 1.1-2.7 1.1L5 8.2 3.9 5.6 1.2 4.5l2.7-1.1z" fill="#f1c84b" stroke="#3b2618" stroke-width=".7" stroke-linejoin="round"/></svg>')}") 5 5, pointer`
-const HELLO = ['Hello!', 'Oh, hi there!', 'Hello, traveller!'], SPELLS = ['Wingardium leviosa!', 'Nearly there!', 'Mind the crane!', 'Shh, it’s under NDA', 'Coming soon, promise']
+const HELLO = ['Hello!', 'Oh, hi there!', 'Hello, traveller!'], SPELLS = ['Coming soon, promise', 'Wingardium leviosa!', 'Nearly there!', 'Mind the crane!', 'Shh, it’s under NDA']
 let decorRaf = 0, decorUntil = 0, decorHot = 0, spell = 0, decorIdle = false, decorTick = 0
 const pick = list => list[Math.floor(Math.random() * list.length)]
 const gone = el => el.remove()
@@ -6917,7 +6977,7 @@ const HINGE_PAGE = 'hinge-share'
 const EXTRA_PAGES = !BATCH.hingePage ? {} : { [HINGE_PAGE]: { title: 'What I can share', realm: 'hinge', from: 'hinge-carehub', cases: [
   { k: 'CareHub 2.0', body: 'Owned the design of its core, the member record, the queue and AI actions, replacing the legacy tool. It is used by every PT and coach, with a 6% efficiency gain.' },
   { k: 'AI next-best-action', body: 'Set a member-first direction and staged roadmap: surface the full situation, make context understandable, then recommend actions. The first release reduced member-profile time by about 6%.' },
-  { k: 'Care-team workflows', body: 'Simplified the everyday workflows care teams run in CareHub: time per member down 8% for PTs and 16% for coaches.' },
+  { k: 'Care-team workflows', body: 'Simplified the everyday workflows care teams run in CareHub: time per member down by up to 16%.' },
   { k: 'Video visits', body: 'Redesigned video visits between members and their care team: recording rates up from 53% to 95%, and visit time down 4.5%.' },
 ] } }
 if (BATCH.hingePage) {
@@ -7287,8 +7347,8 @@ function pageHTML(id) {
   // Every page ends with a way to get in touch (BATCH.pageFixes): write, or take the résumé.
   const cv = ROOMS['home-hello'].links.find(([t]) => /sum/.test(t)), title = plain(P.title || L.title)
   const say = P.contactLock
-    ? `<section class="contact-callout ink-lock" aria-labelledby="case-contact-title"><div class="ink-lock-mark" aria-hidden="true"><img src="${abs('./assets/case-lock.svg')}" alt="" width="420" height="300" loading="lazy" decoding="async"></div><p class="lock-kicker">Under NDA</p><h2 id="case-contact-title">The rest is under lock and key</h2><p>${keep(P.lockLine || 'This is a preview. Write to me for the complete case study: the research, explorations and decisions behind it, walked through together on a call.')}</p><a class="contact-action" href="mailto:kunalsatpal1@gmail.com?subject=${encodeURIComponent(title + ' — complete case study')}"><span>Write to me <span aria-hidden="true">↗</span></span><span class="contact-mail">kunalsatpal1@gmail.com</span></a></section>`
-    : BATCH.pageFixes || EXTRA_PAGES[id] ? `<p class="psay">Want to talk about ${L.blog ? 'this' : 'this work'}? <a href="mailto:kunalsatpal1@gmail.com?subject=${encodeURIComponent(title)}">Write to me at kunalsatpal1@gmail.com</a><span aria-hidden="true"> · </span><a href="${abs(cv[1])}" target="_blank" rel="noopener">Résumé</a></p>` : ''
+    ? `<section class="contact-callout ink-lock" aria-labelledby="case-contact-title"><div class="ink-lock-mark" aria-hidden="true"><img src="${abs('./assets/case-lock.svg')}" alt="" width="420" height="300" loading="lazy" decoding="async"></div><p class="lock-kicker">Under NDA</p><h2 id="case-contact-title">The rest is under lock and key</h2><p>${keep(P.lockLine || 'This is a preview. Write to me for the complete case study: the research, explorations and decisions behind it, walked through together on a call.')}</p><a class="contact-action" href="mailto:kunalsatpal1@gmail.com?subject=${encodeURIComponent(title + ' — complete case study')}">${MAIL_SAY}<span class="contact-mail">kunalsatpal1@gmail.com</span></a></section>`
+    : BATCH.pageFixes || EXTRA_PAGES[id] ? `<p class="psay">Want to talk about ${L.blog ? 'this' : 'this work'}? <a href="mailto:kunalsatpal1@gmail.com?subject=${encodeURIComponent(title)}">${MAIL_SAY}</a><span aria-hidden="true"> · </span><a href="${abs(cv[1])}" target="_blank" rel="noopener">Résumé</a></p>` : ''
   // Every page offers the way on to the other case studies; on a locked preview it comes after the invitation.
   const nav = prev || next ? `<nav class="pnav${prev && next ? ' two' : ''}${P.contactLock ? ' after-lock' : ''}" aria-label="More to read">${prev}${next}</nav>` : ''
   const foot = `<footer class="pfoot">${P.contactLock ? say + nav : nav + say}<button class="pback" data-close>Back to the map</button></footer>`
@@ -7873,7 +7933,7 @@ function phoneAway() {
     + '<h2 id="away-title">This map is made for a bigger screen</h2>'
     + '<p>Open it on a laptop or desktop to explore it. On your phone, my portfolio is at kunalsatpal.com.</p>'
     + '<a class="btn ink" href="https://kunalsatpal.com/">Go to kunalsatpal.com</a>'
-    + '<a class="away-mail" href="mailto:kunalsatpal1@gmail.com">kunalsatpal1@gmail.com</a>'
+    + '<a class="away-mail" href="mailto:kunalsatpal1@gmail.com">' + MAIL_SAY + '</a>'
   document.body.appendChild(note)
 }
 if (PHONE) phoneAway(); else boot()
