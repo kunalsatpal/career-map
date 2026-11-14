@@ -306,6 +306,7 @@ body.cards .eng.up, body.cards .ly-trees { display: none; }
   box-shadow: 0 0 0 1px oklch(27% 0.04 42 / .22), 0 2px 4px oklch(20% 0.03 45 / .08), 0 16px 34px -6px oklch(22% 0.035 45 / .32); }
 #panel.hcard .note { gap: 8px; padding: 16px 18px 18px; }
 #panel.hcard .note .headline { margin: 0; font: 600 1.1875rem/1.25 var(--font-body); color: var(--ink); text-wrap: balance; }
+#panel.hcard .note .headline .h-data { white-space: nowrap; }
 #panel.hcard .note .body, #panel.hcard .note li { color: var(--ink-2); font-size: 1rem; line-height: 1.4; }
 #panel.hcard .note .status { margin: 2px 0 0; font: 500 .9375rem/1.2 var(--font-body); font-variant-caps: all-small-caps; letter-spacing: .1em; color: color-mix(in oklch, var(--c), oklch(25% 0.03 42) 25%); }
 #panel.hcard .note .status a { color: inherit; text-underline-offset: 3px; }
@@ -1110,6 +1111,8 @@ body.ph-layers .sprite.step, body.ph-layers .gymprint { will-change: auto; }
 .cta .mail { font-size: .875em; opacity: .82; user-select: all; overflow-wrap: anywhere; }
 .contact-action { flex-direction: column; gap: 4px; }
 .contact-action .contact-mail { font-size: .875rem; letter-spacing: .02em; opacity: .85; user-select: all; }
+/* The button labels are in small caps; the address under them is written as it is typed. */
+:is(.cta .mail, .contact-action .contact-mail) { font-variant-caps: normal; text-transform: none; letter-spacing: .01em; }
 
 
 /* ---------- Pictures of words, set again as words ---------- */
@@ -1700,3 +1703,20 @@ html.away body > *:not(.away-note) { display: none !important; }
 .away-note p { margin: 0; max-width: 22rem; color: var(--ink-2); font: 400 1.125rem/1.45 'EB Garamond', Georgia, serif; }
 .away-note .btn { margin-top: 8px; position: static; }
 .away-note .away-mail { color: var(--ink-2); font: 400 1rem/1.4 'EB Garamond', Georgia, serif; }
+
+/* Email links (MAIL_SAY in 01-util.js): "Write to me", "Copy email" on hover or focus, "Email copied ✓" once
+   clicked. The three labels share one grid cell, so the link is always as wide as the longest and never jumps. */
+.mail-say { display: inline-grid; }
+:is(.btn, .cta, .contact-action) > .mail-say { justify-items: center; }
+/* Labels cross-fade: the outgoing one lifts away, the incoming one rises into place. */
+.mail-say > span { grid-area: 1 / 1; white-space: nowrap; opacity: 0; translate: 0 .45em; transition: opacity .22s var(--ease-out), translate .28s var(--ease-out); }
+.mail-say .ms-rest { translate: 0 -.45em; }
+a:not(.copied) .mail-say .ms-rest, a.copied .mail-say .ms-done { opacity: 1; translate: 0 0; }
+a:not(.copied):focus-visible .mail-say .ms-rest { opacity: 0; translate: 0 -.45em; }
+a:not(.copied):focus-visible .mail-say .ms-hover { opacity: 1; translate: 0 0; }
+@media (hover: hover) {
+  a:not(.copied):hover .mail-say .ms-rest { opacity: 0; translate: 0 -.45em; }
+  a:not(.copied):hover .mail-say .ms-hover { opacity: 1; translate: 0 0; }
+}
+a.copied .mail-say .ms-hover { translate: 0 -.45em; }
+@media (prefers-reduced-motion: reduce) { .mail-say > span { translate: none !important; transition: opacity .15s linear; } }

@@ -11,7 +11,7 @@ const HINGE_PAGE = 'hinge-share'
 const EXTRA_PAGES = !BATCH.hingePage ? {} : { [HINGE_PAGE]: { title: 'What I can share', realm: 'hinge', from: 'hinge-carehub', cases: [
   { k: 'CareHub 2.0', body: 'Owned the design of its core, the member record, the queue and AI actions, replacing the legacy tool. It is used by every PT and coach, with a 6% efficiency gain.' },
   { k: 'AI next-best-action', body: 'Set a member-first direction and staged roadmap: surface the full situation, make context understandable, then recommend actions. The first release reduced member-profile time by about 6%.' },
-  { k: 'Care-team workflows', body: 'Simplified the everyday workflows care teams run in CareHub: time per member down 8% for PTs and 16% for coaches.' },
+  { k: 'Care-team workflows', body: 'Simplified the everyday workflows care teams run in CareHub: time per member down by up to 16%.' },
   { k: 'Video visits', body: 'Redesigned video visits between members and their care team: recording rates up from 53% to 95%, and visit time down 4.5%.' },
 ] } }
 if (BATCH.hingePage) {
@@ -381,8 +381,8 @@ function pageHTML(id) {
   // Every page ends with a way to get in touch (BATCH.pageFixes): write, or take the résumé.
   const cv = ROOMS['home-hello'].links.find(([t]) => /sum/.test(t)), title = plain(P.title || L.title)
   const say = P.contactLock
-    ? `<section class="contact-callout ink-lock" aria-labelledby="case-contact-title"><div class="ink-lock-mark" aria-hidden="true"><img src="${abs('./assets/case-lock.svg')}" alt="" width="420" height="300" loading="lazy" decoding="async"></div><p class="lock-kicker">Under NDA</p><h2 id="case-contact-title">The rest is under lock and key</h2><p>${keep(P.lockLine || 'This is a preview. Write to me for the complete case study: the research, explorations and decisions behind it, walked through together on a call.')}</p><a class="contact-action" href="mailto:kunalsatpal1@gmail.com?subject=${encodeURIComponent(title + ' — complete case study')}"><span>Write to me <span aria-hidden="true">↗</span></span><span class="contact-mail">kunalsatpal1@gmail.com</span></a></section>`
-    : BATCH.pageFixes || EXTRA_PAGES[id] ? `<p class="psay">Want to talk about ${L.blog ? 'this' : 'this work'}? <a href="mailto:kunalsatpal1@gmail.com?subject=${encodeURIComponent(title)}">Write to me at kunalsatpal1@gmail.com</a><span aria-hidden="true"> · </span><a href="${abs(cv[1])}" target="_blank" rel="noopener">Résumé</a></p>` : ''
+    ? `<section class="contact-callout ink-lock" aria-labelledby="case-contact-title"><div class="ink-lock-mark" aria-hidden="true"><img src="${abs('./assets/case-lock.svg')}" alt="" width="420" height="300" loading="lazy" decoding="async"></div><p class="lock-kicker">Under NDA</p><h2 id="case-contact-title">The rest is under lock and key</h2><p>${keep(P.lockLine || 'This is a preview. Write to me for the complete case study: the research, explorations and decisions behind it, walked through together on a call.')}</p><a class="contact-action" href="mailto:kunalsatpal1@gmail.com?subject=${encodeURIComponent(title + ' — complete case study')}">${MAIL_SAY}<span class="contact-mail">kunalsatpal1@gmail.com</span></a></section>`
+    : BATCH.pageFixes || EXTRA_PAGES[id] ? `<p class="psay">Want to talk about ${L.blog ? 'this' : 'this work'}? <a href="mailto:kunalsatpal1@gmail.com?subject=${encodeURIComponent(title)}">${MAIL_SAY}</a><span aria-hidden="true"> · </span><a href="${abs(cv[1])}" target="_blank" rel="noopener">Résumé</a></p>` : ''
   // Every page offers the way on to the other case studies; on a locked preview it comes after the invitation.
   const nav = prev || next ? `<nav class="pnav${prev && next ? ' two' : ''}${P.contactLock ? ' after-lock' : ''}" aria-label="More to read">${prev}${next}</nav>` : ''
   const foot = `<footer class="pfoot">${P.contactLock ? say + nav : nav + say}<button class="pback" data-close>Back to the map</button></footer>`

@@ -81,7 +81,7 @@ function phoneAway() {
     + '<h2 id="away-title">This map is made for a bigger screen</h2>'
     + '<p>Open it on a laptop or desktop to explore it. On your phone, my portfolio is at kunalsatpal.com.</p>'
     + '<a class="btn ink" href="https://kunalsatpal.com/">Go to kunalsatpal.com</a>'
-    + '<a class="away-mail" href="mailto:kunalsatpal1@gmail.com">kunalsatpal1@gmail.com</a>'
+    + '<a class="away-mail" href="mailto:kunalsatpal1@gmail.com">' + MAIL_SAY + '</a>'
   document.body.appendChild(note)
 }
 if (PHONE) phoneAway(); else boot()

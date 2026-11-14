@@ -117,6 +117,28 @@ document.addEventListener('click', e => {
   const fl = e.target.closest('[data-flow]'); if (fl) { e.preventDefault(); return go(LEVELS[0].id) }
   const t = e.target.closest('[data-go]'); if (t && !vp.contains(t)) { e.preventDefault(); t.classList.contains('lv-t') ? clickPlace(t.dataset.go) : go(t.dataset.go) }
 })
+// Email links (every mailto: on the page). Few people have a mail app set up, so a click doesn't open
+// one: it copies the address and the label (MAIL_SAY) reads "Email copied ✓" for a moment. The links
+// stay real mailto: links, so right-click "Copy email address" and Cmd/middle-click still work; if the
+// clipboard refuses, the click falls back to the mail app.
+function copyText(text) {
+  const old = () => { const t = document.createElement('textarea'); t.value = text; t.setAttribute('readonly', ''); t.style.cssText = 'position:fixed;opacity:0'; document.body.appendChild(t); t.select(); let ok = false; try { ok = document.execCommand('copy') } catch {} t.remove(); return ok }
+  return navigator.clipboard?.writeText ? navigator.clipboard.writeText(text).then(() => true, old) : Promise.resolve(old())
+}
+let mailLive = null
+function mailCopied(a) {
+  clearTimeout(a._mailT); a.classList.add('copied')
+  if (!mailLive) { mailLive = document.createElement('p'); mailLive.className = 'visually-hidden'; mailLive.setAttribute('aria-live', 'polite'); document.body.appendChild(mailLive) }
+  mailLive.textContent = ''; requestAnimationFrame(() => { mailLive.textContent = 'Email address copied' })
+  a._mailT = setTimeout(() => a.classList.remove('copied'), 1800)
+}
+document.addEventListener('click', e => {
+  const a = e.target.closest?.('a[href^="mailto:"]')
+  if (!a || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return
+  e.preventDefault(); e.stopPropagation()
+  const href = a.getAttribute('href')
+  copyText(decodeURIComponent(href.slice(7).split('?')[0])).then(ok => ok ? mailCopied(a) : (location.href = href))
+}, true)
 // From one level to the next, from wherever you are.
 function stepLevel(d) {
   const cur = cardFor && levelOf[cardFor] ? levelOf[cardFor].n - 1 : Math.max(-1, here)

@@ -13,6 +13,9 @@ const $ = id => document.getElementById(id)
 const SVGNS = 'http://www.w3.org/2000/svg'
 const SITE = 'https://kunalsatpal.com/kunalsatpal.com/'
 // Pictures travel with the map, in its own site/ folder; pages and links point to the website.
+// Every email link wears this label: "Write to me", "Copy email" on hover or focus, "Email copied ✓" once
+// clicked (13-input.js copies the address; style.css stacks the three so the width never jumps).
+const MAIL_SAY = '<span class="mail-say"><span class="ms-rest">Write to me</span><span class="ms-hover" aria-hidden="true">Copy email</span><span class="ms-done" aria-hidden="true">Email copied ✓</span></span>'
 const abs = p => !p ? null : /^(https?:|mailto:)/.test(p) ? p : /^(\.\/)?(site|assets)\//.test(p) ? p.replace(/^\.\//, '') : SITE + p.replace(/^\.\//, '')
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c])
 

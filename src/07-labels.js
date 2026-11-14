@@ -61,7 +61,7 @@ function buildLabels() {
   for (const L of LEVELS) {
     const B = ROOMS[L.id], realm = B.realm ? realmBy[B.realm] : null, about = B.realm === 'home', c = realm ? ok(50, .12, realm.hue) : ok(52, .08, 70)
     const el = document.createElement('div'); el.className = 'lvl' + (about ? ' about' : '') + (B.logo ? ' has-logo' : '') + (opens(L.id) ? ' case' : '') + (B.group === 'work' && BATCH.pillarNames ? ' plaque' : B.group || B.quiet || /^life-/.test(L.id) ? ' quiet' : '') + (visited.has(L.id) ? ' done' : ''); el.dataset.id = L.id; el.style.setProperty('--c', c)
-    const cta = hasCase(L.id) ? (letterOf(letterFor(L.id)).blog ? 'Read the blog' : B.caseLabel || 'Read the case study') : B.see ? B.seeLabel || 'Read the story' : '', k = (B.tip || [])[0] || B.stat || B.key || B.body
+    const cta = hasCase(L.id) ? (letterOf(letterFor(L.id)).blog ? 'Read the blog' : B.caseLabel || 'Read the case study') : B.see ? B.seeLabel || 'Read the story' : '', k = B.tag || [(B.tip || [])[0]].flat().at(-1) || B.stat || B.key || B.body
     el.innerHTML = `<button class="lv-t" data-go="${L.id}" aria-label="${B.title}. ${k || ''}">${B.logo ? logoHTML(B.logo) : ''}<b>${B.short || B.title}</b>${k ? `<span class="lv-k">${k}</span>` : ''}${cta ? `<span class="lv-cta">${cta} →</span>` : ''}</button>`
     labelLayer.appendChild(el); L.el = el
     const peekOn = () => levelPeek(L.id)

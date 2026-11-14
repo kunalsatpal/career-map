@@ -47,18 +47,21 @@ function showRoom(id) {
   // As on the universe site: the outcome is the headline, one line supports it, and one accent
   // says what else there is. The building's name is already on its tag, so it is not repeated.
   // In a cartouche the headline is centred and set larger, so a line of numbers breaks after its dot, not before.
-  const head = (B.tip ? B.tip[0] : B.stop ? B.title : B.stat || B.title).replace(/ · /g, BATCH.cardCartouche ? '&nbsp;· ' : ' · ')
+  // A headline can come in two parts, [idea, data]: the work's name, then its number, in one line
+  // ("CareHub 2.0 · 6% more efficient PTs"). The number's phrase is kept whole, so a long line breaks after the dot.
+  const dot = t => t.replace(/ · /g, BATCH.cardCartouche ? '&nbsp;· ' : ' · ')
+  const head = Array.isArray(B.tip?.[0]) ? `${dot(B.tip[0][0] + ' · ')}<span class="h-data">${B.tip[0][1]}</span>` : dot(B.tip ? B.tip[0] : B.stop ? B.title : B.stat || B.title)
   const line = B.tip ? B.tip[1] : B.stop ? [B.stat, B.body].filter(Boolean).join(' · ') : B.body
   note.innerHTML = (opens(id) || B.hoverImg ? winHTML(id) : !B.tip ? figHTML(B.img, B.alt) : '') + picsHTML(B.pics, B.grid)
     + (B.part?.t === 'pillar' ? `<div class="ehead">${crownSVG(B.part.kind)}<p class="headline">${head}</p></div>` : `<p class="headline">${head}</p>`) + (line ? `<p class="body">${line}</p>` : '')
     + (!B.tip && B.list ? `<ul>${B.list.map(li => `<li><span>${li}</span></li>`).join('')}</ul>` : '')
-    + (B.links && !(BATCH.finale && id === 'home-hello') ? `<ul class="links">${B.links.map(([t, h]) => `<li><a href="${abs(h)}" target="_blank" rel="noopener">${t}</a></li>`).join('')}</ul>` : '')
-    + (B.underConstruction ? '<p class="status">Full case study under construction · Preview available</p>' : B.nda ? `<p class="status">Under NDA · <a class="ext" href="mailto:kunalsatpal1@gmail.com?subject=${encodeURIComponent(B.title)}">ask me about it · kunalsatpal1@gmail.com</a></p>`
+    + (B.links && !(BATCH.finale && id === 'home-hello') ? `<ul class="links">${B.links.map(([t, h]) => h.startsWith('mailto:') ? `<li><a href="${h}">${MAIL_SAY}</a></li>` : `<li><a href="${abs(h)}" target="_blank" rel="noopener">${t}</a></li>`).join('')}</ul>` : '')
+    + (B.underConstruction ? '<p class="status">Full case study under construction · Preview available</p>' : B.nda ? `<p class="status">Under NDA · <a class="ext" href="mailto:kunalsatpal1@gmail.com?subject=${encodeURIComponent(B.title)}">${MAIL_SAY}</a></p>`
       : B.soon ? '<p class="status">Case study coming soon</p>' : '')
     + (hasCase(id) ? `<button class="go" data-enter="${id}">${B.caseLabel || 'Read now'} <span>· ${readMins(caseBody(letterFor(id)))} min →</span></button>`
       : B.see ? `<button class="go" data-letter="${B.see}">${B.seeLabel || 'Read the story'} <span>· ${readMins(caseBody(B.see))} min →</span></button>`
       : B.href ? `<a class="cta" href="${abs(B.href)}" target="_blank" rel="noopener">${B.cta || 'Read the case study'} <span aria-hidden="true">↗</span></a>` : '')
-    + (id === 'home-hello' ? `<a class="cta" href="mailto:kunalsatpal1@gmail.com?subject=${encodeURIComponent('Found you on the map')}"><span>Write to me <span aria-hidden="true">✉</span></span><span class="mail">kunalsatpal1@gmail.com</span></a>` : '')
+    + (id === 'home-hello' ? `<a class="cta" href="mailto:kunalsatpal1@gmail.com?subject=${encodeURIComponent('Found you on the map')}">${MAIL_SAY}<span class="mail">kunalsatpal1@gmail.com</span></a>` : '')
     // The sign-off (BATCH.finale): one way to write, then everything else in a single line.
     + (BATCH.finale && id === 'home-hello' ? `<p class="also">${B.links.filter(([, h]) => !h.startsWith('mailto:')).map(([t, h]) => `<a href="${abs(h)}" target="_blank" rel="noopener">${t.replace(' (PDF)', '')}</a>`).join('<span aria-hidden="true"> · </span>')}</p>` : '')
 }
