@@ -4,7 +4,7 @@
 // and banks a little into the road's turns. The ink layer (a CSS 3D plane), the standing
 // cities (on the GPU) and the labels (placed on screen) all share its one projection.
 // =====================================================================================
-const cam = { cx: W / 2, cy: 0, s: .8, ax: 0, ay: 0, intro: 0 }
+const cam = { cx: W / 2, cy: 0, s: .8, ax: 0, ay: 0, intro: 0, push: 0 }   // push: 0..1, the small lean in as a case study opens (18-letter.js)
 let VW = innerWidth, VH = innerHeight
 const DEG = Math.PI / 180, FOV = 40 * DEG, NEAR = 40, FAR = 16000
 // Flat, straight down, when motion is reduced or the GPU is unavailable; flying otherwise.
@@ -111,7 +111,7 @@ function view() {
   const sh = TILT ? (cam.sh || shot(cam.cy)) : { pitch: 90 * DEG, zoom: 1, yaw: 0 }
   const k = TILT ? cam.intro : 0
   const pitch = lerp(sh.pitch, 90 * DEG, k), yaw = lerp(sh.yaw, 0, k)
-  const s = cam.s * lerp(sh.zoom, VW / (W - 100) / cam.s, k), F = VH / 2 / Math.tan(FOV / 2), D = F / s
+  const s = cam.s * lerp(sh.zoom, VW / (W - 100) / cam.s, k) * (1 + PUSH_IN * cam.push), F = VH / 2 / Math.tan(FOV / 2), D = F / s
   const sp = Math.sin(pitch), cp = Math.cos(pitch), syw = Math.sin(yaw), cyw = Math.cos(yaw)
   const d = [syw * cp, -cyw * cp, -sp], r = [cyw, syw, 0], u = [d[1] * r[2] - d[2] * r[1], d[2] * r[0] - d[0] * r[2], d[0] * r[1] - d[1] * r[0]]
   const E = [cam.cx - d[0] * D, cam.cy - d[1] * D, -d[2] * D]
@@ -216,6 +216,17 @@ function easeStep(now) {
 const cancelFly = () => { cancelAnimationFrame(flyId); cancelAnimationFrame(glideId); flyId = glideId = 0 }
 const cancelMotion = () => { cancelFly(); cancelAnimationFrame(easeRaf); easeRaf = 0; targetY = null; camVel = 0 }
 // Travel along the road until world height y is the place being looked at.
+// Opening a case study, the camera leans a little closer to its building as the page fades in, and eases
+// back as it closes, so the move says you went into that building. Kept small on purpose: 4% closer.
+const PUSH_IN = .04
+let pushRaf = 0
+function pushTo(to, dur) {
+  cancelAnimationFrame(pushRaf)
+  if (reduce || !TILT) { cam.push = to; return }
+  const from = cam.push, t0 = performance.now()
+  const step = now => { const p = clamp((now - t0) / dur, 0, 1); cam.push = lerp(from, to, 1 - (1 - p) ** 3); moved(); render(); pushRaf = p < 1 ? requestAnimationFrame(step) : 0 }
+  pushRaf = requestAnimationFrame(step)
+}
 function flyTo(_x, y, _s, dur = 1000, done) {
   cancelMotion()
   const from = cam.cy, to = clamp(y, END_Y, START_Y), t0 = performance.now()

@@ -392,6 +392,13 @@ function pageHTML(id) {
 // ---------- Opening and closing ----------
 // Quiet on purpose: the page fades up a few pixels over the map, and fades away again.
 const letterEl = $('letter'), pageEl = letterEl.querySelector('.page'), lscroll = letterEl.querySelector('.lscroll'), lightbox = $('lightbox')
+// "Back" returns to the map; the page's own kicker already says which city. For screen readers it says
+// where to ("Back to Hinge Health on the map").
+const backEl = letterEl.querySelector('.lclose')
+function setBack(L) {
+  const name = ROOMS[L.from] && realmBy[ROOMS[L.from].realm]?.name
+  backEl.setAttribute('aria-label', name ? `Back to ${name} on the map` : 'Back to the map')
+}
 let caseId = null, letterFrom = null, seq = 0, reveal = null, riseIO = null, sysIO = null
 const SETTLE = 'cubic-bezier(.22, 1, .36, 1)'
 // Pictures rise into place as they scroll into view.
@@ -437,7 +444,7 @@ function openCase(id) {
   caseId = id; letterFrom = document.activeElement; letterEl.dataset.openCase = id
   const my = ++seq
   levelPeek(null); closePanel(); markVisited(L.from)
-  pageEl.innerHTML = pageHTML(id); letterEl.style.setProperty('--rc', ok(46, .12, fromOf(L).hue))
+  pageEl.innerHTML = pageHTML(id); letterEl.style.setProperty('--rc', ok(46, .12, fromOf(L).hue)); setBack(L)
   letterEl.hidden = false; letterEl.classList.remove('in'); lscroll.scrollTop = 0; watchRise()
   history.replaceState(null, '', `#${id}/read`)
   if (ROOMS[L.from]) citySelect(L.from)
@@ -445,7 +452,9 @@ function openCase(id) {
   requestAnimationFrame(() => letterEl.classList.add('in'))
   if (reduce) return done()
   reveal?.cancel()
-  reveal = letterEl.animate([{ opacity: 0, transform: 'translateY(12px)' }, { opacity: 1, transform: 'none' }], { duration: 340, easing: SETTLE, fill: 'forwards' })
+  // The camera leans in first; the page fades in a beat later, over the moving map, and no longer slides up.
+  pushTo(1, 560)
+  reveal = letterEl.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 360, delay: 140, easing: SETTLE, fill: 'both' })
   reveal.finished.then(done, () => {})
 }
 function closeCase(then) {
@@ -457,11 +466,12 @@ function closeCase(then) {
     if (my !== seq) return
     reveal?.cancel(); reveal = null
     letterEl.hidden = true; letterEl.classList.remove('in'); pageEl.innerHTML = ''; riseIO?.disconnect(); sysIO?.disconnect(); caseId = null; citySelect(null)
+    pushTo(0, 520)
     if (then) then(); else { const home = letterOf(id).from; history.replaceState(null, '', ROOMS[home] ? '#' + home : location.pathname + location.search); if (cardFor && cardFor === home) openCard(); letterFrom?.focus?.({ preventScroll: true }) }
   }
   if (reduce) return done()
   reveal?.cancel()
-  reveal = letterEl.animate([{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'translateY(6px)' }], { duration: 200, easing: 'ease-in', fill: 'forwards' })
+  reveal = letterEl.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 220, easing: 'ease-in', fill: 'forwards' })
   reveal.finished.then(done, () => {})
 }
 function goCase(id) { if (caseId) return closeCase(() => goCase(id)); go(id, { enter: true }) }
@@ -480,7 +490,7 @@ function swapCase(n) {
   const put = () => {
     if (my !== seq) return
     caseId = id; letterEl.dataset.openCase = id; markVisited(L.from)
-    pageEl.innerHTML = pageHTML(id); letterEl.style.setProperty('--rc', ok(46, .12, fromOf(L).hue))
+    pageEl.innerHTML = pageHTML(id); letterEl.style.setProperty('--rc', ok(46, .12, fromOf(L).hue)); setBack(L)
     lscroll.scrollTop = 0; watchRise(); history.replaceState(null, '', `#${id}/read`)
     if (ROOMS[L.from]) citySelect(L.from)
     pageEl.focus({ preventScroll: true })
