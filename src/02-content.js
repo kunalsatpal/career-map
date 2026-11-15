@@ -13,7 +13,7 @@ const REALMS = [
     blurb: 'Head of Design at the Information Management Group, building products for 10,000+ students.' },
   { key: 'intern', logo: 'cult', name: 'Cult.fit internships', years: '2018 · 2019', lead: 'Two internships, then a full-time offer', role: 'Product Design Intern', hue: 16, sig: 'track', ox: 1095, oy: 3695, w: 170, h: 120, minor: true, group: 'early',
     blurb: 'Two summers as a product design intern at Cure.fit, then a full-time offer.' },
-  { key: 'writing', name: 'Field notes', years: 'what I learned, written down', lead: 'Four posts, from my first job to my portfolio', role: 'Writing', hue: 320, sig: 'quill', ox: 690, oy: 2310, w: 560, h: 640, group: 'about',
+  { key: 'writing', name: 'Blogs', years: 'what I learned, written down', role: 'Writing', hue: 320, sig: 'quill', ox: 690, oy: 2310, w: 560, h: 640, group: 'about',
     blurb: 'What I learned along the way, written down: one building for each post.' },
   { key: 'home', name: 'About me', years: 'the Isle of Kunal', lead: '', role: '', hue: 236, sig: 'mark', ox: 660, oy: 710, w: 480, h: 1320, group: 'about',
     blurb: 'I build design teams, and I still design: product, systems, and the code behind this map.' },
@@ -25,9 +25,9 @@ const GROUPS = [{ key: 'work', name: 'How I work', sub: '', hue: 236, sig: 'mark
 const ROOMS = {
   'intern-2018': { tip: ['The internship I came back for', 'My first product design internship: research-led design on a startup project, and the lesson that people matter most.'], realm: 'intern', title: '2018', hall: 'the first studio', key: 'The internship I came back for', stat: 'The internship I came back for', body: 'My first product design internship, at Cure.fit in Bangalore.' },
   'intern-2019': { tip: ['Extended to three months, then a full-time offer', 'Back for a second summer: designed across gamification and payments, with work in the September campaign.'], realm: 'intern', title: '2019', hall: 'the second studio', key: 'Extended, then a full-time offer', stat: 'Extended to three months, then a full-time offer', body: 'A second internship at Cure.fit, extended to three months.' },
-  'iit-placement': { tip: ['200K daily visits at peak', 'Redesigned the campus placement portal students rely on through placement season.'], realm: 'iit', quiet: true, title: 'Placement portal', hall: 'the clock tower', key: '200K daily visits at peak', stat: '200K daily visits at peak', body: 'Redesigned the campus placement portal that serves students through placement and internship season.',
+  'iit-placement': { tip: [['Placement portal', '200K daily visits at peak'], 'Redesigned the campus placement portal students rely on through placement season.'], realm: 'iit', quiet: true, title: 'Placement portal', hall: 'the clock tower', key: '200K daily visits at peak', stat: '200K daily visits at peak', body: 'Redesigned the campus placement portal that serves students through placement and internship season.',
     list: ['Peak traffic of 200K daily visits', 'Designed for students, recruiters and the placement office'], img: './site/img/team_iit.jpg' },
-  'iit-team': { tip: ['A team of 12+ designers', "Built and led IMG's design team, making products for 10,000+ students."], realm: 'iit', quiet: true, title: 'Design team', hall: 'the studio', key: 'A team of 12+ designers', stat: 'A team of 12+ designers', body: 'As Head of Design at IMG, I built a team of 12+ designers making products for 10,000+ students.',
+  'iit-team': { tip: [['IIT Roorkee · IMG', 'Led a team of 12+ designers'], 'As Head of Design, built the team and its process, making products for 10,000+ students.'], realm: 'iit', quiet: true, title: 'Design team', hall: 'the studio', key: 'A team of 12+ designers', stat: 'A team of 12+ designers', body: 'As Head of Design at IMG, I built a team of 12+ designers making products for 10,000+ students.',
     list: ['Set up design reviews and a shared process', 'Mentored designers who went on to product roles'] },
   'cult-fitclub': { tag: 'Launched across Cult and Mind', tip: ['Fitclub V2 · Loyalty program', "Designed Cult.fit's loyalty program to lift retention first and cross-sell second."], realm: 'cult', title: 'Fitclub V2', hall: 'the arena', key: 'Loyalty, across Cult and Mind', stat: 'Launched across Cult and Mind', body: "Designed Fitclub V2, Cult.fit's loyalty program, to increase retention first and cross-sell products second.",
     list: ['Rewards, streaks and plan selection in one journey', 'Built with product, engineering and marketing'], img: './site/img/fitclub.png', href: './case.html?c=Fitclub' },
@@ -62,11 +62,12 @@ const ROOMS = {
     list: ["Created 10+ AI skills that improve designers' work at Hinge Health.", 'Contributed to the Aurora design system at Cult.fit.'] },
   'work-code': { realm: 'home', group: 'work', world: 'work', title: 'Code and motion', hall: 'a pillar with a code sign', stat: 'I code, and I design motion.',
     body: 'I prototype in code and design the motion, including the code and animation behind this map.' },
-  'home-hello': { realm: 'home', title: 'Say hello', hall: 'the lighthouse', key: 'Say hello', stat: 'Available for conversations about design, AI products and remote work.',
+  'home-hello': { realm: 'home', title: 'Say hello', hall: 'the lighthouse', key: 'Say hello', stat: 'Available for conversations about design, AI products and remote work.', say: 'Let’s talk.',
     links: [['Write to me', 'mailto:kunalsatpal1@gmail.com'], ['Résumé (PDF)', 'https://kunalsatpal.com/kunalsatpal_resume.pdf'], ['LinkedIn', 'https://www.linkedin.com/in/kunalsatpal1/']] },
   'life-lift': { realm: 'home', title: 'I lift every day', hall: 'off duty', key: 'Physically fit, and sane while shipping', stat: 'Physically fit, and sane while shipping products.', img: './site/img/goku-nimbus-toon.webp', alt: 'Goku riding the Flying Nimbus' },
   'life-books': { realm: 'home', title: 'Weekends are for books', hall: 'off duty', key: 'Mostly non-fiction', stat: 'Mostly non-fiction; fiction when I need to unwind.', pics: Array.from({ length: 12 }, (_, i) => `./site/img/book_${i + 1}.jpg`), grid: 'books' },
-  'life-games': { realm: 'home', title: 'Breaks mean a controller', hall: 'off duty', key: 'God of War, forever', stat: 'To slay gods or kick goals. God of War forever; most hours in FIFA.', pics: ['./site/img/gow.png', './site/img/fifa.png'], grid: 'games' },
+  'life-games': { realm: 'home', title: 'Breaks mean a controller', hall: 'off duty', key: 'Elden Ring, Expedition 33', stat: 'I like a challenge, so I play games that fight back.',
+    pics: ['./site/img/elden-ring.jpg', './site/img/expedition-33.jpg'], grid: 'games' },
   'life-anime': { realm: 'home', title: 'A designer who loves anime', hall: 'off duty', key: 'Naruto, one more time', stat: 'Naruto, more times than I can count, and a minimal poster series of it.', pics: Array.from({ length: 12 }, (_, i) => `./site/img/naruto_${String(i + 1).padStart(2, '0')}.png`), grid: 'posters' },
   'life-people': { realm: 'home', title: 'People matter the most', hall: 'off duty', key: 'Family, friends, teammates', stat: 'Family, friends, teammates.', pics: ['./site/img/team_gofood.jpg', './site/img/team_cult.jpg', './site/img/team_iit.jpg'], grid: 'photos' },
 }
@@ -102,9 +103,13 @@ const STOPS = [
 ]
 // More about the earlier stops, from the résumé and the field notes (BATCH.stopDetails). Pibit's story
 // stays with the Field notes, so its stop does not link to it.
+// Each card reads the same way: how and when as the label, the company as the headline, then one line on the work.
 const STOP_MORE = {
-  'stop-west': { years: '2018', tip: ['2018 · seven months, on contract', 'Product design for West Agile Labs, a product studio in San Francisco: my first real taste of corporate work.'] },
-  'stop-pibit': { tip: ['22 clients · 10,000+ users', 'Founding product designer of an offers platform for local merchants.'] },
+  'stop-mobily': { years: '2019', tip: [['Freelance · 2019', 'Mobily Invited'], 'Freelance product design for an invitations product.'] },
+  'stop-pipeline': { years: '2018', tip: [['Freelance · 2018', 'Pipeline Security'], 'Freelance product design for a security company.'] },
+  'stop-west': { years: '2018', tip: [['Contract · 2018', 'West Agile Labs'], 'Seven months of product design for a San Francisco studio: my first real taste of corporate work.'] },
+  'stop-pibit': { tip: [['Founding designer · 2017', 'Pibit'], 'Founding product designer of an offers platform for local merchants: 22 clients, 10,000+ users.'] },
+  'stop-stockroom': { years: '2017', tip: [['Product design · 2017', 'stockroom.io'], 'Product design for a B2B platform that helps recruiters curate candidates.'] },
 }
 if (BATCH.stopDetails) for (const S of STOPS) Object.assign(S, STOP_MORE[S.id])
 STOPS.forEach(S => { ROOMS[S.id] = { stop: true, title: S.name, stat: S.years || '', body: S.note, logo: S.logo, tip: S.tip, see: S.see } })
@@ -122,7 +127,7 @@ const WORLDS = [
   { key: 'gojek', name: 'Gojek', years: '2022 – 2023', y0: 5635, y1: 6590 },
   { key: 'cult', name: 'Cult.fit', years: '2020 – 2022', y0: 4480, y1: 5635 },
   { key: 'earlier', name: 'Earlier work', years: '2017 – 2020', y0: 3020, y1: 4480 },
-  { key: 'writing', name: 'Field notes', years: 'four posts', y0: 2220, y1: 3020 },
+  { key: 'writing', name: 'Blogs', years: 'four posts', y0: 2220, y1: 3020 },
   { key: 'work', name: 'How I work', years: '', y0: 1500, y1: 2220 },
   { key: 'home', name: 'About me', years: 'and how to say hello', y0: 380, y1: 1500 },
 ]

@@ -25,7 +25,7 @@ function boot() {
   })
   for (const { id } of BLOGS) {
     const B = ROOMS[id], p = FULLCASE_DATA[FULL_OF[id]].blocks.find(x => x.t === 'p'), text = p ? keep(p.html).replace(/<[^>]+>/g, '').trim() : ''
-    B.key = B.stat = `Field note · ${readMins(caseBody(id))} min read`
+    B.key = B.stat = `Blog · ${readMins(caseBody(id))} min read`
     if (text) B.body = (text.match(/^.{40,260}?[.!?](?=\s|$)/) || [text.slice(0, 220) + '…'])[0]
   }
   buildLabels(); buildSky(); buildGym(); buildWip(); markInert()

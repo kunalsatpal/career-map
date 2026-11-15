@@ -26,8 +26,17 @@ function winHTML(id) {
 // about and how long it takes, a few lines of it, and the way in.
 function noteHTML(id) {
   const B = ROOMS[id], P = PAGES[FULL_OF[id]] || {}, mins = readMins(caseBody(id))
-  return `<div class="jhead">${P.icon ? `<img class="jicon${P.iconBg ? ' mark' : ''}" src="${abs(P.icon)}" alt="" decoding="async"${P.iconBg ? ` style="background:${P.iconBg};padding:${P.iconPad ?? 11}px"` : ''}>` : ''}<div><p class="jtag">${P.tag || 'Field note'} · ${mins} min read</p><h2>${B.title}</h2></div></div>`
-    + (B.body ? `<p class="body jline">${B.body}</p>` : '') + `<button class="go" data-enter="${id}">Read the note <span>→</span></button>`
+  return `<div class="jhead">${P.icon ? `<img class="jicon${P.iconBg ? ' mark' : ''}" src="${abs(P.icon)}" alt="" decoding="async"${P.iconBg ? ` style="background:${P.iconBg};padding:${P.iconPad ?? 11}px"` : ''}>` : ''}<div><p class="jtag">${P.tag || 'Blog'} · ${mins} min read</p><h2>${B.title}</h2></div></div>`
+    + (B.body ? `<p class="body jline">${B.body}</p>` : '') + `<button class="go" data-enter="${id}">Read the blog <span>→</span></button>`
+}
+// With the cartouche, a field note's card reads like every other: its cover as a small badge, what it is as the
+// label, its title as the headline, the line the page opens with, and the way in with how long it takes.
+function noteCardHTML(id) {
+  const B = ROOMS[id], P = PAGES[FULL_OF[id]] || {}, mins = readMins(caseBody(id))
+  return (P.icon ? `<img class="jicon${P.iconBg ? ' mark' : ''}" src="${abs(P.icon)}" alt="" decoding="async"${P.iconBg ? ` style="background:${P.iconBg};padding:${P.iconPad ?? 11}px"` : ''}>` : '')
+    + `<p class="headline"><span class="h-name">Blog · ${P.tag || 'Writing'}</span><span class="h-data">${B.title}</span></p>`
+    + ((P.stand || B.body) ? `<p class="body">${P.stand || B.body}</p>` : '')
+    + `<button class="go" data-enter="${id}">Read the blog <span>· ${mins} min <i class="arr" aria-hidden="true">→</i></span></button>`
 }
 // The How I work pillars carry their crown, drawn small, beside the line in their note.
 const CROWNS = {
@@ -36,22 +45,34 @@ const CROWNS = {
   data: '<path d="M6 34H34"/><rect x="8" y="25" width="4.5" height="9"/><rect x="15" y="19" width="4.5" height="15"/><rect x="22" y="13" width="4.5" height="21"/><rect x="29" y="6" width="4.5" height="28"/>',
   tools: '<path d="M5 15H29Q32 19 25 21H22V27H27V31H12V27H17V21H12Q7 19 5 15Z"/><path d="M27 4L35 10M31 3L36 6"/>',
   code: '<path d="M13 12L5 20L13 28M27 12L35 20L27 28M23 8L17 32"/>',
+  // The lighthouse's owl, with a letter: the journey's last card.
+  owl: '<g class="ow-hop"><g class="ow-body"><path d="M12 22V14L13 6.5L18 10H22L27 6.5L28 14V22C28 27.5 24.5 31 20 31C15.5 31 12 27.5 12 22Z"/><g class="ow-eyes"><circle cx="16.5" cy="15.5" r="3"/><circle cx="23.5" cy="15.5" r="3"/><circle class="ow-p" cx="16.5" cy="15.7" r="1.25" fill="currentColor" stroke="none"/><circle class="ow-p" cx="23.5" cy="15.7" r="1.25" fill="currentColor" stroke="none"/><path class="ow-joy" d="M13.8 16.4Q16.5 13 19.2 16.4M20.8 16.4Q23.5 13 26.2 16.4"/></g><path d="M18.8 19.5L20 21.5L21.2 19.5"/><path d="M17 31V34M23 31V34"/><g class="ow-letter"><rect x="15.5" y="23.5" width="9" height="6"/><path d="M15.5 23.5L20 26.8L24.5 23.5"/></g></g></g><path d="M12 34H28"/>',
 }
 const crownSVG = kind => CROWNS[kind] ? `<span class="emblem"><svg viewBox="0 0 40 40" aria-hidden="true">${CROWNS[kind]}</svg></span>` : ''
 function showRoom(id) {
   const B = ROOMS[id], realm = B.realm ? realmBy[B.realm] : null, c = realm ? ok(48, .11, realm.hue) : ok(50, .08, 70)
   pillarRead(id)
-  panelEl.classList.toggle('journal', !!B.blog); panelEl.classList.toggle('hcard', !B.blog); panelEl.classList.toggle('cartouche', BATCH.cardCartouche && !B.blog)
+  panelEl.classList.toggle('journal', !!B.blog && !BATCH.cardCartouche); panelEl.classList.toggle('hcard', !B.blog || BATCH.cardCartouche); panelEl.classList.toggle('cartouche', !!BATCH.cardCartouche)
   note.style.setProperty('--c', c); panelEl.style.setProperty('--c', c)
-  if (B.blog) { note.innerHTML = noteHTML(id); return }
+  // The journey's end has its own card; set (or clear) its class before any other card is drawn, so it never lingers.
+  const fin = BATCH.finale && id === 'home-hello'
+  panelEl.classList.toggle('finale', fin)
+  if (B.blog) { note.innerHTML = BATCH.cardCartouche ? noteCardHTML(id) : noteHTML(id); return }
   // As on the universe site: the outcome is the headline, one line supports it, and one accent
   // says what else there is. The building's name is already on its tag, so it is not repeated.
   // In a cartouche the headline is centred and set larger, so a line of numbers breaks after its dot, not before.
   // A headline can come in two parts, [idea, data]: the work's name, then its number, in one line
   // ("CareHub 2.0 · 6% more efficient PTs"). The number's phrase is kept whole, so a long line breaks after the dot.
   const dot = t => t.replace(/ · /g, BATCH.cardCartouche ? '&nbsp;· ' : ' · ')
-  const head = Array.isArray(B.tip?.[0]) ? `${dot(B.tip[0][0] + ' · ')}<span class="h-data">${B.tip[0][1]}</span>` : dot(B.tip ? B.tip[0] : B.stop ? B.title : B.stat || B.title)
+  const head = Array.isArray(B.tip?.[0]) ? `<span class="h-name">${dot(B.tip[0][0])}</span><span class="h-sep">${dot(' · ')}</span><span class="h-data">${B.tip[0][1]}</span>` : dot(B.tip ? B.tip[0] : B.stop ? B.title : B.stat || B.title)
   const line = B.tip ? B.tip[1] : B.stop ? [B.stat, B.body].filter(Boolean).join(' · ') : B.body
+  // The journey's end (BATCH.finale): the owl, two words and the way to write, and nothing else.
+  if (fin) {
+    note.innerHTML = crownSVG('owl') + `<p class="headline">${B.say}</p><p class="mail-line">kunalsatpal1@gmail.com</p>`
+      + `<a class="cta" href="mailto:kunalsatpal1@gmail.com?subject=${encodeURIComponent('Found you on the map')}">${MAIL_SAY}</a>`
+      + `<p class="also">${B.links.filter(([, h]) => !h.startsWith('mailto:')).map(([t, h]) => `<a href="${abs(h)}" target="_blank" rel="noopener">${t.replace(' (PDF)', '')}</a>`).join('<span aria-hidden="true"> · </span>')}</p>`
+    return
+  }
   note.innerHTML = (opens(id) || B.hoverImg ? winHTML(id) : !B.tip ? figHTML(B.img, B.alt) : '') + picsHTML(B.pics, B.grid)
     + (B.part?.t === 'pillar' ? `<div class="ehead">${crownSVG(B.part.kind)}<p class="headline">${head}</p></div>` : `<p class="headline">${head}</p>`) + (line ? `<p class="body">${line}</p>` : '')
     + (!B.tip && B.list ? `<ul>${B.list.map(li => `<li><span>${li}</span></li>`).join('')}</ul>` : '')

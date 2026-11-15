@@ -357,13 +357,13 @@ const readMins = html => {
   return Math.max(2, Math.round(content.content.textContent.trim().split(/\s+/).length / 200))
 }
 // Who a page is from: the company it was written at, or my own field notes.
-const fromOf = L => L.realm && !L.blog ? realmBy[L.realm] : { name: 'Field notes', years: '', role: '', hue: 320, sig: 'quill' }
+const fromOf = L => L.realm && !L.blog ? realmBy[L.realm] : { name: 'Blogs', years: '', role: '', hue: 320, sig: 'quill' }
 const plain = h => String(h).replace(/<[^>]+>/g, '')
 function pageHTML(id) {
   const L = letterOf(id), from = fromOf(L), P = PAGES[L.doc] || {}, body = caseBody(id, true), mins = readMins(body)
-  const order = L.blog ? BLOG_ORDER : CASE_ORDER, at = order.indexOf(id), kind = L.blog ? 'field note' : 'case study'
+  const order = L.blog ? BLOG_ORDER : CASE_ORDER, at = order.indexOf(id), kind = L.blog ? 'blog' : 'case study'
   const head = L.blog
-    ? `<header class="phero blog">${P.icon ? `<div class="picon"${P.iconBg ? ` style="background:${P.iconBg}"` : ''}><img src="${abs(P.icon)}" alt=""${P.iconBg ? ` style="padding:${Math.round((P.iconPad ?? 11) * 1.3)}px"` : ' class="logo-fill"'}></div>` : ''}<p class="pkick">Field note ${two(P.n || 1)} · ${P.tag || 'Writing'} · ${mins} min read</p>`
+    ? `<header class="phero blog">${P.icon ? `<div class="picon"${P.iconBg ? ` style="background:${P.iconBg}"` : ''}><img src="${abs(P.icon)}" alt=""${P.iconBg ? ` style="padding:${Math.round((P.iconPad ?? 11) * 1.3)}px"` : ' class="logo-fill"'}></div>` : ''}<p class="pkick">Blog ${two(P.n || 1)} · ${P.tag || 'Writing'} · ${mins} min read</p>`
       + `<h1>${P.title || L.title}</h1>${P.stand ? `<p class="pstand">${P.stand}</p>` : ''}</header>`
     : `<header class="phero case${P.desktopHero ? ' desktop-product' : ''}"><div class="ptext"><p class="pkick">${crest(from.hue, from.sig)}<span>${from.name}</span></p><h1>${P.title || L.title}</h1>`
       + `${P.summary ? `<p class="psum">${P.summary}</p>` : ''}${P.chips ? `<dl class="pchips">${P.chips.map(([b, t]) => `<div><dt>${b}</dt><dd>${t}</dd></div>`).join('')}</dl>` : ''}<p class="pmeta">${from.role} · ${mins} min read</p></div>`
