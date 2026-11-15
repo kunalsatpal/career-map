@@ -921,6 +921,8 @@ body.reading-case #viewport, body.reading-case #dusk, body.reading-case #gl, bod
 /* One family in the card: the headline in the body's Garamond, a touch heavier, rather than the map's display lettering. */
 #panel.hcard.cartouche .note .headline { font: 500 1.375rem/1.2 var(--font-body); font-variant-numeric: lining-nums; }
 #panel.hcard.cartouche .note .headline::after { content: '❧'; display: block; margin-top: 8px; font: 400 1rem/1 var(--font-body); color: color-mix(in oklch, var(--c), oklch(30% 0.04 42) 30%); }
+/* A fleuron divides; when nothing follows the headline (the About me cards), it would only dangle, so it goes. */
+#panel.hcard.cartouche .note .headline:last-child::after { content: none; }
 /* The line under the headline: upright and a size smaller than the headline, in the softer ink, so it
    supports the headline instead of competing with it; balanced into even lines, a little in from the frame. */
 #panel.hcard.cartouche .note .body { font-size: .9375rem; line-height: 1.4; padding-inline: 6px; text-wrap: balance; }

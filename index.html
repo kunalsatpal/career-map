@@ -947,6 +947,8 @@ body.reading-case #viewport, body.reading-case #dusk, body.reading-case #gl, bod
 /* One family in the card: the headline in the body's Garamond, a touch heavier, rather than the map's display lettering. */
 #panel.hcard.cartouche .note .headline { font: 500 1.375rem/1.2 var(--font-body); font-variant-numeric: lining-nums; }
 #panel.hcard.cartouche .note .headline::after { content: '❧'; display: block; margin-top: 8px; font: 400 1rem/1 var(--font-body); color: color-mix(in oklch, var(--c), oklch(30% 0.04 42) 30%); }
+/* A fleuron divides; when nothing follows the headline (the About me cards), it would only dangle, so it goes. */
+#panel.hcard.cartouche .note .headline:last-child::after { content: none; }
 /* The line under the headline: upright and a size smaller than the headline, in the softer ink, so it
    supports the headline instead of competing with it; balanced into even lines, a little in from the frame. */
 #panel.hcard.cartouche .note .body { font-size: .9375rem; line-height: 1.4; padding-inline: 6px; text-wrap: balance; }
@@ -2080,12 +2082,12 @@ const ROOMS = {
     body: 'I prototype in code and design the motion, including the code and animation behind this map.' },
   'home-hello': { realm: 'home', title: 'Say hello', hall: 'the lighthouse', key: 'Say hello', stat: 'Available for conversations about design, AI products and remote work.', say: 'Let’s talk.',
     links: [['Write to me', 'mailto:kunalsatpal1@gmail.com'], ['Résumé (PDF)', 'https://kunalsatpal.com/kunalsatpal_resume.pdf'], ['LinkedIn', 'https://www.linkedin.com/in/kunalsatpal1/']] },
-  'life-lift': { realm: 'home', title: 'I lift every day', hall: 'off duty', key: 'Physically fit, and sane while shipping', stat: 'Physically fit, and sane while shipping products.', img: './site/img/goku-nimbus-toon.webp', alt: 'Goku riding the Flying Nimbus' },
-  'life-books': { realm: 'home', title: 'Weekends are for books', hall: 'off duty', key: 'Mostly non-fiction', stat: 'Mostly non-fiction; fiction when I need to unwind.', pics: Array.from({ length: 12 }, (_, i) => `./site/img/book_${i + 1}.jpg`), grid: 'books' },
+  'life-lift': { realm: 'home', title: 'I lift every day', hall: 'off duty', key: 'Physically fit, and sane while shipping', stat: 'The gym keeps me sane while I ship.', img: './site/img/goku-nimbus-toon.webp', alt: 'Goku riding the Flying Nimbus' },
+  'life-books': { realm: 'home', title: 'Weekends are for books', hall: 'off duty', key: 'Mostly non-fiction', stat: 'Mostly non-fiction. Fiction to unwind.', pics: Array.from({ length: 12 }, (_, i) => `./site/img/book_${i + 1}.jpg`), grid: 'books' },
   'life-games': { realm: 'home', title: 'Breaks mean a controller', hall: 'off duty', key: 'Elden Ring, Expedition 33', stat: 'I like a challenge, so I play games that fight back.',
     pics: ['./site/img/elden-ring.jpg', './site/img/expedition-33.jpg'], grid: 'games' },
-  'life-anime': { realm: 'home', title: 'A designer who loves anime', hall: 'off duty', key: 'Naruto, one more time', stat: 'Naruto, more times than I can count, and a minimal poster series of it.', pics: Array.from({ length: 12 }, (_, i) => `./site/img/naruto_${String(i + 1).padStart(2, '0')}.png`), grid: 'posters' },
-  'life-people': { realm: 'home', title: 'People matter the most', hall: 'off duty', key: 'Family, friends, teammates', stat: 'Family, friends, teammates.', pics: ['./site/img/team_gofood.jpg', './site/img/team_cult.jpg', './site/img/team_iit.jpg'], grid: 'photos' },
+  'life-anime': { realm: 'home', title: 'A designer who loves anime', hall: 'off duty', key: 'Naruto, one more time', stat: 'I love anime, and created a Naruto bookmark series.', pics: Array.from({ length: 12 }, (_, i) => `./site/img/naruto_${String(i + 1).padStart(2, '0')}.png`), grid: 'posters' },
+  'life-people': { realm: 'home', title: 'People matter the most', hall: 'off duty', key: 'Family, friends, teammates', stat: 'People are important wherever I go.', pics: ['./site/img/team_gofood.jpg', './site/img/team_cult.jpg', './site/img/team_iit.jpg'], grid: 'photos' },
 }
 // How I work as proof (BATCH.pillarProof): each pillar is named as a practice, and its note gives
 // one line of proof. Written with Kunal, 29 Oct.
