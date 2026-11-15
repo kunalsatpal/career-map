@@ -58,8 +58,8 @@ function showRoom(id) {
     + (B.links && !(BATCH.finale && id === 'home-hello') ? `<ul class="links">${B.links.map(([t, h]) => h.startsWith('mailto:') ? `<li><a href="${h}">${MAIL_SAY}</a></li>` : `<li><a href="${abs(h)}" target="_blank" rel="noopener">${t}</a></li>`).join('')}</ul>` : '')
     + (B.underConstruction ? '<p class="status">Full case study under construction · Preview available</p>' : B.nda ? `<p class="status">Under NDA · <a class="ext" href="mailto:kunalsatpal1@gmail.com?subject=${encodeURIComponent(B.title)}">${MAIL_SAY}</a></p>`
       : B.soon ? '<p class="status">Case study coming soon</p>' : '')
-    + (hasCase(id) ? `<button class="go" data-enter="${id}">${B.caseLabel || 'Read now'} <span>· ${readMins(caseBody(letterFor(id)))} min →</span></button>`
-      : B.see ? `<button class="go" data-letter="${B.see}">${B.seeLabel || 'Read the story'} <span>· ${readMins(caseBody(B.see))} min →</span></button>`
+    + (hasCase(id) ? `<button class="go" data-enter="${id}">${B.caseLabel || 'Read now'} <span>· ${readMins(caseBody(letterFor(id)))} min <i class="arr" aria-hidden="true">→</i></span></button>`
+      : B.see ? `<button class="go" data-letter="${B.see}">${B.seeLabel || 'Read the story'} <span>· ${readMins(caseBody(B.see))} min <i class="arr" aria-hidden="true">→</i></span></button>`
       : B.href ? `<a class="cta" href="${abs(B.href)}" target="_blank" rel="noopener">${B.cta || 'Read the case study'} <span aria-hidden="true">↗</span></a>` : '')
     + (id === 'home-hello' ? `<a class="cta" href="mailto:kunalsatpal1@gmail.com?subject=${encodeURIComponent('Found you on the map')}">${MAIL_SAY}<span class="mail">kunalsatpal1@gmail.com</span></a>` : '')
     // The sign-off (BATCH.finale): one way to write, then everything else in a single line.

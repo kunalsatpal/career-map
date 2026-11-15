@@ -296,15 +296,19 @@ body.cards .eng.up, body.cards .ly-trees { display: none; }
 .note .enter small { font: italic 400 .8125rem/1.1 var(--font-body); letter-spacing: 0; opacity: .75; }
 .note .enter:hover { background: var(--ink-2); }
 /* In a hover note the way in is a plain line, and there is nothing to close. */
-.note .go { display: flex; justify-content: center; align-items: baseline; gap: 6px; width: 100%; margin-top: 4px; padding: 10px 14px 11px; border: 0; border-radius: 3px; cursor: pointer;
-  font: 600 1rem/1.2 var(--font-body); color: oklch(96% 0.02 84); background: var(--ink); }
+.note .go { display: flex; justify-content: center; align-items: baseline; gap: 6px; width: 100%; margin-top: 4px; padding: 11px 14px; border: 0; border-radius: 3px; cursor: pointer;
+  font: 500 1.0625rem/1.2 var(--font-sc); letter-spacing: .05em; font-variant-caps: small-caps; font-variant-numeric: lining-nums; color: oklch(96% 0.02 84); background: var(--ink); }
 .note .go:hover { background: oklch(34% 0.045 42); }
-.note .go span { font-weight: 400; opacity: .75; }
+.note .go span { font-weight: 400; opacity: .85; }
+/* The arrow leans the way you're going when the pointer is on the button. */
+.note .go .arr { display: inline-block; font-style: normal; transition: transform .2s var(--ease-out); }
+.note .go:hover .arr { transform: translateX(3px); }
+@media (prefers-reduced-motion: reduce) { .note .go .arr { transition: none; } }
 /* Hover notes, structured as the universe site's: the outcome first in one bold line, one line under
    it, one accent. On a brighter paper than the map, with a warm shadow, so it stands off it. */
 #panel.hcard { width: max-content; min-width: 220px; max-width: 300px; border-radius: 8px; color: var(--ink); background: oklch(98.5% 0.008 84);
   box-shadow: 0 0 0 1px oklch(27% 0.04 42 / .22), 0 2px 4px oklch(20% 0.03 45 / .08), 0 16px 34px -6px oklch(22% 0.035 45 / .32); }
-#panel.hcard .note { gap: 8px; padding: 16px 18px 18px; }
+#panel.hcard .note { gap: 8px; padding: 16px 18px 18px; font-variant-numeric: lining-nums; }
 #panel.hcard .note .headline { margin: 0; font: 600 1.1875rem/1.25 var(--font-body); color: var(--ink); text-wrap: balance; }
 #panel.hcard .note .headline .h-data { white-space: nowrap; }
 #panel.hcard .note .body, #panel.hcard .note li { color: var(--ink-2); font-size: 1rem; line-height: 1.4; }
@@ -896,12 +900,16 @@ body.reading-case #viewport, body.reading-case #dusk, body.reading-case #gl, bod
 #panel.hcard.cartouche::before { content: ''; position: absolute; inset: 5px; border: 1px solid oklch(27% 0.04 42 / .45); pointer-events: none;
   background: linear-gradient(var(--ink), var(--ink)) 0 0 / 6px 6px no-repeat, linear-gradient(var(--ink), var(--ink)) 100% 0 / 6px 6px no-repeat,
     linear-gradient(var(--ink), var(--ink)) 0 100% / 6px 6px no-repeat, linear-gradient(var(--ink), var(--ink)) 100% 100% / 6px 6px no-repeat; }
+#panel.hcard.cartouche { max-width: 320px; }
 #panel.hcard.cartouche .note { padding: 22px 24px; justify-items: center; text-align: center; }
 #panel.hcard.cartouche .note > :is(figure, .pics, .go, ul, .links) { justify-self: stretch; }
 #panel.hcard.cartouche .note ul { text-align: left; }
 #panel.hcard.cartouche .note .headline { font: 400 1.3125rem/1.2 var(--font-display); }
-#panel.hcard.cartouche .note .headline::after { content: '❧'; display: block; margin-top: 6px; font: 400 1rem/1 var(--font-body); color: color-mix(in oklch, var(--c), oklch(30% 0.04 42) 30%); }
-#panel.hcard.cartouche .note .body { font-style: italic; }
+#panel.hcard.cartouche .note .headline::after { content: '❧'; display: block; margin-top: 8px; font: 400 1rem/1 var(--font-body); color: color-mix(in oklch, var(--c), oklch(30% 0.04 42) 30%); }
+/* The italic line under the headline: the full ink and a touch heavier, so the thin Garamond italic reads
+   on the aged paper, a little in from the frame, and never ending on one word alone. */
+#panel.hcard.cartouche .note .body { font-style: italic; font-weight: 500; color: var(--ink); font-size: 1.0625rem; line-height: 1.45;
+  padding-inline: 6px; text-wrap: pretty; }
 #panel.hcard.cartouche .note .ehead { grid-template-columns: 1fr; justify-items: center; gap: 6px; }
 #panel.hcard.cartouche .note .ehead ~ .body { padding-left: 0; }
 #panel.hcard.cartouche .note .emblem { background: none; box-shadow: none; }
