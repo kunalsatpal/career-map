@@ -15,7 +15,7 @@ That's it; `INSTALL.md` has the step-by-step for a new machine, and `EDITING.md`
 - Scroll, drag, ↑/↓, Space or Page Up/Down move along the road. ←/→ jump between stops. Home and End go to the start and the end.
 - Hover over a building to see its note. Buildings with a red wax seal hold a full case study or field note: click one to open it. Esc or "Back to the map" closes it.
 - Small things on the map answer the pointer: rest on the barbell, click a lamp or a tree, poke the ship.
-- On a phone, swipe down to move on, one stop per swipe (at the very start a swipe either way begins); a chip at the foot of the screen says where you are. Tap a building for its note. A phone too slow for the 3D city gets the flat ink map instead.
+- On a phone the map is told as a scroll (`src/18-phonemap.js`, `src/phone.css`): the title, then each city's drawing with its buildings named on it, a road between them, and the same case studies. Tap a building for its note. Add `?phone` to the address to see it on a laptop. The drawings are pictures of the real map, taken by `tools/phoneshots.mjs` into `site/m/`.
 - With `prefers-reduced-motion` set, the camera stays top-down and the cities appear without animating.
 
 ## Build it

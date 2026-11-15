@@ -1,0 +1,193 @@
+{
+  "title": {
+    "img": "site/m/title.webp",
+    "w": 1800,
+    "h": 2200,
+    "pins": {}
+  },
+  "hinge": {
+    "img": "site/m/hinge.webp",
+    "w": 1200,
+    "h": 1200,
+    "pins": {
+      "hinge-carehub": [
+        32.9,
+        62.2
+      ],
+      "hinge-ai": [
+        69.5,
+        61.8
+      ],
+      "hinge-workflows": [
+        33.1,
+        44.6
+      ],
+      "hinge-video": [
+        68.5,
+        45
+      ]
+    }
+  },
+  "gojek": {
+    "img": "site/m/gojek.webp",
+    "w": 1120,
+    "h": 1120,
+    "pins": {
+      "gojek-promo": [
+        42.6,
+        59.6
+      ],
+      "gojek-experiments": [
+        57.3,
+        47.5
+      ]
+    }
+  },
+  "cult": {
+    "img": "site/m/cult.webp",
+    "w": 1120,
+    "h": 1120,
+    "pins": {
+      "cult-cart": [
+        38.9,
+        64.7
+      ],
+      "cult-fitclub": [
+        65.9,
+        54.6
+      ],
+      "cult-ds": [
+        34.1,
+        48.5
+      ],
+      "cult-onboarding": [
+        52,
+        42.2
+      ]
+    }
+  },
+  "earlier": {
+    "img": "site/m/earlier.webp",
+    "w": 1248,
+    "h": 1180,
+    "pins": {
+      "iit-placement": [
+        32.1,
+        67.6
+      ],
+      "iit-team": [
+        46.4,
+        66.9
+      ],
+      "intern-2018": [
+        59.5,
+        38.8
+      ],
+      "intern-2019": [
+        69,
+        41.6
+      ],
+      "stop-mobily": [
+        31.2,
+        29.7
+      ],
+      "stop-pipeline": [
+        63.8,
+        21.9
+      ],
+      "stop-west": [
+        30.8,
+        17.9
+      ],
+      "stop-pibit": [
+        62.4,
+        10.5
+      ],
+      "stop-stockroom": [
+        34.2,
+        6.6
+      ]
+    }
+  },
+  "writing": {
+    "img": "site/m/writing.webp",
+    "w": 1120,
+    "h": 840,
+    "pins": {
+      "blog-portfolio": [
+        65,
+        52.1
+      ],
+      "blog-curefit": [
+        35,
+        40.5
+      ],
+      "blog-whatsapp": [
+        64,
+        27.5
+      ],
+      "blog-pibit": [
+        37.6,
+        15.3
+      ]
+    }
+  },
+  "work": {
+    "img": "site/m/work.webp",
+    "w": 1000,
+    "h": 600,
+    "pins": {
+      "work-grow": [
+        23.6,
+        45.8
+      ],
+      "work-strategy": [
+        33,
+        31.4
+      ],
+      "work-data": [
+        47.2,
+        26.1
+      ],
+      "work-tools": [
+        61.2,
+        31.4
+      ],
+      "work-code": [
+        70.6,
+        45.7
+      ]
+    }
+  },
+  "home": {
+    "img": "site/m/home.webp",
+    "w": 1120,
+    "h": 1080,
+    "pins": {
+      "life-people": [
+        50.9,
+        77.7
+      ],
+      "life-games": [
+        38.3,
+        68.6
+      ],
+      "life-anime": [
+        63.4,
+        68.4
+      ],
+      "life-lift": [
+        36.7,
+        59.1
+      ],
+      "life-books": [
+        58.6,
+        57.9
+      ],
+      "home-hello": [
+        63,
+        42.6
+      ]
+    }
+  }
+}

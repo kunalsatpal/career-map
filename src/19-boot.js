@@ -84,4 +84,5 @@ function phoneAway() {
     + '<a class="away-mail" href="mailto:kunalsatpal1@gmail.com">' + MAIL_SAY + '</a>'
   document.body.appendChild(note)
 }
-if (PHONE) phoneAway(); else boot()
+// Phones get their own page (18-phonemap.js): the same map, told as a scroll. If it fails, the note above.
+if (PHONE) { try { phoneBoot() } catch (e) { console.error(e); phoneAway() } } else boot()

@@ -6,6 +6,8 @@ css = (src / 'style.css').read_text()
 # His name's lettering, a fan-made font (Harry P, by GemFonts), inline so it loads from disk.
 import base64 as _b64
 css = "@font-face { font-family: 'Harry P'; src: url(data:font/ttf;base64," + _b64.b64encode((root / 'assets' / 'fonts' / 'harry-p.ttf').read_bytes()).decode() + ") format('truetype'); font-display: block; }\n" + css
+# The phone page's own styles (every rule is under html.pm, so a desktop never matches one).
+css += (src / 'phone.css').read_text()
 body = (src / 'body.html').read_text()
 # The full case studies, from kunalsatpal.com, travel inside the page as data.
 cases = {p.stem: json.loads(p.read_text()) for p in sorted((src / 'cases').glob('*.json'))}
@@ -15,6 +17,8 @@ data = 'const FULLCASE_DATA = ' + json.dumps(cases, ensure_ascii=False).replace(
 import base64
 eng = {p.stem: 'data:image/webp;base64,' + base64.b64encode(p.read_bytes()).decode() for p in sorted((root / 'assets' / 'v').glob('*.webp')) if not p.stem.startswith('wet')}
 data += 'const ENG_DATA = ' + json.dumps(eng) + '\n'
+# The phone page's pictures of each city, and where each building stands in them (tools/phoneshots.mjs).
+data += 'const PHONE_SCENES = ' + (src / 'phone-scenes.json').read_text().strip() + '\n'
 js = data + '\n'.join(p.read_text() for p in sorted(src.glob('[0-9][0-9]-*.js')))
 html = f'''<!doctype html>
 <html lang="en">
@@ -34,8 +38,6 @@ html = f'''<!doctype html>
 <meta property="og:image:alt" content="A hand-drawn parchment map with the Hinge Health city standing in 3D beside a winding road.">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 41 39'%3E%3Crect x='-4' y='-4' width='41' height='39' rx='8' fill='%23f4ead7'/%3E%3Cg fill='%23372017'%3E%3Crect y='1.09' width='7.68' height='28.36' rx='1.4'/%3E%3Cpath d='M31.24.92c.77 0 1.4.63 1.4 1.4v25.52c0 .77-.63 1.4-1.4 1.4h-6.1c-.27 0-.52-.11-.7-.31L12.18 15.08 24.44 1.22c.18-.19.43-.3.7-.3z'/%3E%3C/g%3E%3C/svg%3E">
-<!-- Phones go straight to kunalsatpal.com: the map is made for bigger screens. Same test as PHONE (01-util.js), so tablets stay. -->
-<script>if (matchMedia('(pointer: coarse)').matches && Math.min(screen.width, screen.height) <= 760) location.replace('https://kunalsatpal.com/')</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400,0..1,0&icon_names=app_registration,area_chart,arrow_right,auto_awesome,cancel,chat,check_circle,done,home,list,mode_heat,queue,rocket,sentiment_dissatisfied,sentiment_satisfied,sentiment_very_dissatisfied,sentiment_very_satisfied,settings_accessibility,tab,task,thumb_down,thumb_up,video_camera_front,videocam,warning&display=block" rel="stylesheet" media="print" onload="this.media='all'" data-font>
