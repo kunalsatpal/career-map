@@ -25,18 +25,23 @@ html = f'''<!doctype html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Kunal Satpal — A map of the work</title>
-<!-- What a shared link shows (LinkedIn, X, Slack, iMessage). The picture is site/img/og-career-map.jpg. -->
+<title>Kunal Satpal | Portfolio</title>
+<!-- What a shared link shows (LinkedIn, X, Slack, iMessage, WhatsApp). The picture is site/img/og-portfolio.jpg. -->
 <meta name="description" content="Kunal Satpal's design portfolio as a hand-drawn map: every company is a city that builds itself as you arrive, and every project is a building you can open.">
 <meta property="og:type" content="website">
+<meta property="og:site_name" content="Kunal Satpal">
 <meta property="og:url" content="https://kunalsatpal.com/career-map/">
-<meta property="og:title" content="Kunal Satpal — A map of the work">
-<meta property="og:description" content="A design portfolio you travel through. Every company is a city that builds itself as you arrive; every project is a building you can open.">
-<meta property="og:image" content="https://kunalsatpal.com/career-map/site/img/og-career-map.jpg">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="A hand-drawn parchment map with the Hinge Health city standing in 3D beside a winding road.">
+<meta property="og:title" content="Kunal Satpal | Portfolio">
+<meta property="og:description" content="Staff Product Designer at Hinge Health. A design portfolio you travel through: every company is a city, every project a building you can open.">
+<meta property="og:image" content="https://kunalsatpal.com/career-map/site/img/og-portfolio.jpg">
+<meta property="og:image:width" content="2400">
+<meta property="og:image:height" content="1260">
+<meta property="og:image:alt" content="Kunal Satpal, Staff Product Designer at Hinge Health, set on parchment with a compass rose and a sailing ship.">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Kunal Satpal | Portfolio">
+<meta name="twitter:description" content="Staff Product Designer at Hinge Health. A design portfolio you travel through: every company is a city, every project a building you can open.">
+<meta name="twitter:image" content="https://kunalsatpal.com/career-map/site/img/og-portfolio.jpg">
+<meta name="twitter:image:alt" content="Kunal Satpal, Staff Product Designer at Hinge Health, set on parchment with a compass rose and a sailing ship.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 41 39'%3E%3Crect x='-4' y='-4' width='41' height='39' rx='8' fill='%23f4ead7'/%3E%3Cg fill='%23372017'%3E%3Crect y='1.09' width='7.68' height='28.36' rx='1.4'/%3E%3Cpath d='M31.24.92c.77 0 1.4.63 1.4 1.4v25.52c0 .77-.63 1.4-1.4 1.4h-6.1c-.27 0-.52-.11-.7-.31L12.18 15.08 24.44 1.22c.18-.19.43-.3.7-.3z'/%3E%3C/g%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

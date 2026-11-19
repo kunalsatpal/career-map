@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kunal Satpal | Portfolio</title>
+<meta name="description" content="Portfolio of Kunal Satpal, Staff Product Designer at Hinge Health. Case studies in care, AI, fitness and commerce.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Kunal Satpal">
+<meta property="og:url" content="https://kunalsatpal.com">
+<meta property="og:title" content="Kunal Satpal | Portfolio">
+<meta property="og:description" content="Portfolio of Kunal Satpal, Staff Product Designer at Hinge Health. Case studies in care, AI, fitness and commerce.">
+<meta property="og:image" content="https://kunalsatpal.com/images/og-portfolio.jpg">
+<meta property="og:image:width" content="2400">
+<meta property="og:image:height" content="1260">
+<meta property="og:image:alt" content="Kunal Satpal, Staff Product Designer at Hinge Health, set on parchment with a compass rose and a sailing ship.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Kunal Satpal | Portfolio">
+<meta name="twitter:description" content="Portfolio of Kunal Satpal, Staff Product Designer at Hinge Health. Case studies in care, AI, fitness and commerce.">
+<meta name="twitter:image" content="https://kunalsatpal.com/images/og-portfolio.jpg">
+<meta name="twitter:image:alt" content="Kunal Satpal, Staff Product Designer at Hinge Health, set on parchment with a compass rose and a sailing ship.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: oklch(94% 0.028 84); --ink: oklch(27% 0.04 42); --ink-2: oklch(40% 0.042 48); --seal: oklch(46% 0.15 28);
+  }
+  * { box-sizing: border-box; margin: 0; }
+  html, body { height: 100%; }
+  body { display: flex; overflow: hidden; background: var(--paper); }
+  a { color: inherit; text-decoration: none; }
+
+  /* Two halves. The one you point at opens up; the other steps back. */
+  .half { position: relative; flex: 1 1 0; min-width: 0; overflow: hidden; outline: none;
+    display: flex; align-items: center; justify-content: center;
+    transition: flex-grow .55s cubic-bezier(.2,.7,.2,1); }
+  .half .art { position: absolute; transition: filter .55s, opacity .55s; }
+  body:has(.half:hover, .half:focus-visible) .half:not(:hover, :focus-visible) .art { filter: saturate(.5); opacity: .75; }
+  .half:hover, .half:focus-visible { flex-grow: 1.35; }
+
+  .pitch { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 0 32px; }
+  .cta { display: inline-flex; align-items: center; gap: 10px; margin-top: 32px; white-space: nowrap; transition: background .25s, transform .25s; }
+  .cta .arrow { transition: transform .25s; }
+  .half:hover .cta .arrow, .half:focus-visible .cta .arrow { transform: translateX(4px); }
+
+  /* Classic website: its own type, its own desk. */
+  .classic { background: linear-gradient(90deg, #f3f3f3, #fbfbfb); color: #1d1d1f; font-family: "Poppins", system-ui, sans-serif; }
+  .classic .art { left: 50%; bottom: 0; width: 1440px; transform: translateX(-50%); }
+  .classic h2 { font: 600 clamp(34px, 3.4vw, 50px)/1.1 "Poppins", sans-serif; letter-spacing: -.02em; }
+  .classic p { margin-top: 14px; font-size: 17px; color: #6e6e73; }
+  .classic .cta { height: 52px; padding: 0 26px; border-radius: 999px; background: #1d1d1f; color: #fff; font-size: 16px; font-weight: 500; }
+  .classic:hover .cta { background: #000; }
+
+  /* An interactive map: parchment, ink and a wax-red button, as on the map itself. Like the classic
+     half's desk, the map's own engravings sit at the edges: its compass rose, and a ship at the bottom. */
+  .map { color: var(--ink); font-family: "EB Garamond", Georgia, serif;
+    background: radial-gradient(120% 100% at 50% 45%, oklch(95% 0.022 84), oklch(90.5% 0.034 82)); }
+  .map .art { inset: 0; pointer-events: none; }
+  .map .art img { position: absolute; mix-blend-mode: multiply; }
+  .map .compass { right: -120px; top: -120px; width: 520px; opacity: .55; }
+  /* The ship rides the swell; leaning towards the map, it sets sail. */
+  .map .ship { position: absolute; left: 5%; bottom: -2%; width: 240px; transition: transform 1.4s cubic-bezier(.3,.6,.3,1); }
+  .map .ship img { position: static; display: block; width: 100%; transform-origin: 50% 85%; animation: rock 5.5s ease-in-out infinite; }
+  .map:hover .ship, .map:focus-visible .ship { transform: translateX(44px); }
+  @keyframes rock { 0%, 100% { transform: rotate(-1.4deg) translateY(0); } 50% { transform: rotate(1.4deg) translateY(-4px); } }
+  .map h2 { font: 400 clamp(42px, 4.2vw, 62px)/1.05 "EB Garamond", serif; letter-spacing: -.01em; }
+  .map p { margin-top: 12px; font: italic 400 20px/1.3 "EB Garamond", serif; color: var(--ink-2); }
+  .map .cta { height: 52px; padding: 0 26px; border-radius: 3px; background: var(--seal); color: oklch(96% 0.02 84);
+    font: 500 19px/1 "EB Garamond", serif; letter-spacing: .04em; font-variant-caps: small-caps;
+    box-shadow: 0 0 0 1px oklch(34% 0.12 28), 0 8px 22px oklch(10% 0.02 45 / .3); }
+  .map:hover .cta { background: oklch(41% 0.14 28); }
+
+  /* The seam between the two. */
+  .seam { position: relative; flex: 0 0 1px; background: oklch(27% 0.04 42 / .2); z-index: 2; }
+
+  /* On the way out: the chosen half settles into the first colour of the page it opens,
+     and that colour sweeps across the screen. Nothing reflows; the next page starts where this ends. */
+  .veil { position: fixed; inset: 0; z-index: 10; pointer-events: none; visibility: hidden; }
+  /* The map's loading drop, exactly as the map draws it (src/style.css .loader .ldrop), so the sweep
+     ends on the map's own loading screen and the map picks up from there. */
+  .veil .dot { position: absolute; left: 50%; top: 56%; width: 30px; height: 30px; margin: -15px 0 0 -15px; border-radius: 50%; opacity: 0;
+    background: radial-gradient(closest-side, oklch(29% 0.05 40 / .75), oklch(29% 0.05 40 / .5) 55%, oklch(29% 0.05 40 / 0)); }
+  @media (max-width: 760px) { .veil .dot { top: 50%; } }
+  /* Once grown, it breathes exactly as the map's drop does (src/style.css ldrop-breathe), from the same rest. */
+  .veil .dot.breathing { animation: dot-breathe 2.6s ease-in-out infinite; }
+  @keyframes dot-breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.16); } }
+  body.going { pointer-events: none; }
+
+  /* Phones: one above the other. */
+  @media (max-width: 720px), (orientation: portrait) {
+    body { flex-direction: column; }
+    .classic .art { width: 900px; }
+    .classic p, .map p { font-size: 16px; }
+    .map p { font-size: 18px; }
+    .cta { margin-top: 22px; }
+    .classic .cta, .map .cta { height: 48px; }
+    .classic .pitch { margin-bottom: 70px; }
+    .map .compass { width: 210px; right: -60px; top: -60px; }
+    .map .ship { width: 150px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .half, .half .art, .cta, .cta .arrow, .map .ship { transition: none; }
+    .map .ship img { animation: none; }
+    .map:hover .ship, .map:focus-visible .ship { transform: none; }
+  }
+</style>
+</head>
+<body>
+  <a class="half classic" href="https://kunalsatpal.com/">
+    <img class="art" src="desk.jpg" alt="">
+    <div class="pitch">
+      <h2>Classic website</h2>
+      <p>Case studies and résumé, quick to scan</p>
+      <span class="cta">Open the website <span class="arrow">→</span></span>
+    </div>
+  </a>
+  <div class="seam" aria-hidden="true"></div>
+  <a class="half map" href="../index.html">
+    <div class="art" aria-hidden="true">
+      <img class="compass" src="../assets/compass.webp" alt="">
+      <div class="ship"><img src="../assets/ship.webp" alt=""></div>
+    </div>
+    <div class="pitch">
+      <h2>An interactive map</h2>
+      <p>Walk through my career, city by city</p>
+      <span class="cta">Explore the map <span class="arrow">→</span></span>
+    </div>
+  </a>
+<script>
+  // The map is one big page, so fetch it ahead: on a laptop a moment after this page is up,
+  // elsewhere as soon as someone leans towards it or touches it.
+  const map = document.querySelector('.map')
+  let fetched = false
+  const prefetch = () => {
+    if (fetched) return; fetched = true
+    const l = document.createElement('link'); l.rel = 'prefetch'; l.href = map.href; document.head.appendChild(l)
+  }
+  for (const t of ['pointerenter', 'pointerdown', 'focus']) map.addEventListener(t, prefetch, { once: true })
+  if (matchMedia('(pointer: fine)').matches) addEventListener('load', () => setTimeout(prefetch, 800))
+
+  // The first frame of each destination: the classic site's off-white, the map's loading sheet.
+  const FIRST = { classic: 'rgb(247, 247, 247)', map: 'rgb(222, 212, 187)' }
+  const veil = document.createElement('div'); veil.className = 'veil'; document.body.appendChild(veil)
+  const dot = document.createElement('div'); dot.className = 'dot'; veil.appendChild(dot)
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches
+  const ease = 'cubic-bezier(.65, 0, .35, 1)'
+
+  document.querySelectorAll('.half').forEach(a => a.addEventListener('click', async e => {
+    if (still || e.metaKey || e.ctrlKey || e.shiftKey || e.button) return
+    e.preventDefault()
+    document.body.classList.add('going')
+    const r = a.getBoundingClientRect(), W = innerWidth, H = innerHeight
+    const from = `inset(${r.top}px ${W - r.right}px ${H - r.bottom}px ${r.left}px)`
+    const toMap = a.classList.contains('map')
+    veil.style.background = FIRST[toMap ? 'map' : 'classic']
+    veil.style.visibility = 'visible'
+    // Tell the map its loading drop is already showing, so it keeps it rather than drawing it in again.
+    if (toMap) try { sessionStorage.setItem('map-drop', '1') } catch (_) {}
+    try {
+      // 1. The half quietly becomes a plain sheet of the next page's colour.
+      await veil.animate([{ clipPath: from, opacity: 0 }, { clipPath: from, opacity: 1 }], { duration: 120, easing: 'ease-out', fill: 'forwards' }).finished
+      // 2. The sheet spreads over the whole screen; for the map, its loading drop gathers in the middle.
+      if (toMap) dot.animate([{ opacity: 0, scale: .15 }, { opacity: 1, scale: 1 }], { duration: 300, easing: 'ease-out', fill: 'forwards' })
+        .finished.then(() => dot.classList.add('breathing'), () => {})
+      await veil.animate([{ clipPath: from, opacity: 1 }, { clipPath: 'inset(0px 0px 0px 0px)', opacity: 1 }], { duration: 300, easing: ease, fill: 'forwards' }).finished
+    } catch (_) {}
+    location.href = a.href
+  }))
+  // Coming back with the browser's Back button: show both halves again.
+  addEventListener('pageshow', () => {
+    document.body.classList.remove('going')
+    veil.getAnimations().forEach(x => x.cancel()); dot.getAnimations().forEach(x => x.cancel()); dot.classList.remove('breathing'); veil.style.visibility = 'hidden'
+  })
+</script>
+</body>
+</html>

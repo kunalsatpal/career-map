@@ -5,7 +5,11 @@
 const vp = $('viewport')
 const BLOCK = '#panel, #letter, #reader, #lightbox, .ui'
 const busy = () => document.body.classList.contains('reading') || caseId
+// The opening (19-boot.js): until the title has stood on screen a moment, the wheel, a drag and the
+// keys wait, so a scroll made under the blank sheet never carries the eye past the title unseen.
+let opening = false
 addEventListener('wheel', e => {
+  if (opening) { e.preventDefault(); return }
   if (e.target.closest?.('#panel, #letter, #reader, #lightbox') || busy()) return
   e.preventDefault()
   if (e.ctrlKey || e.metaKey) return
@@ -23,7 +27,7 @@ let drag = null, vel = 0, dragged = false
 // not the wrong way: there is nothing behind you, so it holds still and, let go, begins the walk (swipeTo).
 const nudge = dY => { if (dY < 0 && cam.cy >= START_Y - 1) return PHONE_START ? undefined : wrongWay(); cam.cy -= dY * perPx(); clampCam(); moved(); requestRender() }
 addEventListener('pointerdown', e => {
-  if ((e.pointerType === 'mouse' && e.button !== 0) || e.target.closest?.(BLOCK) || busy()) return
+  if ((e.pointerType === 'mouse' && e.button !== 0) || e.target.closest?.(BLOCK) || busy() || opening) return
   cancelMotion()
   drag = { id: e.pointerId, y: e.clientY, sy: e.clientY, cy0: cam.cy, t: performance.now(), moved: false, target: e.target }
 })
@@ -145,7 +149,7 @@ function stepLevel(d) {
   go(LEVELS[clamp(cur + d, 0, LEVELS.length - 1)].id)
 }
 addEventListener('keydown', e => {
-  if (e.metaKey || e.ctrlKey || e.altKey || busy() || e.target.closest?.('input, textarea')) return
+  if (e.metaKey || e.ctrlKey || e.altKey || busy() || opening || e.target.closest?.('input, textarea')) return
   const k = e.key, unit = perPx()
   if (k === 'Escape') { closePanel() }
   else if (k === 'ArrowUp') { e.preventDefault(); scrollBy(140 * unit) }

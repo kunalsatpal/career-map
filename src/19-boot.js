@@ -51,7 +51,9 @@ function boot() {
   setAnchor(); cam.cy = START_Y; cam.intro = deep || reduce ? 0 : 1; clampCam()
   ground.style.setProperty('--hatch', '.7'); ground.style.setProperty('--lw', lineWeight(cam.s))
   render()
-  if (loader?.isConnected && !deep) spread = prepareSpread(loader)
+  // Input waits while the sheet stands (13-input.js), until the eye begins to lean in. If the opening
+  // fails it lets go at once; a minute is only a last backstop.
+  if (loader?.isConnected && !deep) { spread = prepareSpread(loader); opening = true; setTimeout(() => { opening = false }, 60000) }
   else BARE = null
   // The web fonts' stylesheets load without holding up the first paint (build.py), so the loader shows
   // at once instead of a blank tab; the fonts count as ready once those sheets are in and their faces loaded.
@@ -64,8 +66,8 @@ function boot() {
   // The lean-in waits for the first-visit warm-up (BATCH.prewarm) to finish, so it never stutters.
   else Promise.race([fontsIn, new Promise(r => setTimeout(r, 1500))]).then(() => warm).then(() => BATCH.calmOpen && cityReady().then(linger)).then(() => {
     const inking = unload()
-    setTimeout(() => leanIn(2600), inking ? 1200 : BATCH.calmOpen ? 650 : 250)
-  })
+    setTimeout(() => { opening = false; leanIn(2600) }, inking ? 1200 : BATCH.calmOpen ? 650 : 250)
+  }).catch(e => { opening = false; throw e })
   let resizeT = 0
   addEventListener('resize', () => { VW = innerWidth; VH = innerHeight; setAnchor(); clampCam(); cityResize(); ground.style.setProperty('--lw', lineWeight(cam.s)); if (cardFor) measureCard(); render(); clearTimeout(resizeT); resizeT = setTimeout(render, 120) })
   window.__map = { cam, go, flyTo, fitAll, render, view, project, city, cam, LEVELS, ROOMS, DECOR, decorAt, decorState: () => [decorRaf, decorIdle], openCase, scrollBy, pick: (x, y) => cityPick(x, y), gls: () => GLS && ({ p: !!GLS.pieceP.u, s: !!GLS.shadowP.u, c: !!GLS.compP.u }) }
@@ -85,4 +87,4 @@ function phoneAway() {
   document.body.appendChild(note)
 }
 // Phones get their own page (18-phonemap.js): the same map, told as a scroll. If it fails, the note above.
-if (PHONE) { try { phoneBoot() } catch (e) { console.error(e); phoneAway() } } else boot()
+if (PHONE && /[?&]scroll\b/.test(location.search)) { try { phoneBoot() } catch (e) { console.error(e); phoneAway() } } else boot()

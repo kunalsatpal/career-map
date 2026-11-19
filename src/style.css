@@ -1034,6 +1034,12 @@ body.ph-layers .sprite.step, body.ph-layers .gymprint { will-change: auto; }
 .loader.spreading .ldrop, .loader.done .ldrop { opacity: 0; scale: 3; }
 .loader.done .lveil { opacity: 0; }
 @keyframes ldrop-in { from { opacity: 0; scale: .15; } }
+/* While it waits, the drop breathes: it swells a little and settles, slowly, like ink taking in the
+   paper. It moves transform, so it adds to the entrance and to the exit into the spread (both scale). */
+.loader .ldrop { animation: ldrop-in 1.4s var(--ease-out) .2s backwards, ldrop-breathe 2.6s ease-in-out 1.6s infinite; }
+.loader.kept .ldrop { animation: ldrop-breathe 2.6s ease-in-out infinite; }
+@keyframes ldrop-breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.16); } }
+@media (prefers-reduced-motion: reduce) { .loader .ldrop, .loader.kept .ldrop { animation: none; } }
 @media (max-width: 760px) { .loader .ldrop { top: 50%; } }
 
 /* Product previews use complete screens within the shared case-study template. */

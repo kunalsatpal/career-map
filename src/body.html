@@ -1,6 +1,8 @@
 <!-- The ink stamp (BATCH.inkLogos): a logo's darkness becomes ink; its light parts and its transparent ground stay paper. -->
 <svg width="0" height="0" aria-hidden="true" style="position:absolute"><filter id="inkstamp" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values="0 0 0 0 .216  0 0 0 0 .124  0 0 0 0 .088  -.51 -1.716 -.173 0 2.4"/><feComposite in2="SourceAlpha" operator="in"/></filter></svg>
 <div class="loader" id="loader" role="status" aria-label="Loading the map"><div class="lveil"></div><div class="ldrop" aria-hidden="true"></div></div>
+<!-- Arriving from the split page (split/), whose last frame already shows this drop: keep it still. -->
+<script>try { if (sessionStorage.getItem('map-drop')) { sessionStorage.removeItem('map-drop'); document.getElementById('loader').classList.add('kept') } } catch (e) {}</script>
 <h1 class="sr">Kunal Satpal, a map of the work</h1>
 <main id="viewport" aria-label="A hand-drawn map of Kunal Satpal's work. Scroll or drag to travel the road; the arrow keys step from one piece of work to the next.">
   <div id="ground"></div>
