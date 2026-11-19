@@ -1,6 +1,8 @@
 <!-- The ink stamp (BATCH.inkLogos): a logo's darkness becomes ink; its light parts and its transparent ground stay paper. -->
 <svg width="0" height="0" aria-hidden="true" style="position:absolute"><filter id="inkstamp" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values="0 0 0 0 .216  0 0 0 0 .124  0 0 0 0 .088  -.51 -1.716 -.173 0 2.4"/><feComposite in2="SourceAlpha" operator="in"/></filter></svg>
 <div class="loader" id="loader" role="status" aria-label="Loading the map"><div class="lveil"></div><div class="ldrop" aria-hidden="true"></div></div>
+<!-- Arriving from the front door or the classic site's switch, whose last frame already shows this drop: keep it still. -->
+<script>try { if (sessionStorage.getItem('map-drop')) { sessionStorage.removeItem('map-drop'); document.getElementById('loader').classList.add('kept') } } catch (e) {}</script>
 <h1 class="sr">Kunal Satpal, a map of the work</h1>
 <main id="viewport" aria-label="A hand-drawn map of Kunal Satpal's work. Scroll or drag to travel the road; the arrow keys step from one piece of work to the next.">
   <div id="ground"></div>
@@ -17,7 +19,26 @@
 <nav class="ui top" aria-label="Links">
   <a class="btn ink" href="mailto:kunalsatpal1@gmail.com"><span class="mail-say"><span class="ms-rest">Write to me</span><span class="ms-hover" aria-hidden="true">Copy email</span><span class="ms-done" aria-hidden="true">Email copied ✓</span></span></a>
   <a class="btn round wide" href="https://kunalsatpal.com/kunalsatpal_resume.pdf" target="_blank" rel="noopener">Resume <span aria-hidden="true">↗</span></a>
+  <a class="btn mode" href="/home.html" aria-label="Magic mode. Switch to Classic mode"><span data-tip="Classic mode"><svg class="i-page" viewBox="0 0 16 16" aria-hidden="true"><rect x="3" y="1.75" width="10" height="12.5" rx="1.5"/><path class="ln" d="M5.75 5.5h4.5"/><path class="ln" d="M5.75 8h4.5"/><path class="ln" d="M5.75 10.5h2.75"/></svg></span><span data-tip="Magic mode" class="on"><svg class="i-hat" viewBox="0 0 16 16" aria-hidden="true"><g class="hat"><path d="M4.3 11.6C5.5 8.4 6.6 5.4 7.8 3.2c.8-1.4 2.4-1.7 3.6-.7-1.2.4-1.9 1.4-2 2.7l1.9 6.4"/><path d="M1.8 12.4c1.4 1.5 11 1.5 12.4 0-1.4-1-11-1-12.4 0z"/><path d="M5.2 9.4c1.9.7 3.8.7 5.6 0"/></g><path class="tw" d="M3.4 3v2.2M2.3 4.1h2.2"/></svg></span></a>
 </nav>
+<script>
+  // Magic → Classic: the highlight slides to the page, then the map fades like a print in the sun and the paper
+  // bleaches to white from the middle outwards; the classic home then comes up out of the white, with no loading screen.
+  const modeBtn = document.querySelector('.btn.mode')
+  modeBtn.addEventListener('click', e => {
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches || e.metaKey || e.ctrlKey || e.shiftKey || e.button) return
+    e.preventDefault()
+    const href = modeBtn.href
+    modeBtn.classList.add('flip')
+    try { sessionStorage.setItem('mode-arrive', '1') } catch (_) {}
+    setTimeout(() => {
+      const v = document.createElement('div'); v.className = 'mode-bleach'; document.body.appendChild(v)
+      v.animate([{ '--p': 0 }, { '--p': 1 }], { duration: 950, easing: 'cubic-bezier(.5, 0, .3, 1)', fill: 'forwards' })
+      setTimeout(() => { location.href = href }, 1050)
+    }, 260)
+  })
+  addEventListener('pageshow', () => { modeBtn.classList.remove('flip'); document.querySelectorAll('.mode-bleach').forEach(v => v.remove()) })
+</script>
 <nav class="ui rail" id="rail" aria-label="Where you are on the road"></nav>
 <svg id="leader" aria-hidden="true"><path/><circle r="5"/></svg>
 <aside id="panel" class="slip" role="dialog" aria-label="Details">
